@@ -1,0 +1,53 @@
+.chapter-nav {
+  position: sticky;
+  top: 140px;
+  align-self: start;
+}
+
+.chapter-nav__label {
+  margin: 0 0 20px;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--color-text-faint);
+}
+
+.chapter-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chapter-nav__list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.chapter-nav__bar {
+  flex-shrink: 0;
+  width: 3px;
+  height: 22px;
+  border-radius: 1.5px;
+  background: #dbdbdb;
+}
+
+.chapter-nav__list li.is-active .chapter-nav__bar {
+  background: var(--color-primary);
+}
+
+.chapter-nav__list a {
+  text-decoration: none;
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  color: #474747;
+}
+
+.chapter-nav__list li.is-active a {
+  color: var(--color-primary);
+  font-weight: 600;
+}

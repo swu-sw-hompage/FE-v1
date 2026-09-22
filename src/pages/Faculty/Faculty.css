@@ -1,0 +1,141 @@
+.faculty__group-label {
+  margin: 0 0 24px;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.faculty__group-label--emeritus {
+  margin-top: 64px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.faculty__group-label--emeritus p {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.faculty__group-label--emeritus span {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.faculty__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 432px);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.faculty__grid:last-of-type {
+  margin-bottom: 0;
+}
+
+.faculty__card {
+  box-sizing: border-box;
+  width: 432px;
+  display: flex;
+  flex-direction: column;
+}
+
+.faculty__top {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.faculty__photo {
+  flex-shrink: 0;
+  width: 120px;
+  height: 152px;
+  object-fit: cover;
+  background: #fafafa;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.faculty__identity {
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}
+
+.faculty__identity strong {
+  margin-bottom: 4px;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.faculty__identity--emeritus strong {
+  margin-bottom: 0;
+  padding-top: 28px;
+}
+
+.faculty__position {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.faculty__contact {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.faculty__contact:last-child {
+  margin-bottom: 0;
+}
+
+.faculty__meta-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.faculty__label {
+  flex-shrink: 0;
+  width: 64px;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-primary);
+}
+
+.faculty__value {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.faculty__value--stacked p {
+  margin: 0;
+}
+
+.faculty__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin-bottom: 16px;
+}
+
+@media (max-width: 700px) {
+  .faculty__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faculty__top {
+    flex-wrap: wrap;
+  }
+}

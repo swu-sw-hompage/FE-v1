@@ -1,0 +1,222 @@
+.roadmap .page-layout__main {
+  gap: 88px;
+}
+
+.roadmap__years {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  row-gap: 20px;
+  column-gap: 24px;
+}
+
+.roadmap__year {
+  display: flex;
+  flex-direction: column;
+}
+
+.roadmap__year-no {
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-primary);
+}
+
+.roadmap__year-title {
+  margin-top: 5px;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-text-body);
+}
+
+.roadmap__year-rule {
+  display: block;
+  margin-top: 15px;
+  height: 2px;
+  background: var(--color-border);
+}
+
+.roadmap__year-rule--active {
+  background: var(--color-primary);
+}
+
+.roadmap__semester {
+  padding-top: 0;
+}
+
+.roadmap__sem-divider {
+  display: block;
+  margin-bottom: 20px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.roadmap__sem-label {
+  margin: 0 0 15px;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.roadmap__course {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.roadmap__course-mark {
+  flex-shrink: 0;
+  width: 3px;
+  border-radius: 2px;
+  align-self: stretch;
+}
+
+.roadmap__course-mark--required {
+  background: var(--color-primary);
+}
+
+.roadmap__course-mark--elective {
+  background: #c74a54;
+}
+
+.roadmap__course-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roadmap__course-title {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--color-text-body);
+}
+
+.roadmap__course-tag {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+}
+
+.roadmap__course-tag--required {
+  color: var(--color-primary);
+}
+
+.roadmap__course-tag--elective {
+  color: var(--color-text-faint);
+}
+
+.roadmap__tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 0;
+  z-index: 5;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  width: 230px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.roadmap__tooltip strong {
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-primary);
+}
+
+.roadmap__tooltip p {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-faint);
+}
+
+.roadmap__course:hover .roadmap__tooltip {
+  display: flex;
+}
+
+.roadmap__course--flip .roadmap__tooltip {
+  left: auto;
+  right: calc(100% + 10px);
+}
+
+/* 함께 들으면 좋은 교양 */
+.roadmap__liberal {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.roadmap__liberal-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roadmap__liberal-year {
+  margin: 0 0 12px;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-text-body);
+}
+
+.roadmap__liberal-item {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 10px 12px;
+}
+
+.roadmap__liberal-item span {
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text-body);
+}
+
+.roadmap__liberal-item:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-soft);
+}
+
+.roadmap__liberal-item:hover span {
+  color: var(--color-primary);
+}
+
+.roadmap__tooltip--liberal {
+  top: auto;
+  align-self: center;
+}
+
+.roadmap__liberal-item:hover .roadmap__tooltip--liberal {
+  display: flex;
+}
+
+@media (max-width: 900px) {
+  .roadmap__years,
+  .roadmap__liberal {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .roadmap__tooltip {
+    display: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .roadmap__years,
+  .roadmap__liberal {
+    grid-template-columns: 1fr;
+  }
+}

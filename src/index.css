@@ -1,0 +1,129 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  /* 실제 콘텐츠(본문/푸터 안쪽)가 정렬되는 폭 — 화면은 이 값과 무관하게 항상 가로 100%로 채워짐. 피그마 1440px 프레임 실측(본문 1320px = 양쪽 60px) */
+  --container-width: 1320px;
+  --container-padding: 60px;
+  /* 헤더 내부 폭 — 피그마 실측(1392px = 양쪽 24px) */
+  --header-width: 1392px;
+  --header-padding: 24px;
+
+  /* Brand — 2026 리디자인 버건디 */
+  --color-primary: #761419;
+  --color-primary-strong: #5c0f13;
+  --color-primary-accent: #a73034;
+  --color-primary-soft: #fff5f5;
+  --color-primary-soft-bg: #f5eced;
+
+  /* Text */
+  --color-text: #171717;
+  --color-text-body: #262223;
+  --color-text-secondary: #525252;
+  --color-text-muted: #6b6b6b;
+  --color-text-faint: #737373;
+  --color-nav: #171717;
+
+  /* Surfaces */
+  --color-bg: #ffffff;
+  --color-bg-soft: #f7f7f7;
+  --color-bg-soft-2: #f2f2f2;
+  --color-bg-dark: #131313;
+  --color-bg-footer: #404040;
+  --color-border: #e5e5e5;
+  --color-border-soft: #e0e0e0;
+
+  /* Accent */
+  --color-accent-yellow: #fad133;
+
+  --font-pretendard: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+  --font-kr: 'Noto Sans KR', system-ui, sans-serif;
+  --font-en: 'Inter', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Noto Sans KR', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  color: var(--color-text-body);
+  background: var(--color-bg);
+}
+
+#root {
+  min-height: 100svh;
+  width: 100%;
+}
+
+.app-shell {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding-inline: var(--container-padding);
+}
+
+a {
+  color: inherit;
+}
+
+/* 사이드 목차(ChapterNav) + 본문 2단 레이아웃 — 학과소개/교육과정/교수진/학생활동/공지사항 공통 */
+.page-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+  padding-block: 60px 100px;
+  align-items: start;
+  min-width: 0;
+}
+
+.page-layout__main {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+  min-width: 0;
+}
+
+.page-section h2 {
+  display: inline-block;
+  margin: 0 0 38px;
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 30px;
+  color: var(--color-text);
+}
+
+.page-section h2::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  margin-top: 12px;
+  border-radius: 2px;
+  background: var(--color-primary);
+}
+
+@media (max-width: 900px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --container-padding: 20px;
+  }
+}
