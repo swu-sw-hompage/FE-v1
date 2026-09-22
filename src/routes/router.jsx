@@ -22,6 +22,7 @@ import Dashboard from '../pages/Admin/Dashboard'
 import AdminAccounts from '../pages/Admin/AdminAccounts'
 import NoticeWrite from '../pages/Admin/NoticeWrite'
 import CapstoneWrite from '../pages/Admin/CapstoneWrite'
+import RequireAdmin from './RequireAdmin'
 
 export const router = createBrowserRouter([
   {
@@ -50,8 +51,8 @@ export const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
-  { path: '/admin', element: <Dashboard /> },
-  { path: '/admin/accounts', element: <AdminAccounts /> },
-  { path: '/admin/notices/new', element: <NoticeWrite /> },
-  { path: '/admin/capstone/new', element: <CapstoneWrite /> },
+  { path: '/admin', element: <RequireAdmin><Dashboard /></RequireAdmin> },
+  { path: '/admin/accounts', element: <RequireAdmin><AdminAccounts /></RequireAdmin> },
+  { path: '/admin/notices/new', element: <RequireAdmin><NoticeWrite /></RequireAdmin> },
+  { path: '/admin/capstone/new', element: <RequireAdmin><CapstoneWrite /></RequireAdmin> },
 ])
