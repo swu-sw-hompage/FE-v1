@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
+import { requestVerificationCode, verifyCode, subscribe } from '../../api/notification'
 import './NoticeSubscribe.css'
 
 const SECTIONS = [{ id: 'subscribe-form', label: '공지 알림 신청' }]
@@ -11,6 +12,8 @@ const CATEGORIES = [
 ]
 
 export default function NoticeSubscribe() {
+  const [studentNo, setStudentNo] = useState('')
+  const [name, setName] = useState('')
   const [categories, setCategories] = useState(['academic'])
   const [email, setEmail] = useState('')
   const [codeSent, setCodeSent] = useState(false)
@@ -19,6 +22,10 @@ export default function NoticeSubscribe() {
   const [agreed, setAgreed] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [verifying, setVerifying] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!showToast) return undefined
@@ -32,22 +39,56 @@ export default function NoticeSubscribe() {
     )
   }
 
-  const handleSendCode = () => {
-    if (!email) return
-    setCodeSent(true)
+  const handleSendCode = async () => {
+    if (!studentNo || !name || !email) return
+    setError('')
+    setSending(true)
+    try {
+      await requestVerificationCode({ studentNo, name, email })
+      setCodeSent(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSending(false)
+    }
   }
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (!code) return
-    setVerified(true)
+    setError('')
+    setVerifying(true)
+    try {
+      await verifyCode({ studentNo, email, verificationCode: code })
+      setVerified(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setVerifying(false)
+    }
   }
 
-  const canSubmit = categories.length > 0 && verified && agreed
+  const canSubmit = categories.length > 0 && verified && agreed && !submitting
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit) return
-    setSubmitted(true)
-    setShowToast(true)
+    setError('')
+    setSubmitting(true)
+    try {
+      await subscribe({
+        studentNo,
+        name,
+        email,
+        academicNotice: categories.includes('academic'),
+        employmentNotice: categories.includes('career'),
+        privacyConsent: agreed,
+      })
+      setSubmitted(true)
+      setShowToast(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -73,6 +114,36 @@ export default function NoticeSubscribe() {
                 <p className="notice-subscribe__card-desc">
                   등록한 이메일로 학과 공지사항이 게시되었다는 소식을 보내드립니다.
                 </p>
+              </div>
+
+              <div className="notice-subscribe__field">
+                <p className="notice-subscribe__field-label">학번 *</p>
+                <input
+                  type="text"
+                  className="notice-subscribe__input"
+                  placeholder="학번을 입력해주세요"
+                  value={studentNo}
+                  onChange={(e) => {
+                    setStudentNo(e.target.value)
+                    setCodeSent(false)
+                    setVerified(false)
+                  }}
+                />
+              </div>
+
+              <div className="notice-subscribe__field">
+                <p className="notice-subscribe__field-label">이름 *</p>
+                <input
+                  type="text"
+                  className="notice-subscribe__input"
+                  placeholder="이름을 입력해주세요"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value)
+                    setCodeSent(false)
+                    setVerified(false)
+                  }}
+                />
               </div>
 
               <div className="notice-subscribe__field">
@@ -119,9 +190,9 @@ export default function NoticeSubscribe() {
                     type="button"
                     className="notice-subscribe__side-btn"
                     onClick={handleSendCode}
-                    disabled={!email}
+                    disabled={!studentNo || !name || !email || sending}
                   >
-                    {codeSent ? '재전송' : '인증번호 받기'}
+                    {sending ? '전송 중...' : codeSent ? '재전송' : '인증번호 받기'}
                   </button>
                 </div>
                 {codeSent && !verified && (
@@ -148,12 +219,18 @@ export default function NoticeSubscribe() {
                         : 'notice-subscribe__side-btn notice-subscribe__side-btn--outline'
                     }
                     onClick={handleVerify}
-                    disabled={!codeSent || !code || verified}
+                    disabled={!codeSent || !code || verified || verifying}
                   >
-                    {verified ? '인증 완료' : '인증하기'}
+                    {verifying ? '확인 중...' : verified ? '인증 완료' : '인증하기'}
                   </button>
                 </div>
               </div>
+
+              {error && (
+                <p className="notice-subscribe__hint" role="alert">
+                  {error}
+                </p>
+              )}
 
               <div className="notice-subscribe__consent">
                 <button
@@ -178,7 +255,7 @@ export default function NoticeSubscribe() {
                 onClick={handleSubmit}
                 disabled={!canSubmit}
               >
-                {submitted ? '알림 신청 완료' : '알림 신청하기 ↗'}
+                {submitting ? '신청 중...' : submitted ? '알림 신청 완료' : '알림 신청하기 ↗'}
               </button>
             </div>
           </section>
