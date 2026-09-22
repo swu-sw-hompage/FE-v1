@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-// 백엔드(Spring / Next.js API) 주소는 .env의 VITE_API_BASE_URL로 주입
+// 백엔드(Spring Boot) 주소는 .env의 VITE_API_BASE_URL로 주입
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api',
   headers: {
@@ -15,3 +15,13 @@ apiClient.interceptors.request.use((config) => {
   }
   return config
 })
+
+// 백엔드는 모든 응답을 { isSuccess, code, message, result } 형태로 감싸서 내려준다.
+// 응답에서는 result만 꺼내고, 실패 응답은 message가 담긴 Error로 통일해서 던진다.
+apiClient.interceptors.response.use(
+  (response) => response.data?.result,
+  (error) => {
+    const message = error.response?.data?.message ?? error.message ?? '요청 처리 중 오류가 발생했습니다.'
+    return Promise.reject(new Error(message))
+  },
+)

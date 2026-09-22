@@ -103,11 +103,18 @@
   color: #1f1f21;
 }
 
-.admin__sidebar-footer a {
+.admin__sidebar-footer a,
+.admin__logout-btn {
   font-weight: 600;
   font-size: 12px;
   color: #7b1e22;
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .admin__body {

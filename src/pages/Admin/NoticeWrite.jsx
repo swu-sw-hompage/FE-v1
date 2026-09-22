@@ -1,17 +1,22 @@
 import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import MarkdownLite from '../../components/common/MarkdownLite'
+import { createNotice, publishNotice } from '../../api/notice'
+import { getAdminEmail } from '../../api/auth'
 import './Admin.css'
 
 const COLOR_SWATCHES = ['#7b1e22', '#1f5fd6', '#1f9d55', '#c0392b', '#7a7a80']
 
 export default function NoticeWrite() {
+  const navigate = useNavigate()
   const [category, setCategory] = useState('general')
   const [status, setStatus] = useState('published')
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [previewMode, setPreviewMode] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const textareaRef = useRef(null)
 
   const wrapSelection = (before, after = before) => {
@@ -29,6 +34,32 @@ export default function NoticeWrite() {
   }
 
   const applyColor = (hex) => wrapSelection(`{color:${hex}}`, '{/color}')
+
+  const handleSubmit = async (targetStatus) => {
+    if (!title.trim() || !body.trim()) {
+      setError('제목과 내용을 입력해주세요.')
+      return
+    }
+    setError('')
+    setStatus(targetStatus)
+    setSubmitting(true)
+    try {
+      const notice = await createNotice({
+        title,
+        content: body,
+        academicNotice: category === 'general',
+        employmentNotice: category === 'career',
+      })
+      if (targetStatus === 'published') {
+        await publishNotice(notice.id)
+      }
+      navigate('/admin')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <AdminLayout title="공지사항 작성">
@@ -184,11 +215,11 @@ export default function NoticeWrite() {
             <h3>게시 정보</h3>
             <div className="admin-info-row">
               <p className="admin-info-row__label">작성자</p>
-              <p className="admin-info-row__value">김관리자</p>
+              <p className="admin-info-row__value">{getAdminEmail() ?? '관리자'}</p>
             </div>
             <div className="admin-info-row">
               <p className="admin-info-row__label">작성일</p>
-              <p className="admin-info-row__value">2026.09.21</p>
+              <p className="admin-info-row__value">{new Date().toLocaleDateString('ko-KR')}</p>
             </div>
             <div className="admin-note admin-note--blue">
               게시된 공지는 알림 신청자에게 이메일로 발송됩니다.
@@ -196,14 +227,26 @@ export default function NoticeWrite() {
           </aside>
         </div>
 
+        {error && <p className="admin-writer__error" role="alert">{error}</p>}
+
         <div className="admin-writer__actions">
           <Link to="/admin" className="admin-btn admin-btn--ghost">
             취소
           </Link>
-          <button type="button" className="admin-btn admin-btn--outline">
+          <button
+            type="button"
+            className="admin-btn admin-btn--outline"
+            disabled={submitting}
+            onClick={() => handleSubmit('draft')}
+          >
             임시저장
           </button>
-          <button type="button" className="admin-btn admin-btn--primary">
+          <button
+            type="button"
+            className="admin-btn admin-btn--primary"
+            disabled={submitting}
+            onClick={() => handleSubmit('published')}
+          >
             게시하기
           </button>
         </div>

@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { getAdminEmail, logout } from '../api/auth'
 import './AdminLayout.css'
 
 const NAV_ITEMS = [
@@ -11,6 +12,13 @@ const NAV_ITEMS = [
 
 export default function AdminLayout({ title, children }) {
   const location = useLocation()
+  const navigate = useNavigate()
+  const adminEmail = getAdminEmail()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   return (
     <div className="admin">
@@ -48,10 +56,12 @@ export default function AdminLayout({ title, children }) {
 
         <div className="admin__sidebar-footer">
           <div>
-            <p>김관리자</p>
+            <p>{adminEmail ?? '관리자'}</p>
             <p>관리자 계정</p>
           </div>
-          <Link to="/">로그아웃 ↗</Link>
+          <button type="button" className="admin__logout-btn" onClick={handleLogout}>
+            로그아웃 ↗
+          </button>
         </div>
       </aside>
 

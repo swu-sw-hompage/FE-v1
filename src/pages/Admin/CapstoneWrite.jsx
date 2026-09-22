@@ -1,14 +1,43 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
+import { createGraduationProject } from '../../api/graduation'
 import './Admin.css'
 
 export default function CapstoneWrite() {
+  const navigate = useNavigate()
   const [status, setStatus] = useState('published')
   const [year, setYear] = useState('')
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
   const [desc, setDesc] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (targetStatus) => {
+    if (!year.trim() || !title.trim() || !desc.trim()) {
+      setError('졸업연도, 작품명, 상세 설명을 입력해주세요.')
+      return
+    }
+    setError('')
+    setStatus(targetStatus)
+    setSubmitting(true)
+    try {
+      await createGraduationProject({
+        year: Number(year),
+        title,
+        summary,
+        content: desc,
+        thumbnailUrl: null,
+        status: targetStatus === 'published' ? 'PUBLISHED' : 'DRAFT',
+      })
+      navigate('/admin')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <AdminLayout title="졸업프로젝트 작성">
@@ -106,14 +135,26 @@ export default function CapstoneWrite() {
           </aside>
         </div>
 
+        {error && <p className="admin-writer__error" role="alert">{error}</p>}
+
         <div className="admin-writer__actions">
           <Link to="/admin" className="admin-btn admin-btn--ghost">
             취소
           </Link>
-          <button type="button" className="admin-btn admin-btn--outline">
+          <button
+            type="button"
+            className="admin-btn admin-btn--outline"
+            disabled={submitting}
+            onClick={() => handleSubmit('draft')}
+          >
             임시저장
           </button>
-          <button type="button" className="admin-btn admin-btn--primary">
+          <button
+            type="button"
+            className="admin-btn admin-btn--primary"
+            disabled={submitting}
+            onClick={() => handleSubmit('published')}
+          >
             게시하기
           </button>
         </div>
