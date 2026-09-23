@@ -203,6 +203,11 @@
   display: flex;
 }
 
+.roadmap__liberal-item--flip .roadmap__tooltip--liberal {
+  left: auto;
+  right: calc(100% + 10px);
+}
+
 @media (max-width: 900px) {
   .roadmap__years,
   .roadmap__liberal {

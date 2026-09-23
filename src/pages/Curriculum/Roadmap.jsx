@@ -279,7 +279,14 @@ export default function Roadmap() {
                 <div className="roadmap__liberal-col" key={group.year}>
                   <p className="roadmap__liberal-year">{group.year}</p>
                   {group.courses.map((course) => (
-                    <div className="roadmap__liberal-item" key={course.title}>
+                    <div
+                      className={
+                        group.year === '4학년'
+                          ? 'roadmap__liberal-item roadmap__liberal-item--flip'
+                          : 'roadmap__liberal-item'
+                      }
+                      key={course.title}
+                    >
                       <span>{course.title}</span>
                       <div className="roadmap__tooltip roadmap__tooltip--liberal">
                         <strong>추천 이유</strong>
