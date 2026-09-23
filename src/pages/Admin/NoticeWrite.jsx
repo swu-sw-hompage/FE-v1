@@ -15,9 +15,19 @@ export default function NoticeWrite() {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [previewMode, setPreviewMode] = useState(false)
+  const [files, setFiles] = useState([])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const textareaRef = useRef(null)
+  const fileInputRef = useRef(null)
+
+  const addFiles = (fileList) => {
+    setFiles((prev) => [...prev, ...Array.from(fileList)])
+  }
+
+  const removeFile = (index) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index))
+  }
 
   const wrapSelection = (before, after = before) => {
     const el = textareaRef.current
@@ -44,12 +54,15 @@ export default function NoticeWrite() {
     setStatus(targetStatus)
     setSubmitting(true)
     try {
-      const notice = await createNotice({
-        title,
-        content: body,
-        academicNotice: category === 'general',
-        employmentNotice: category === 'career',
-      })
+      const notice = await createNotice(
+        {
+          title,
+          content: body,
+          academicNotice: category === 'general',
+          employmentNotice: category === 'career',
+        },
+        files,
+      )
       if (targetStatus === 'published') {
         await publishNotice(notice.id)
       }
@@ -188,6 +201,41 @@ export default function NoticeWrite() {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                   />
+                )}
+              </div>
+            </label>
+
+            <label className="admin-field">
+              <span>첨부파일</span>
+              <div className="admin-attachments">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  hidden
+                  onChange={(e) => {
+                    addFiles(e.target.files)
+                    e.target.value = ''
+                  }}
+                />
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--outline"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  파일 선택
+                </button>
+                {files.length > 0 && (
+                  <ul className="admin-attachments__list">
+                    {files.map((file, index) => (
+                      <li key={`${file.name}-${index}`}>
+                        <span>{file.name}</span>
+                        <button type="button" onClick={() => removeFile(index)} aria-label="첨부파일 삭제">
+                          ×
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </label>

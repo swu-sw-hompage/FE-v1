@@ -1,14 +1,12 @@
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
 import { FACULTY, EMERITUS_FACULTY } from '../../data/faculty'
+import heroFaculty from '../../assets/images/brand/hero-faculty.jpg'
 import './Faculty.css'
 
 const SECTIONS = [{ id: 'faculty-list', label: '교수진' }]
 
-function EducationValue({ education, stacked }) {
-  if (!stacked) {
-    return <p className="faculty__value">{education.join(' · ')}</p>
-  }
+function EducationValue({ education }) {
   return (
     <div className="faculty__value faculty__value--stacked">
       {education.map((line) => (
@@ -18,10 +16,10 @@ function EducationValue({ education, stacked }) {
   )
 }
 
-export default function Faculty({ stackedEducation = true }) {
+export default function Faculty() {
   return (
     <div className="faculty">
-      <PageHero photo title={['교수진']} />
+      <PageHero photo photoSrc={heroFaculty} title={['교수진']} />
 
       <div className="container page-layout">
         <ChapterNav sections={SECTIONS} />
@@ -50,7 +48,7 @@ export default function Faculty({ stackedEducation = true }) {
                   <div className="faculty__divider" />
                   <div className="faculty__meta-row">
                     <span className="faculty__label">학력</span>
-                    <EducationValue education={professor.education} stacked={stackedEducation} />
+                    <EducationValue education={professor.education} />
                   </div>
                 </div>
               ))}
@@ -76,7 +74,7 @@ export default function Faculty({ stackedEducation = true }) {
                   <div className="faculty__divider" />
                   <div className="faculty__meta-row">
                     <span className="faculty__label">학력</span>
-                    <EducationValue education={professor.education} stacked={stackedEducation} />
+                    <EducationValue education={professor.education} />
                   </div>
                 </div>
               ))}

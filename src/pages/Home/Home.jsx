@@ -1,14 +1,12 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import heroHome from '../../assets/images/brand/hero-home.jpg'
 import iconQuick1 from '../../assets/images/brand/icon-quick1.svg'
 import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
-import { NOTICES } from '../../data/notices'
-import { CAPSTONE_2025 } from '../../data/capstone2025'
+import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { getGraduationProjects } from '../../api/graduation'
 import './Home.css'
-
-const LATEST_NOTICES = NOTICES.slice(0, 5)
-const LATEST_PROJECTS = CAPSTONE_2025.slice(0, 4)
 
 const QUICK_LINKS = [
   { id: 'roadmap', icon: iconQuick3, title: '전공 로드맵', to: '/curriculum/roadmap' },
@@ -17,6 +15,18 @@ const QUICK_LINKS = [
 ]
 
 export default function Home() {
+  const [notices, setNotices] = useState([])
+  const [projects, setProjects] = useState([])
+
+  useEffect(() => {
+    getNotices({ page: 0, size: 5 })
+      .then((result) => setNotices(result?.content ?? []))
+      .catch(() => setNotices([]))
+    getGraduationProjects({ year: 2025, page: 0, size: 4 })
+      .then((result) => setProjects(result?.content ?? []))
+      .catch(() => setProjects([]))
+  }, [])
+
   return (
     <div className="home">
       <section className="home__hero">
@@ -60,11 +70,11 @@ export default function Home() {
             </div>
           </div>
           <ul className="home__notice-list">
-            {LATEST_NOTICES.map((notice) => (
+            {notices.map((notice) => (
               <li key={notice.id}>
-                <span className="home__notice-category">{notice.category} ·</span>
+                <span className="home__notice-category">{noticeCategoryLabel(notice)} ·</span>
                 <Link to={`/notice/${notice.id}`}>{notice.title}</Link>
-                <span className="home__notice-date">{notice.date}</span>
+                <span className="home__notice-date">{formatNoticeDate(notice.publishedAt ?? notice.createdAt)}</span>
               </li>
             ))}
           </ul>
@@ -93,10 +103,10 @@ export default function Home() {
           </Link>
         </div>
         <div className="home__projects-grid">
-          {LATEST_PROJECTS.map((project) => (
+          {projects.map((project) => (
             <article className="project-card" key={project.id}>
-              {project.thumb ? (
-                <img className="project-card__image" src={project.thumb} alt="" />
+              {project.thumbnailUrl ? (
+                <img className="project-card__image" src={project.thumbnailUrl} alt="" />
               ) : (
                 <div className="project-card__image project-card__image--empty" />
               )}

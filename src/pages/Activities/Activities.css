@@ -233,6 +233,31 @@
   color: var(--color-text);
 }
 
+.activity-detail__summary {
+  margin: 16px 0 0;
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  color: var(--color-text-secondary);
+}
+
+.activity-detail__body {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-soft);
+  font-family: var(--font-pretendard);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--color-text-body);
+}
+
+.activity-detail__body p {
+  margin: 0 0 16px;
+}
+
+.activity-detail__body p:last-child {
+  margin-bottom: 0;
+}
+
 .activity-detail__empty {
   padding-block: 100px;
   text-align: center;
