@@ -199,6 +199,7 @@
   position: relative;
   width: 100%;
   max-width: 760px;
+  margin-inline: auto;
   aspect-ratio: 16 / 9;
   background: #131313;
   border-radius: 4px;
@@ -216,6 +217,7 @@
 .activity-detail__image {
   width: 100%;
   max-width: 760px;
+  margin-inline: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: 4px;
