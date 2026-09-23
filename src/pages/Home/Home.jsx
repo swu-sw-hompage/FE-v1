@@ -104,17 +104,15 @@ export default function Home() {
         </div>
         <div className="home__projects-grid">
           {projects.map((project) => (
-            <article className="project-card" key={project.id}>
+            <Link to={`/activities/2025/${project.id}`} className="project-card" key={project.id}>
               {project.thumbnailUrl ? (
                 <img className="project-card__image" src={project.thumbnailUrl} alt="" />
               ) : (
                 <div className="project-card__image project-card__image--empty" />
               )}
               <h3>{project.title}</h3>
-              <Link to="/activities/2025" className="project-card__link">
-                자세히 보기 →
-              </Link>
-            </article>
+              <span className="project-card__link">자세히 보기 →</span>
+            </Link>
           ))}
         </div>
       </section>

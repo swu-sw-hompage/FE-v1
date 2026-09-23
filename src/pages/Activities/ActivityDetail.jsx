@@ -33,6 +33,8 @@ export default function ActivityDetail() {
     }
   }, [id])
 
+  const hasInfoRow = project && (project.teamName || project.section || project.members)
+
   return (
     <div className="activities">
       <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
@@ -42,6 +44,8 @@ export default function ActivityDetail() {
 
         <main className="page-layout__main">
           <section className="page-section">
+            <h2>졸업프로젝트</h2>
+
             {loading && <p className="notice__loading">불러오는 중...</p>}
 
             {!loading && (error || !project) && (
@@ -52,24 +56,31 @@ export default function ActivityDetail() {
             )}
 
             {!loading && project && (
-              <>
-                <Link to={`/activities/${activeYear}`} className="activity-detail__back">
-                  ← {activeYear}년도 졸업프로젝트 목록
-                </Link>
-
-                {project.thumbnailUrl ? (
-                  <img className="activity-detail__image" src={project.thumbnailUrl} alt="" />
-                ) : (
-                  <div className="activity-detail__image activity-detail__image--empty" />
-                )}
-
-                <div className="activity-detail__meta">
-                  <span>{project.year ?? activeYear}년도 졸업프로젝트</span>
-                  {project.section && <span>{project.section}분반</span>}
-                  {project.date && <span>{project.date}</span>}
+              <div className="activity-detail__article">
+                <div className="activity-detail__header">
+                  <p className="activity-detail__title">{project.title}</p>
+                  {(project.teamName || project.section) && (
+                    <p className="activity-detail__subtitle">
+                      {[project.teamName, project.section && `${project.section}분반`]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </p>
+                  )}
+                  <div className="activity-detail__divider" />
                 </div>
 
-                <h1 className="activity-detail__title">{project.title}</h1>
+                {project.videoUrl ? (
+                  <div className="activity-detail__video">
+                    <iframe
+                      src={project.videoUrl}
+                      title={project.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : project.thumbnailUrl ? (
+                  <img className="activity-detail__image" src={project.thumbnailUrl} alt="" />
+                ) : null}
 
                 {project.summary && <p className="activity-detail__summary">{project.summary}</p>}
 
@@ -81,7 +92,40 @@ export default function ActivityDetail() {
                     ))}
                   </div>
                 )}
-              </>
+
+                {hasInfoRow && (
+                  <div className="activity-detail__info">
+                    {project.teamName && (
+                      <div className="activity-detail__info-row">
+                        <span className="activity-detail__info-label">팀명</span>
+                        <span>{project.teamName}</span>
+                      </div>
+                    )}
+                    <div className="activity-detail__info-row">
+                      <span className="activity-detail__info-label">주제</span>
+                      <span>{project.title}</span>
+                    </div>
+                    {project.section && (
+                      <div className="activity-detail__info-row">
+                        <span className="activity-detail__info-label">분반</span>
+                        <span>{project.section}분반</span>
+                      </div>
+                    )}
+                    {project.members && (
+                      <div className="activity-detail__info-row">
+                        <span className="activity-detail__info-label">이름</span>
+                        <span>{project.members}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="activity-detail__actions">
+                  <Link to={`/activities/${activeYear}`} className="activity-detail__back-btn">
+                    목록으로
+                  </Link>
+                </div>
+              </div>
             )}
           </section>
         </main>
