@@ -80,7 +80,9 @@ export default function ActivityDetail() {
                   </div>
                 ) : project.thumbnailUrl ? (
                   <img className="activity-detail__image" src={project.thumbnailUrl} alt="" />
-                ) : null}
+                ) : (
+                  <div className="activity-detail__image activity-detail__image--empty" />
+                )}
 
                 {project.summary && <p className="activity-detail__summary">{project.summary}</p>}
 
