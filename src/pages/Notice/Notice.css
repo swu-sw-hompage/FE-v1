@@ -19,6 +19,19 @@
   margin-bottom: 24px;
 }
 
+.notice__search-scope:focus,
+.notice__search-input:focus,
+.notice__search-btn:focus {
+  outline: none;
+}
+
+.notice__search-scope:focus,
+.notice__search-input:focus {
+  border-color: var(--color-primary);
+  position: relative;
+  z-index: 1;
+}
+
 .notice__search-scope {
   flex-shrink: 0;
   width: 132px;

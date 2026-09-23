@@ -13,29 +13,6 @@
   color: var(--color-text-faint);
 }
 
-.activities__sidebar-heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 38px;
-  margin-bottom: 0;
-}
-
-.activities__sidebar-rail {
-  flex-shrink: 0;
-  width: 1px;
-  height: 18px;
-  background: var(--color-border);
-}
-
-.activities__sidebar-heading p {
-  margin: 0;
-  font-family: var(--font-pretendard);
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--color-text);
-}
-
 .activities__year-nav {
   display: flex;
   flex-direction: column;
