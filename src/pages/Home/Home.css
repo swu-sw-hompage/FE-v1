@@ -358,6 +358,10 @@
 }
 
 @media (max-width: 900px) {
+  .home__hero {
+    min-height: auto;
+  }
+
   .home__hero-bg {
     position: static;
     width: 100%;

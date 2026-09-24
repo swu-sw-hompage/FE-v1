@@ -189,6 +189,15 @@
 }
 
 @media (max-width: 900px) {
+  .header__inner {
+    min-height: auto;
+    padding-block: 12px;
+  }
+
+  .header__logo-full {
+    height: 44px;
+  }
+
   .header__mega {
     display: none !important;
   }
@@ -286,8 +295,3 @@
   text-decoration: none;
 }
 
-@media (max-width: 640px) {
-  .header__logo-full {
-    height: 54px;
-  }
-}
