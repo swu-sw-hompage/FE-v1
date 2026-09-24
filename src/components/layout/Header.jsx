@@ -1,12 +1,18 @@
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { NAV_ITEMS, MEGA_MENU_COLUMNS } from '../../constants/nav'
 import logoFull from '../../assets/images/brand/logo-full.svg'
 import './Header.css'
 
 export default function Header() {
   const [hoveredKey, setHoveredKey] = useState(null)
-  const [openMobileKey, setOpenMobileKey] = useState(null)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const currentColumn = MEGA_MENU_COLUMNS.find(
+    (c) => location.pathname === c.key || location.pathname.startsWith(`${c.key}/`),
+  )
+  const showMobileDropdown = currentColumn && currentColumn.links.length > 1
 
   return (
     <header className="header" onMouseLeave={() => setHoveredKey(null)}>
@@ -34,6 +40,21 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
+
+        {showMobileDropdown && (
+          <select
+            className="header__mobile-select"
+            aria-label={currentColumn.title}
+            value={currentColumn.links.find((l) => l.to === location.pathname)?.to ?? currentColumn.links[0].to}
+            onChange={(e) => navigate(e.target.value)}
+          >
+            {currentColumn.links.map((link) => (
+              <option key={link.to} value={link.to}>
+                {link.label}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div className={hoveredKey ? 'header__mega header__mega--open' : 'header__mega'}>
@@ -62,36 +83,6 @@ export default function Header() {
           ))}
         </div>
       </div>
-
-      <nav className="header__mobile-accordion" aria-label="모바일 메뉴">
-        {MEGA_MENU_COLUMNS.map((column) => {
-          const isOpen = openMobileKey === column.key
-          return (
-            <div key={column.key} className="header__mobile-accordion-item">
-              <button
-                type="button"
-                className="header__mobile-accordion-trigger"
-                aria-expanded={isOpen}
-                onClick={() => setOpenMobileKey(isOpen ? null : column.key)}
-              >
-                {column.title}
-                <span className={isOpen ? 'header__mobile-chevron header__mobile-chevron--open' : 'header__mobile-chevron'} />
-              </button>
-              {isOpen && (
-                <ul className="header__mobile-accordion-panel">
-                  {column.links.map((link) => (
-                    <li key={link.label}>
-                      <Link to={link.to} onClick={() => setOpenMobileKey(null)}>
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )
-        })}
-      </nav>
     </header>
   )
 }
