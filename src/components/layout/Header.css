@@ -225,6 +225,7 @@
 
   .header__menu-btn--open span:nth-child(2) {
     opacity: 0;
+    transform: scaleX(0);
   }
 
   .header__menu-btn--open span:nth-child(3) {
