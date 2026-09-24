@@ -151,26 +151,45 @@
   }
 
   .activities__project-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
   .activities__project-card {
+    flex-direction: row;
+    align-items: center;
     width: 100%;
     height: auto;
+    gap: 16px;
+    padding: 16px 4px;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+
+  .activities__project-card:hover {
+    box-shadow: none;
   }
 
   .activities__project-image,
   .activities__project-image--empty {
-    height: auto;
-    aspect-ratio: 315 / 176;
+    flex-shrink: 0;
+    width: 100px;
+    height: 72px;
+    aspect-ratio: auto;
+    border-radius: 6px;
   }
 
   .activities__project-card strong {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
     overflow: visible;
     white-space: normal;
     text-overflow: clip;
-    margin-bottom: 17px;
+    font-size: 15px;
+    line-height: 1.4;
   }
 
   .activities__project-link {
