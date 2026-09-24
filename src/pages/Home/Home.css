@@ -386,11 +386,11 @@
 
   .home__subtitle {
     max-width: none;
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .home__subtitle span {
-    display: inline;
+    display: block;
   }
 
   .btn {
