@@ -165,6 +165,17 @@
     height: auto;
     aspect-ratio: 315 / 176;
   }
+
+  .activities__project-card strong {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+    margin-bottom: 17px;
+  }
+
+  .activities__project-link {
+    display: none;
+  }
 }
 
 /* Activity detail */
