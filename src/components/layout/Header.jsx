@@ -1,18 +1,17 @@
-import { useState } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { NAV_ITEMS, MEGA_MENU_COLUMNS } from '../../constants/nav'
 import logoFull from '../../assets/images/brand/logo-full.svg'
 import './Header.css'
 
 export default function Header() {
   const [hoveredKey, setHoveredKey] = useState(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate()
 
-  const currentColumn = MEGA_MENU_COLUMNS.find(
-    (c) => location.pathname === c.key || location.pathname.startsWith(`${c.key}/`),
-  )
-  const showMobileDropdown = currentColumn && currentColumn.links.length > 1
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname, location.search])
 
   return (
     <header className="header" onMouseLeave={() => setHoveredKey(null)}>
@@ -41,20 +40,17 @@ export default function Header() {
           ))}
         </nav>
 
-        {showMobileDropdown && (
-          <select
-            className="header__mobile-select"
-            aria-label={currentColumn.title}
-            value={currentColumn.links.find((l) => l.to === location.pathname)?.to ?? currentColumn.links[0].to}
-            onChange={(e) => navigate(e.target.value)}
-          >
-            {currentColumn.links.map((link) => (
-              <option key={link.to} value={link.to}>
-                {link.label}
-              </option>
-            ))}
-          </select>
-        )}
+        <button
+          type="button"
+          className={mobileMenuOpen ? 'header__menu-btn header__menu-btn--open' : 'header__menu-btn'}
+          aria-label="메뉴 열기"
+          aria-expanded={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen((v) => !v)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
 
       <div className={hoveredKey ? 'header__mega header__mega--open' : 'header__mega'}>
@@ -83,6 +79,23 @@ export default function Header() {
           ))}
         </div>
       </div>
+
+      {mobileMenuOpen && (
+        <div className="header__mobile-menu">
+          {MEGA_MENU_COLUMNS.map((column) => (
+            <div key={column.key} className="header__mobile-menu-group">
+              <p className="header__mobile-menu-title">{column.title}</p>
+              <ul>
+                {column.links.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.to}>{link.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
     </header>
   )
 }
