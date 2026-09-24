@@ -152,12 +152,18 @@
 
   .activities__project-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
-}
 
-@media (max-width: 560px) {
-  .activities__project-grid {
-    grid-template-columns: 1fr;
+  .activities__project-card {
+    width: 100%;
+    height: auto;
+  }
+
+  .activities__project-image,
+  .activities__project-image--empty {
+    height: auto;
+    aspect-ratio: 315 / 176;
   }
 }
 
