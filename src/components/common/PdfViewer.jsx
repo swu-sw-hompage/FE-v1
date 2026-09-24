@@ -99,10 +99,10 @@ export default function PdfViewer({ src, fileName, pageCount }) {
           </button>
         </div>
         <a className="pdf-viewer__link" href={src} target="_blank" rel="noreferrer">
-          새 창에서 보기 ↗
+          <span className="pdf-viewer__link-label">새 창에서 보기</span> ↗
         </a>
         <a className="pdf-viewer__link" href={src} download={fileName}>
-          다운로드 ↓
+          <span className="pdf-viewer__link-label">다운로드</span> ↓
         </a>
       </div>
 

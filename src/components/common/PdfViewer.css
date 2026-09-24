@@ -138,6 +138,18 @@
     padding-block: 12px;
   }
 
+  .pdf-viewer__title {
+    display: none;
+  }
+
+  .pdf-viewer__link-label {
+    display: none;
+  }
+
+  .pdf-viewer__link {
+    font-size: 18px;
+  }
+
   .pdf-viewer__body {
     height: 420px;
   }
