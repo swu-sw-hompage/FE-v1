@@ -383,6 +383,15 @@
     font-size: 32px;
   }
 
+  .home__subtitle {
+    max-width: none;
+    font-size: 16px;
+  }
+
+  .home__subtitle span {
+    display: inline;
+  }
+
   .home__news {
     grid-template-columns: 1fr;
   }

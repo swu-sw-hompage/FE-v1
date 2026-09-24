@@ -40,7 +40,7 @@ export default function Home() {
               <span>소프트웨어 인재를 키웁니다</span>
             </h1>
             <p className="home__subtitle">
-              <span>AI·데이터·서비스 개발을 연결하는 실무 중심 교육으로</span>
+              <span>AI·데이터·서비스 개발을 연결하는 실무 중심 교육으로</span>{' '}
               <span>내일의 문제를 해결하는 여성 IT 리더를 양성합니다.</span>
             </p>
             <div className="home__cta">
