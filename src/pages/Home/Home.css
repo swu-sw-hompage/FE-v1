@@ -361,7 +361,7 @@
   .home__hero-bg {
     position: static;
     width: 100%;
-    height: 220px;
+    height: 160px;
   }
 
   .home__hero-fade {
@@ -376,7 +376,8 @@
 
   .home__hero-text {
     width: 100%;
-    padding-block: 32px;
+    gap: 14px;
+    padding-block: 20px;
   }
 
   .home__hero-text h1 {
@@ -392,12 +393,15 @@
     display: inline;
   }
 
-  .home__cta {
-    display: none;
+  .btn {
+    height: 44px;
+    font-size: 14px;
+    padding-inline: 16px;
   }
 
   .home__news {
     grid-template-columns: 1fr;
+    padding-top: 32px;
   }
 
   .home__quick-links {
