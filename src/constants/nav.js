@@ -1,3 +1,5 @@
+import { ACTIVITY_YEARS } from './activities'
+
 export const NAV_ITEMS = [
   { label: '학과 소개', path: '/about' },
   { label: '교육과정', path: '/curriculum' },
@@ -35,10 +37,10 @@ export const MEGA_MENU_COLUMNS = [
   {
     key: '/activities',
     title: '학생활동',
-    links: [
-      { to: '/activities/2025', label: '학생활동' },
-      { to: '/activities/2025', label: '졸업프로젝트' },
-    ],
+    links: ACTIVITY_YEARS.map((year) => ({
+      to: `/activities/${year}`,
+      label: `${year}년도 졸업프로젝트`,
+    })),
   },
   {
     key: '/notice',
