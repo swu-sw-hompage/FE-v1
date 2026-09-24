@@ -347,13 +347,39 @@
 
 @media (max-width: 900px) {
   .home__projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-}
 
-@media (max-width: 480px) {
-  .home__projects-grid {
-    grid-template-columns: 1fr;
+  .project-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 4px;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+
+  .project-card__image,
+  .project-card__image--empty {
+    flex-shrink: 0;
+    width: 100px;
+    height: 72px;
+    border-radius: 6px;
+  }
+
+  .project-card h3 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .project-card__link {
+    display: none;
   }
 }
 
