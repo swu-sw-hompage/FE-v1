@@ -392,6 +392,10 @@
     display: inline;
   }
 
+  .home__cta {
+    display: none;
+  }
+
   .home__news {
     grid-template-columns: 1fr;
   }
@@ -402,11 +406,6 @@
 }
 
 @media (max-width: 480px) {
-  .home__cta {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
   .home__hero-text h1 {
     font-size: 26px;
   }
