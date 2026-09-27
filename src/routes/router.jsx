@@ -15,6 +15,7 @@ import Activities from '../pages/Activities/Activities'
 import ActivityDetail from '../pages/Activities/ActivityDetail'
 import Notice from '../pages/Notice/Notice'
 import NoticeDetail from '../pages/Notice/NoticeDetail'
+import NoticeSubscribe from '../pages/Notice/NoticeSubscribe'
 import Login from '../pages/Login/Login'
 import NotFound from '../pages/NotFound/NotFound'
 import Dashboard from '../pages/Admin/Dashboard'
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
       { path: 'activities/:year', element: <Activities /> },
       { path: 'activities/:year/:id', element: <ActivityDetail /> },
       { path: 'notice', element: <Notice /> },
-      { path: 'notice/subscribe', element: <Navigate to="/notice#notice-subscribe" replace /> },
+      { path: 'notice/subscribe', element: <NoticeSubscribe /> },
       { path: 'notice/:id', element: <NoticeDetail /> },
       { path: 'login', element: <Login /> },
       { path: '*', element: <NotFound /> },

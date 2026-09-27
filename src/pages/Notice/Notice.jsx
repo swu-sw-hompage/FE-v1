@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
 import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
-import { requestVerificationCode, verifyCode, subscribe } from '../../api/notification'
 import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import iconPrev from '../../assets/icons/pagination-prev.svg'
 import iconNext from '../../assets/icons/pagination-next.svg'
 import './Notice.css'
-import './NoticeSubscribe.css'
 
 const FILTERS = [
   { key: 'all', label: '전체' },
@@ -16,15 +14,9 @@ const FILTERS = [
   { key: 'employment', label: '취업' },
 ]
 
-const SUBSCRIBE_CATEGORIES = [
-  { id: 'academic', label: '학사공지' },
-  { id: 'career', label: '취업공지' },
-]
-
 const PAGE_SIZE = 8
 
 export default function Notice() {
-  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const filter = searchParams.get('filter') ?? 'all'
   const page = Number(searchParams.get('page') ?? '1')
@@ -37,20 +29,6 @@ export default function Notice() {
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-
-  // 공지 알림 신청 폼 상태
-  const [subCategories, setSubCategories] = useState(['academic'])
-  const [email, setEmail] = useState('')
-  const [codeSent, setCodeSent] = useState(false)
-  const [code, setCode] = useState('')
-  const [verified, setVerified] = useState(false)
-  const [agreed, setAgreed] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [showToast, setShowToast] = useState(false)
-  const [sending, setSending] = useState(false)
-  const [verifying, setVerifying] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [subError, setSubError] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -83,18 +61,6 @@ export default function Notice() {
     }
   }, [filter, page, submittedKeyword, submittedScope])
 
-  // 다른 페이지의 메가메뉴에서 /notice#notice-subscribe로 넘어왔을 때 해당 섹션으로 스크롤
-  useEffect(() => {
-    if (!location.hash) return
-    document.querySelector(location.hash)?.scrollIntoView({ block: 'start' })
-  }, [location.hash])
-
-  useEffect(() => {
-    if (!showToast) return undefined
-    const timer = setTimeout(() => setShowToast(false), 2800)
-    return () => clearTimeout(timer)
-  }, [showToast])
-
   const setFilter = (key) => {
     const next = new URLSearchParams(searchParams)
     next.set('filter', key)
@@ -121,60 +87,6 @@ export default function Notice() {
     document.getElementById('notice-list')?.scrollIntoView({ block: 'start' })
   }
 
-  const toggleSubCategory = (id) => {
-    setSubCategories((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]))
-  }
-
-  const handleSendCode = async () => {
-    if (!email) return
-    setSubError('')
-    setSending(true)
-    try {
-      await requestVerificationCode({ email })
-      setCodeSent(true)
-    } catch (err) {
-      setSubError(err.message)
-    } finally {
-      setSending(false)
-    }
-  }
-
-  const handleVerify = async () => {
-    if (!code) return
-    setSubError('')
-    setVerifying(true)
-    try {
-      await verifyCode({ email, verificationCode: code })
-      setVerified(true)
-    } catch (err) {
-      setSubError(err.message)
-    } finally {
-      setVerifying(false)
-    }
-  }
-
-  const canSubmitSubscribe = subCategories.length > 0 && verified && agreed && !submitting
-
-  const handleSubscribeSubmit = async () => {
-    if (!canSubmitSubscribe) return
-    setSubError('')
-    setSubmitting(true)
-    try {
-      await subscribe({
-        email,
-        academicNotice: subCategories.includes('academic'),
-        employmentNotice: subCategories.includes('career'),
-        privacyConsent: agreed,
-      })
-      setSubmitted(true)
-      setShowToast(true)
-    } catch (err) {
-      setSubError(err.message)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   return (
     <div className="notice">
       <PageHero photo photoSrc={heroNotice} title={['공지사항']} />
@@ -193,7 +105,7 @@ export default function Notice() {
             ))}
             <li>
               <span className="chapter-nav__bar" />
-              <a href="#notice-subscribe">공지 알림 신청</a>
+              <Link to="/notice/subscribe">공지 알림 신청</Link>
             </li>
           </ul>
         </nav>
@@ -283,159 +195,8 @@ export default function Notice() {
               </nav>
             )}
           </section>
-
-          <section id="notice-subscribe" className="page-section">
-            <h2>공지 알림 신청</h2>
-
-            <div className="notice-subscribe__form">
-              <p className="notice-subscribe__form-title">받을 공지를 선택해주세요</p>
-              <div className="notice-subscribe__divider" />
-
-              <div className="notice-subscribe__row">
-                <div className="notice-subscribe__row-label">
-                  <p>알림 받을 공지</p>
-                  <span>* 중복 선택 가능</span>
-                </div>
-                <div className="notice-subscribe__row-content">
-                  <div className="notice-subscribe__categories">
-                    {SUBSCRIBE_CATEGORIES.map((c) => {
-                      const active = subCategories.includes(c.id)
-                      return (
-                        <button
-                          key={c.id}
-                          type="button"
-                          className={
-                            active
-                              ? 'notice-subscribe__category notice-subscribe__category--active'
-                              : 'notice-subscribe__category'
-                          }
-                          onClick={() => toggleSubCategory(c.id)}
-                          aria-pressed={active}
-                        >
-                          {c.label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              <div className="notice-subscribe__divider" />
-
-              <div className="notice-subscribe__row">
-                <div className="notice-subscribe__row-label">
-                  <p>이메일 인증</p>
-                </div>
-                <div className="notice-subscribe__row-content">
-                  <div className="notice-subscribe__field">
-                    <p className="notice-subscribe__field-label">이메일 주소</p>
-                    <div className="notice-subscribe__pair">
-                      <input
-                        type="email"
-                        className="notice-subscribe__input"
-                        placeholder="example@swu.ac.kr"
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value)
-                          setCodeSent(false)
-                          setVerified(false)
-                        }}
-                      />
-                      <button
-                        type="button"
-                        className="notice-subscribe__side-btn notice-subscribe__side-btn--primary-outline"
-                        onClick={handleSendCode}
-                        disabled={!email || sending}
-                      >
-                        {sending ? '전송 중...' : codeSent ? '재전송' : '인증번호 받기'}
-                      </button>
-                    </div>
-                    {codeSent && !verified && (
-                      <p className="notice-subscribe__hint">인증번호를 이메일로 보냈습니다.</p>
-                    )}
-                  </div>
-
-                  <div className="notice-subscribe__field">
-                    <p className="notice-subscribe__field-label">인증번호</p>
-                    <div className="notice-subscribe__pair">
-                      <input
-                        type="text"
-                        className="notice-subscribe__input"
-                        placeholder="6자리 인증번호 입력"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        disabled={!codeSent || verified}
-                      />
-                      <button
-                        type="button"
-                        className={
-                          verified
-                            ? 'notice-subscribe__side-btn notice-subscribe__side-btn--done'
-                            : 'notice-subscribe__side-btn'
-                        }
-                        onClick={handleVerify}
-                        disabled={!codeSent || !code || verified || verifying}
-                      >
-                        {verifying ? '확인 중...' : verified ? '인증 완료' : '인증하기'}
-                      </button>
-                    </div>
-                  </div>
-
-                  {subError && (
-                    <p className="notice-subscribe__hint notice-subscribe__hint--error" role="alert">
-                      {subError}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="notice-subscribe__divider" />
-
-              <div className="notice-subscribe__row">
-                <div className="notice-subscribe__row-label">
-                  <p>개인정보 이용 동의</p>
-                </div>
-                <div className="notice-subscribe__row-content">
-                  <div className="notice-subscribe__consent">
-                    <button
-                      type="button"
-                      className={
-                        agreed
-                          ? 'notice-subscribe__check notice-subscribe__check--active'
-                          : 'notice-subscribe__check'
-                      }
-                      onClick={() => setAgreed((v) => !v)}
-                      aria-pressed={agreed}
-                      aria-label="개인정보 수집 및 이용에 동의합니다"
-                    />
-                    <p>개인정보 수집 및 이용에 동의합니다.</p>
-                  </div>
-                  <p className="notice-subscribe__note">
-                    입력한 이메일은 공지 알림 발송을 위해서만 사용됩니다.
-                  </p>
-                </div>
-              </div>
-
-              <div className="notice-subscribe__actions">
-                <button
-                  type="button"
-                  className="notice-subscribe__submit"
-                  onClick={handleSubscribeSubmit}
-                  disabled={!canSubmitSubscribe}
-                >
-                  {submitting ? '신청 중...' : submitted ? '알림 신청 완료' : '알림 신청하기'}
-                </button>
-              </div>
-            </div>
-          </section>
         </main>
       </div>
-
-      {showToast && (
-        <div className="notice-subscribe__toast" role="status">
-          신청이 완료되었습니다🎉
-        </div>
-      )}
     </div>
   )
 }
