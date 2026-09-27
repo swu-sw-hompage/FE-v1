@@ -6,6 +6,11 @@ import './Faculty.css'
 
 const SECTIONS = [{ id: 'faculty-list', label: '교수진' }]
 
+const POSITION_RANK = { 교수: 0, 부교수: 1, 조교수: 2 }
+const SORTED_FACULTY = [...FACULTY].sort(
+  (a, b) => (POSITION_RANK[a.position] ?? 99) - (POSITION_RANK[b.position] ?? 99),
+)
+
 function EducationValue({ education }) {
   return (
     <div className="faculty__value faculty__value--stacked">
@@ -30,7 +35,7 @@ export default function Faculty() {
 
             <p className="faculty__group-label">전임교수</p>
             <div className="faculty__grid">
-              {FACULTY.map((professor) => (
+              {SORTED_FACULTY.map((professor) => (
                 <div className="faculty__card" key={professor.email}>
                   <div className="faculty__top">
                     <img className="faculty__photo" src={professor.photo} alt={professor.name} />
@@ -41,12 +46,12 @@ export default function Faculty() {
                       <p className="faculty__contact">{professor.email}</p>
                     </div>
                   </div>
-                  <div className="faculty__meta-row">
+                  <div className="faculty__meta-row faculty__meta-row--major">
                     <span className="faculty__label">연구분야</span>
                     <p className="faculty__value">{professor.major}</p>
                   </div>
                   <div className="faculty__divider" />
-                  <div className="faculty__meta-row">
+                  <div className="faculty__meta-row faculty__meta-row--education">
                     <span className="faculty__label">학력</span>
                     <EducationValue education={professor.education} />
                   </div>
@@ -67,12 +72,12 @@ export default function Faculty() {
                       <strong>{professor.name}</strong>
                     </div>
                   </div>
-                  <div className="faculty__meta-row">
+                  <div className="faculty__meta-row faculty__meta-row--major">
                     <span className="faculty__label">연구분야</span>
                     <p className="faculty__value">{professor.field}</p>
                   </div>
                   <div className="faculty__divider" />
-                  <div className="faculty__meta-row">
+                  <div className="faculty__meta-row faculty__meta-row--education">
                     <span className="faculty__label">학력</span>
                     <EducationValue education={professor.education} />
                   </div>
