@@ -93,7 +93,7 @@ export default function NoticeSubscribe() {
 
   return (
     <div className="notice-subscribe">
-      <PageHero photo photoSrc={heroNoticeSubscribe} title={['공식 알림 설정']} />
+      <PageHero photo photoSrc={heroNoticeSubscribe} title={['공지사항']} />
 
       <div className="container page-layout">
         <nav className="chapter-nav notice__filter-nav" aria-label="공지사항 분류">
@@ -114,7 +114,7 @@ export default function NoticeSubscribe() {
 
         <main className="page-layout__main">
           <section id="subscribe-form" className="page-section">
-            <h2>공식 알림 설정</h2>
+            <h2>공지사항</h2>
 
             <div className="notice-subscribe__form">
               <p className="notice-subscribe__form-title">받을 공지를 선택해주세요</p>
