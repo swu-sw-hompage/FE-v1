@@ -48,7 +48,7 @@ export const MEGA_MENU_COLUMNS = [
     links: [
       { to: '/notice?filter=academic', label: '학사' },
       { to: '/notice?filter=employment', label: '취업' },
-      { to: '/notice/subscribe', label: '공지 알림 신청' },
+      { to: '/notice#notice-subscribe', label: '공지 알림 신청' },
     ],
   },
 ]
