@@ -208,8 +208,11 @@
   right: calc(100% + 10px);
 }
 
+.roadmap__years-mobile {
+  display: none;
+}
+
 @media (max-width: 900px) {
-  .roadmap__years,
   .roadmap__liberal {
     grid-template-columns: 1fr 1fr;
   }
@@ -217,10 +220,27 @@
   .roadmap__tooltip {
     display: none !important;
   }
+
+  .roadmap__years {
+    display: none;
+  }
+
+  .roadmap__years-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .roadmap__years-mobile .roadmap__year-rule {
+    margin-bottom: 20px;
+  }
+
+  .roadmap__years-mobile .roadmap__semester:not(:first-of-type) {
+    margin-top: 20px;
+  }
 }
 
 @media (max-width: 560px) {
-  .roadmap__years,
   .roadmap__liberal {
     grid-template-columns: 1fr;
   }

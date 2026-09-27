@@ -204,6 +204,36 @@ const LIBERAL_ARTS = [
   },
 ]
 
+function CourseItem({ course, flip }) {
+  return (
+    <div className={flip ? 'roadmap__course roadmap__course--flip' : 'roadmap__course'}>
+      <span
+        className={
+          course.tag === '필수'
+            ? 'roadmap__course-mark roadmap__course-mark--required'
+            : 'roadmap__course-mark roadmap__course-mark--elective'
+        }
+      />
+      <div className="roadmap__course-body">
+        <p className="roadmap__course-title">{course.title}</p>
+        <span
+          className={
+            course.tag === '필수'
+              ? 'roadmap__course-tag roadmap__course-tag--required'
+              : 'roadmap__course-tag roadmap__course-tag--elective'
+          }
+        >
+          {course.tag}
+        </span>
+      </div>
+      <div className="roadmap__tooltip">
+        <strong>{course.title.replace(/\(\d+\)$/, '')}</strong>
+        <p>{course.desc ?? COURSE_DESC_PLACEHOLDER}</p>
+      </div>
+    </div>
+  )
+}
+
 export default function Roadmap() {
   return (
     <div className="roadmap">
@@ -233,41 +263,33 @@ export default function Roadmap() {
                       {semIndex > 0 && <span className="roadmap__sem-divider" />}
                       <p className="roadmap__sem-label">{sem.label}</p>
                       {sem.courses.map((course) => (
-                        <div
-                          className={
-                            y.no === '04' ? 'roadmap__course roadmap__course--flip' : 'roadmap__course'
-                          }
-                          key={course.title}
-                        >
-                          <span
-                            className={
-                              course.tag === '필수'
-                                ? 'roadmap__course-mark roadmap__course-mark--required'
-                                : 'roadmap__course-mark roadmap__course-mark--elective'
-                            }
-                          />
-                          <div className="roadmap__course-body">
-                            <p className="roadmap__course-title">{course.title}</p>
-                            <span
-                              className={
-                                course.tag === '필수'
-                                  ? 'roadmap__course-tag roadmap__course-tag--required'
-                                  : 'roadmap__course-tag roadmap__course-tag--elective'
-                              }
-                            >
-                              {course.tag}
-                            </span>
-                          </div>
-                          <div className="roadmap__tooltip">
-                            <strong>{course.title.replace(/\(\d+\)$/, '')}</strong>
-                            <p>{course.desc ?? COURSE_DESC_PLACEHOLDER}</p>
-                          </div>
-                        </div>
+                        <CourseItem course={course} flip={y.no === '04'} key={course.title} />
                       ))}
                     </div>
                   )
                 }),
               )}
+            </div>
+
+            <div className="roadmap__years-mobile">
+              {YEARS.map((y) => (
+                <div className="roadmap__year-block" key={y.year}>
+                  <div className="roadmap__year">
+                    <span className="roadmap__year-no">{y.no}</span>
+                    <strong className="roadmap__year-title">{y.year}</strong>
+                    <span className={y.highlight ? 'roadmap__year-rule roadmap__year-rule--active' : 'roadmap__year-rule'} />
+                  </div>
+                  {y.semesters.map((sem, semIndex) => (
+                    <div className="roadmap__semester" key={sem.label}>
+                      {semIndex > 0 && <span className="roadmap__sem-divider" />}
+                      <p className="roadmap__sem-label">{sem.label}</p>
+                      {sem.courses.map((course) => (
+                        <CourseItem course={course} key={course.title} />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </section>
 

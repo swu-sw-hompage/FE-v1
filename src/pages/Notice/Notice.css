@@ -9,6 +9,12 @@
   color: #474747;
 }
 
+.notice__filter-nav .chapter-nav__list button:focus,
+.notice__page-num:focus,
+.notice__page-arrow:focus {
+  outline: none;
+}
+
 .notice__filter-nav .chapter-nav__list li.is-active button {
   color: var(--color-primary);
   font-weight: 600;
@@ -23,13 +29,6 @@
 .notice__search-input:focus,
 .notice__search-btn:focus {
   outline: none;
-}
-
-.notice__search-scope:focus,
-.notice__search-input:focus {
-  border-color: var(--color-primary);
-  position: relative;
-  z-index: 1;
 }
 
 .notice__search-scope {
