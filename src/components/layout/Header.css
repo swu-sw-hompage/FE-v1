@@ -60,21 +60,8 @@
   font-weight: 700;
 }
 
-.header__hover-bar {
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  bottom: 6px;
-  height: 2px;
-  background: var(--color-primary);
-  opacity: 0;
-  transform: scaleX(0.6);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.header__hover-bar--visible {
-  opacity: 1;
-  transform: scaleX(1);
+.header__link--hovered {
+  color: var(--color-primary);
 }
 
 /* Desktop hover mega menu */

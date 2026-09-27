@@ -26,16 +26,17 @@ export default function Header() {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                isActive ? 'header__link header__link--active' : 'header__link'
+                [
+                  'header__link',
+                  isActive && 'header__link--active',
+                  hoveredKey === item.path && 'header__link--hovered',
+                ]
+                  .filter(Boolean)
+                  .join(' ')
               }
               onMouseEnter={() => setHoveredKey(item.path)}
             >
               {item.label}
-              <span
-                className={
-                  hoveredKey === item.path ? 'header__hover-bar header__hover-bar--visible' : 'header__hover-bar'
-                }
-              />
             </NavLink>
           ))}
         </nav>
@@ -65,6 +66,7 @@ export default function Header() {
               className={
                 hoveredKey === column.key ? 'header__mega-column header__mega-column--active' : 'header__mega-column'
               }
+              onMouseEnter={() => setHoveredKey(column.key)}
             >
               <p className="header__mega-column-title">{column.title}</p>
               <div className="header__mega-column-underline" />
