@@ -30,7 +30,11 @@ export default function ChapterNav({ sections }) {
 
   const routeSections = sections.filter((s) => s.to)
   const matchingRoute = routeSections
-    .filter((s) => location.pathname === s.to || location.pathname.startsWith(`${s.to}/`))
+    .filter(
+      (s) =>
+        location.pathname === s.to ||
+        (!s.exact && location.pathname.startsWith(`${s.to}/`)),
+    )
     .sort((a, b) => b.to.length - a.to.length)[0]
 
   return (

@@ -7,7 +7,7 @@ import './NoticeSubscribe.css'
 
 const SECTIONS = [
   { id: 'subscribe-form', label: '공지 알림 신청' },
-  { to: '/notice', label: '공지사항 바로가기' },
+  { to: '/notice', label: '공지사항 바로가기', exact: true },
 ]
 
 const CATEGORIES = [
