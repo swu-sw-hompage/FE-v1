@@ -69,7 +69,6 @@ export default function Header() {
               onMouseEnter={() => setHoveredKey(column.key)}
             >
               <p className="header__mega-column-title">{column.title}</p>
-              <div className="header__mega-column-underline" />
               <ul>
                 {column.links.map((link) => (
                   <li key={link.label}>
