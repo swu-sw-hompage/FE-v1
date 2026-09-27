@@ -1,20 +1,18 @@
 import { apiClient } from './client'
 
-export const requestVerificationCode = ({ studentNo, name, email }) =>
-  apiClient.post('/notifications/verification-code', { studentNo, name, email })
+export const requestVerificationCode = ({ email }) =>
+  apiClient.post('/notifications/verification-code', { email })
 
-export const verifyCode = ({ studentNo, email, verificationCode }) =>
-  apiClient.post('/notifications/verify', { studentNo, email, verificationCode })
+export const verifyCode = ({ email, verificationCode }) =>
+  apiClient.post('/notifications/verify', { email, verificationCode })
 
-export const subscribe = ({ studentNo, name, email, academicNotice, employmentNotice, privacyConsent }) =>
+export const subscribe = ({ email, academicNotice, employmentNotice, privacyConsent }) =>
   apiClient.post('/notifications/subscribe', {
-    studentNo,
-    name,
     email,
     academicNotice,
     employmentNotice,
     privacyConsent,
   })
 
-export const unsubscribe = ({ studentNo, email }) =>
-  apiClient.delete('/notifications/subscribe', { data: { studentNo, email } })
+export const unsubscribe = ({ email }) =>
+  apiClient.delete('/notifications/subscribe', { data: { email } })

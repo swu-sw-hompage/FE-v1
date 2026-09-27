@@ -16,8 +16,6 @@ const CATEGORIES = [
 ]
 
 export default function NoticeSubscribe() {
-  const [studentNo, setStudentNo] = useState('')
-  const [name, setName] = useState('')
   const [categories, setCategories] = useState(['academic'])
   const [email, setEmail] = useState('')
   const [codeSent, setCodeSent] = useState(false)
@@ -42,11 +40,11 @@ export default function NoticeSubscribe() {
   }
 
   const handleSendCode = async () => {
-    if (!studentNo || !name || !email) return
+    if (!email) return
     setError('')
     setSending(true)
     try {
-      await requestVerificationCode({ studentNo, name, email })
+      await requestVerificationCode({ email })
       setCodeSent(true)
     } catch (err) {
       setError(err.message)
@@ -60,7 +58,7 @@ export default function NoticeSubscribe() {
     setError('')
     setVerifying(true)
     try {
-      await verifyCode({ studentNo, email, verificationCode: code })
+      await verifyCode({ email, verificationCode: code })
       setVerified(true)
     } catch (err) {
       setError(err.message)
@@ -77,8 +75,6 @@ export default function NoticeSubscribe() {
     setSubmitting(true)
     try {
       await subscribe({
-        studentNo,
-        name,
         email,
         academicNotice: categories.includes('academic'),
         employmentNotice: categories.includes('career'),
@@ -107,38 +103,6 @@ export default function NoticeSubscribe() {
             <div className="notice-subscribe__form">
               <p className="notice-subscribe__form-title">받을 공지를 선택해주세요</p>
               <div className="notice-subscribe__divider" />
-
-              <div className="notice-subscribe__row">
-                <div className="notice-subscribe__row-label">
-                  <p>학생 확인</p>
-                </div>
-                <div className="notice-subscribe__row-content">
-                  <div className="notice-subscribe__pair">
-                    <input
-                      type="text"
-                      className="notice-subscribe__input notice-subscribe__input--sm"
-                      placeholder="학번"
-                      value={studentNo}
-                      onChange={(e) => {
-                        setStudentNo(e.target.value)
-                        setCodeSent(false)
-                        setVerified(false)
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="notice-subscribe__input notice-subscribe__input--sm"
-                      placeholder="이름"
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value)
-                        setCodeSent(false)
-                        setVerified(false)
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
 
               <div className="notice-subscribe__row">
                 <div className="notice-subscribe__row-label">
@@ -194,7 +158,7 @@ export default function NoticeSubscribe() {
                         type="button"
                         className="notice-subscribe__side-btn notice-subscribe__side-btn--primary-outline"
                         onClick={handleSendCode}
-                        disabled={!studentNo || !name || !email || sending}
+                        disabled={!email || sending}
                       >
                         {sending ? '전송 중...' : codeSent ? '재전송' : '인증번호 받기'}
                       </button>
