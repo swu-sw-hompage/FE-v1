@@ -14,14 +14,29 @@ const QUICK_LINKS = [
   { id: 'notice-sub', icon: iconQuick1, title: '공지 알림 신청', to: '/notice/subscribe' },
 ]
 
+const NOTICE_FILTERS = [
+  { key: 'all', label: '전체' },
+  { key: 'academic', label: '학사' },
+  { key: 'employment', label: '취업' },
+]
+
 export default function Home() {
   const [notices, setNotices] = useState([])
   const [projects, setProjects] = useState([])
+  const [noticeFilter, setNoticeFilter] = useState('all')
 
   useEffect(() => {
-    getNotices({ page: 0, size: 5 })
+    getNotices({
+      academic: noticeFilter === 'academic' ? true : undefined,
+      employment: noticeFilter === 'employment' ? true : undefined,
+      page: 0,
+      size: 5,
+    })
       .then((result) => setNotices(result?.content ?? []))
       .catch(() => setNotices([]))
+  }, [noticeFilter])
+
+  useEffect(() => {
     getGraduationProjects({ year: 2025, page: 0, size: 4 })
       .then((result) => setProjects(result?.content ?? []))
       .catch(() => setProjects([]))
@@ -64,9 +79,18 @@ export default function Home() {
               전체보기 <span aria-hidden="true">+</span>
             </Link>
             <div className="home__notice-tabs">
-              <span className="home__notice-tab home__notice-tab--active">전체</span>
-              <span className="home__notice-tab">학사</span>
-              <span className="home__notice-tab">취업</span>
+              {NOTICE_FILTERS.map((f) => (
+                <button
+                  key={f.key}
+                  type="button"
+                  className={
+                    noticeFilter === f.key ? 'home__notice-tab home__notice-tab--active' : 'home__notice-tab'
+                  }
+                  onClick={() => setNoticeFilter(f.key)}
+                >
+                  {f.label}
+                </button>
+              ))}
             </div>
           </div>
           <ul className="home__notice-list">
