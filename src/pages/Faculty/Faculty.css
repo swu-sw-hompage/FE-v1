@@ -141,6 +141,12 @@
 
   .faculty__top {
     flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .faculty__photo {
+    height: auto;
+    align-self: stretch;
   }
 
   .faculty__identity,
