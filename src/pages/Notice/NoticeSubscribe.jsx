@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
-import ChapterNav from '../../components/common/ChapterNav'
+import '../../components/common/ChapterNav.css'
 import { requestVerificationCode, verifyCode, subscribe } from '../../api/notification'
 import heroNoticeSubscribe from '../../assets/images/brand/hero-notice-subscribe.jpg'
 import './NoticeSubscribe.css'
 
-const SECTIONS = [
-  { id: 'subscribe-form', label: '공지 알림 신청' },
-  { to: '/notice', label: '공지사항 바로가기', exact: true },
+const FILTERS = [
+  { key: 'all', label: '전체' },
+  { key: 'academic', label: '학사' },
+  { key: 'employment', label: '취업' },
 ]
 
 const CATEGORIES = [
@@ -94,7 +96,21 @@ export default function NoticeSubscribe() {
       <PageHero photo photoSrc={heroNoticeSubscribe} title={['공식 알림 설정']} />
 
       <div className="container page-layout">
-        <ChapterNav sections={SECTIONS} />
+        <nav className="chapter-nav notice__filter-nav" aria-label="공지사항 분류">
+          <p className="chapter-nav__label">ON THIS PAGE</p>
+          <ul className="chapter-nav__list">
+            {FILTERS.map((f) => (
+              <li key={f.key}>
+                <span className="chapter-nav__bar" />
+                <Link to={`/notice?filter=${f.key}`}>{f.label}</Link>
+              </li>
+            ))}
+            <li className="is-active">
+              <span className="chapter-nav__bar" />
+              <Link to="/notice/subscribe">공지 알림 신청</Link>
+            </li>
+          </ul>
+        </nav>
 
         <main className="page-layout__main">
           <section id="subscribe-form" className="page-section">
