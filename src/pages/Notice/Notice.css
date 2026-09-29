@@ -118,8 +118,13 @@
 
 .notice__pin {
   flex-shrink: 0;
-  display: inline-flex;
-  color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 9999px;
 }
 
 .notice__category {
@@ -227,6 +232,9 @@
   .notice__pin {
     grid-column: 1;
     grid-row: 1;
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 3px;
   }
 
   .notice__category {

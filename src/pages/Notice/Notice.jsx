@@ -152,17 +152,7 @@ export default function Notice() {
                 {notices.map((notice) => (
                   <li key={notice.id}>
                     <Link to={`/notice/${notice.id}`}>
-                      {notice.pinned && (
-                        <span className="notice__pin" aria-label="고정된 공지">
-                          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                            <path
-                              d="M10 18s6-5.686 6-10a6 6 0 10-12 0c0 4.314 6 10 6 10z"
-                              fill="currentColor"
-                            />
-                            <circle cx="10" cy="8" r="2.2" fill="#fff" />
-                          </svg>
-                        </span>
-                      )}
+                      {notice.pinned && <span className="notice__pin">필독</span>}
                       <span className="notice__category">{noticeCategoryLabel(notice)}</span>
                       <span className="notice__title">{notice.title}</span>
                     </Link>
