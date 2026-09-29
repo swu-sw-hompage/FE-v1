@@ -75,6 +75,10 @@
     gap: 10px;
   }
 
+  .curriculum__pillar:first-child {
+    padding-left: 20px;
+  }
+
   .curriculum__pillar {
     display: flex;
     flex-direction: column;

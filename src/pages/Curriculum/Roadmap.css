@@ -218,6 +218,10 @@
     gap: 44px;
   }
 
+  .roadmap .page-section h2 {
+    margin-bottom: 20px;
+  }
+
   .roadmap__tooltip {
     display: none !important;
   }
