@@ -578,7 +578,7 @@
     padding: 24px 20px 0;
   }
 
-  .home__mobile-section:last-child {
+  .home__mobile-section:last-of-type {
     padding-bottom: 48px;
   }
 
