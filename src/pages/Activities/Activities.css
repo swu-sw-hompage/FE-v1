@@ -164,8 +164,12 @@
 
   .activities__mobile-tabs {
     display: flex;
+    position: sticky;
+    top: 69px;
+    z-index: 90;
     gap: 22px;
     padding-inline: var(--container-padding);
+    background: #fff;
     border-bottom: 1px solid #e5e5e8;
   }
 

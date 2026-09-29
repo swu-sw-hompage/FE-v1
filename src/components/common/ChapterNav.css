@@ -55,8 +55,11 @@
 @media (max-width: 900px) {
   .chapter-nav {
     display: flex;
-    position: static;
+    position: sticky;
+    top: 69px;
+    z-index: 90;
     min-width: 0;
+    background: #fff;
     border-bottom: 1px solid #e5e5e8;
   }
 
