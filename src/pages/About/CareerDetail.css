@@ -187,6 +187,7 @@
   .career-detail__summary-row {
     flex-direction: column;
     gap: 14px;
+    margin-top: 18px;
     padding: 18px;
     background: var(--color-primary-soft);
     border-radius: 6px;
