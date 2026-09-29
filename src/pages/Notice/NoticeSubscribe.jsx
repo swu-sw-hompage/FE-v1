@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
 import { requestVerificationCode, verifyCode, subscribe } from '../../api/notification'
-import heroNoticeSubscribe from '../../assets/images/brand/hero-notice-subscribe.jpg'
+import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import './NoticeSubscribe.css'
 
 const FILTERS = [
@@ -93,7 +93,7 @@ export default function NoticeSubscribe() {
 
   return (
     <div className="notice-subscribe">
-      <PageHero photo photoSrc={heroNoticeSubscribe} title={['공지사항']} />
+      <PageHero photo photoSrc={heroNotice} title={['공지사항']} />
 
       <div className="container page-layout">
         <nav className="chapter-nav notice__filter-nav" aria-label="공지사항 분류">
@@ -141,7 +141,10 @@ export default function NoticeSubscribe() {
                           onClick={() => toggleCategory(c.id)}
                           aria-pressed={active}
                         >
-                          {c.label}
+                          <span className="notice-subscribe__category-box" aria-hidden="true">
+                            {active ? '✓' : ''}
+                          </span>
+                          <span className="notice-subscribe__category-label">{c.label}</span>
                         </button>
                       )
                     })}

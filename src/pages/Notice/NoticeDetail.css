@@ -169,3 +169,19 @@
   color: #fff;
   text-decoration: none;
 }
+
+@media (max-width: 900px) {
+  .notice .page-layout {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .notice .page-hero--photo {
+    height: 150px;
+  }
+
+  .notice .page-hero__photo-title {
+    font-size: 24px;
+  }
+}
