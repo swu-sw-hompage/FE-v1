@@ -34,6 +34,23 @@ export default function CareerDetail() {
         <main className="page-layout__main">
           <section className="page-section">
             <h2>졸업 후 진로</h2>
+
+            <div className="career-detail__chips">
+              {CAREER_FIELDS.map((f) => (
+                <Link
+                  to={`/about/career/${f.slug}`}
+                  className={
+                    f.slug === field.slug
+                      ? 'career-detail__chip career-detail__chip--active'
+                      : 'career-detail__chip'
+                  }
+                  key={f.slug}
+                >
+                  {f.title}
+                </Link>
+              ))}
+            </div>
+
             <div className="career-detail__grid">
               {CAREER_FIELDS.map((f) => (
                 <Link
