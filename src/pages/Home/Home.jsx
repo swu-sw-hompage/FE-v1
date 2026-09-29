@@ -11,7 +11,7 @@ import './Home.css'
 const QUICK_LINKS = [
   { id: 'roadmap', icon: iconQuick3, title: '전공 로드맵', to: '/curriculum/roadmap' },
   { id: 'requirements', icon: iconQuick2, title: '졸업 요건', to: '/curriculum/requirements' },
-  { id: 'notice-sub', icon: iconQuick1, title: '공지 알림 신청', to: '/notice/subscribe' },
+  { id: 'notice-sub', icon: iconQuick1, title: '공지 알림 신청', mobileTitle: '공지 알림', to: '/notice/subscribe' },
 ]
 
 const NOTICE_FILTERS = [
@@ -44,6 +44,96 @@ export default function Home() {
 
   return (
     <div className="home">
+      <section className="home__hero-mobile">
+        <img className="home__hero-mobile-bg" src={heroHome} alt="" />
+        <div className="home__hero-mobile-gradient" />
+        <div className="home__hero-mobile-text">
+          <span>기술로 문제를 정의하고,</span>
+          <span>세상을 바꾸는 인재를 키웁니다</span>
+        </div>
+      </section>
+
+      <div className="home__mobile-cta">
+        <Link to="/about" className="home__mobile-btn home__mobile-btn--primary">
+          학과 알아보기
+        </Link>
+        <Link to="/curriculum" className="home__mobile-btn">
+          교육과정 보기
+        </Link>
+      </div>
+
+      <div className="home__mobile-quicklinks">
+        {QUICK_LINKS.map((link) => (
+          <Link to={link.to} key={link.id} className="home__mobile-quick-card">
+            <span className="home__mobile-quick-icon">
+              <img src={link.icon} alt="" />
+            </span>
+            <strong>{link.mobileTitle ?? link.title}</strong>
+          </Link>
+        ))}
+      </div>
+
+      <div className="home__mobile-section">
+        <div className="home__mobile-section-head">
+          <h2>공지사항</h2>
+          <Link to="/notice">전체보기</Link>
+        </div>
+        <div className="home__mobile-notice-tabs">
+          {NOTICE_FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              className={
+                noticeFilter === f.key
+                  ? 'home__mobile-notice-tab home__mobile-notice-tab--active'
+                  : 'home__mobile-notice-tab'
+              }
+              onClick={() => setNoticeFilter(f.key)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        <ul className="home__mobile-notice-list">
+          {notices.slice(0, 4).map((notice) => (
+            <li key={notice.id}>
+              <span
+                className={
+                  noticeCategoryLabel(notice) === '취업'
+                    ? 'home__mobile-notice-category home__mobile-notice-category--employment'
+                    : 'home__mobile-notice-category'
+                }
+              >
+                {noticeCategoryLabel(notice)}
+              </span>
+              <Link to={`/notice/${notice.id}`}>{notice.title}</Link>
+              <span className="home__mobile-notice-date">
+                {formatNoticeDate(notice.publishedAt ?? notice.createdAt)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="home__mobile-section">
+        <div className="home__mobile-section-head">
+          <h2>학생활동</h2>
+          <Link to="/activities/2025">전체보기</Link>
+        </div>
+        <div className="home__mobile-scroller">
+          {projects.map((project) => (
+            <Link to={`/activities/2025/${project.id}`} className="home__mobile-scroll-card" key={project.id}>
+              {project.thumbnailUrl ? (
+                <img className="home__mobile-scroll-image" src={project.thumbnailUrl} alt="" />
+              ) : (
+                <div className="home__mobile-scroll-image home__mobile-scroll-image--empty" />
+              )}
+              <strong>{project.title}</strong>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       <section className="home__hero">
         <img className="home__hero-bg" src={heroHome} alt="" />
         <div className="home__hero-fade" />
