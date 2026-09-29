@@ -31,7 +31,7 @@ export default function Faculty() {
 
         <main className="page-layout__main">
           <section id="faculty-list" className="page-section">
-            <h2>교수진</h2>
+            <h2 className="faculty__page-title">교수진</h2>
 
             <p className="faculty__group-label">전임교수</p>
             <div className="faculty__grid">
@@ -40,10 +40,12 @@ export default function Faculty() {
                   <div className="faculty__top">
                     <img className="faculty__photo" src={professor.photo} alt={professor.name} />
                     <div className="faculty__identity">
-                      <strong>{professor.name}</strong>
-                      <p className="faculty__position">{professor.position}</p>
-                      <p className="faculty__contact">{professor.phone}</p>
-                      <p className="faculty__contact">{professor.email}</p>
+                      <div className="faculty__name-row">
+                        <strong>{professor.name}</strong>
+                        <p className="faculty__position">{professor.position}</p>
+                      </div>
+                      <p className="faculty__contact faculty__contact--phone">{professor.phone}</p>
+                      <p className="faculty__contact faculty__contact--email">{professor.email}</p>
                     </div>
                   </div>
                   <div className="faculty__meta-row faculty__meta-row--major">
@@ -69,7 +71,10 @@ export default function Faculty() {
                   <div className="faculty__top">
                     <img className="faculty__photo" src={professor.photo} alt={professor.name} />
                     <div className="faculty__identity faculty__identity--emeritus">
-                      <strong>{professor.name}</strong>
+                      <div className="faculty__name-row">
+                        <strong>{professor.name}</strong>
+                        <p className="faculty__position">명예교수</p>
+                      </div>
                     </div>
                   </div>
                   <div className="faculty__meta-row faculty__meta-row--major">
