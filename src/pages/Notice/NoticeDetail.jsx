@@ -92,18 +92,22 @@ export default function NoticeDetail() {
                   <div className="notice-detail__attachments">
                     <p className="notice-detail__attachments-title">첨부파일</p>
                     <div className="notice-detail__attachments-divider" />
-                    {notice.attachments.map((att) => (
-                      <a
-                        key={att.url ?? att.fileUrl}
-                        href={att.url ?? att.fileUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="notice-detail__attachment-row"
-                      >
-                        <span>{att.name ?? att.fileName}</span>
-                        <span className="notice-detail__attachment-download">다운로드 ↓</span>
-                      </a>
-                    ))}
+                    {notice.attachments.map((att) => {
+                      const rawUrl = att.url ?? att.fileUrl ?? ''
+                      const href = rawUrl.replace(/^=+/, '')
+                      return (
+                        <a
+                          key={rawUrl}
+                          href={href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="notice-detail__attachment-row"
+                        >
+                          <span>{att.name ?? att.fileName}</span>
+                          <span className="notice-detail__attachment-download">다운로드 ↓</span>
+                        </a>
+                      )
+                    })}
                   </div>
                 )}
 
