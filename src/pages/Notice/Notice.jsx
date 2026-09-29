@@ -153,7 +153,7 @@ export default function Notice() {
                   <li key={notice.id}>
                     <Link to={`/notice/${notice.id}`}>
                       {notice.pinned && <span className="notice__pin">공지</span>}
-                      <span className="notice__category">{noticeCategoryLabel(notice)} ·</span>
+                      <span className="notice__category">{noticeCategoryLabel(notice)}</span>
                       <span className="notice__title">{notice.title}</span>
                     </Link>
                     <span className="notice__date">{formatNoticeDate(notice.publishedAt ?? notice.createdAt)}</span>
