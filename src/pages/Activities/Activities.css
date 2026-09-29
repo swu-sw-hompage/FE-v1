@@ -401,7 +401,7 @@
 }
 
 @media (max-width: 900px) {
-  .activities__page-title {
+  .activities h2.activities__page-title {
     display: none;
   }
 
