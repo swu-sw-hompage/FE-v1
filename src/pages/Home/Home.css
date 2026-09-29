@@ -575,7 +575,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 24px 20px 0;
+    padding: 36px 20px 0;
   }
 
   .home__mobile-section:last-of-type {
