@@ -217,7 +217,7 @@
 
   .notice__list li {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto auto 1fr auto;
     column-gap: 8px;
     row-gap: 6px;
     align-items: center;
@@ -229,12 +229,15 @@
     display: contents;
   }
 
-  .notice__pin,
-  .notice__category {
+  .notice__pin {
+    grid-column: 1;
     grid-row: 1;
   }
 
   .notice__category {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
     padding: 2px 6px;
     background: var(--color-primary-soft-bg);
     border-radius: 3px;
@@ -249,7 +252,7 @@
 
   .notice__date {
     grid-row: 1;
-    grid-column: 3;
+    grid-column: 4;
     justify-self: end;
     font-size: 12px;
   }
