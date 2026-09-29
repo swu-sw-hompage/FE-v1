@@ -139,11 +139,13 @@
     width: 100%;
   }
 
+  .faculty__top {
+    gap: 14px;
+  }
+
   .faculty__photo {
-    width: 96px;
-    height: auto;
-    aspect-ratio: 120 / 152;
-    align-self: stretch;
+    width: 76px;
+    height: 96px;
   }
 
   .faculty__identity,

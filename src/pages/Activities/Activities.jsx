@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import { getGraduationProjects } from '../../api/graduation'
 import { ACTIVITY_YEARS } from '../../constants/activities'
@@ -11,6 +11,7 @@ const PAGE_SIZE = 12
 
 export default function Activities() {
   const { year } = useParams()
+  const navigate = useNavigate()
   const activeYear = ACTIVITY_YEARS.includes(Number(year)) ? Number(year) : 2025
   const [page, setPage] = useState(1)
   const [projects, setProjects] = useState([])
@@ -47,12 +48,36 @@ export default function Activities() {
     <div className="activities">
       <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
 
+      <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
+        <Link to={`/activities/${ACTIVITY_YEARS[0]}`} className="activities__mobile-tab">
+          학생활동
+        </Link>
+        <Link to={`/activities/${activeYear}`} className="activities__mobile-tab is-active">
+          졸업프로젝트
+        </Link>
+      </nav>
+
       <div className="container page-layout">
         <ActivitiesSidebar activeYear={activeYear} />
 
         <main className="page-layout__main">
           <section className="page-section">
             <h2>학생활동</h2>
+
+            <div className="activities__year-select-wrap">
+              <select
+                className="activities__year-select"
+                value={activeYear}
+                onChange={(e) => navigate(`/activities/${e.target.value}`)}
+                aria-label="졸업 연도 선택"
+              >
+                {ACTIVITY_YEARS.map((y) => (
+                  <option key={y} value={y}>
+                    {y}년도 졸업프로젝트
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {error && <p className="notice__error">{error}</p>}
             {!error && loading && <p className="notice__loading">불러오는 중...</p>}

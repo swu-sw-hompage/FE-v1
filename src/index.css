@@ -117,8 +117,8 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .chapter-nav {
-    display: none;
+  .page-layout:has(> .chapter-nav) {
+    padding-top: 0;
   }
 }
 

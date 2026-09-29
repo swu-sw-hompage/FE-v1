@@ -253,12 +253,6 @@
   }
 }
 
-@media (max-width: 900px) {
-  .notice-subscribe .page-layout {
-    padding-top: 0;
-  }
-}
-
 @media (max-width: 700px) {
   .notice-subscribe__row {
     flex-direction: column;

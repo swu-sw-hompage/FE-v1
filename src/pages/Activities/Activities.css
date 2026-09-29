@@ -145,27 +145,82 @@
   font-weight: 600;
 }
 
+.activities__mobile-tabs {
+  display: none;
+}
+
+.activities__year-select-wrap {
+  display: none;
+}
+
 @media (max-width: 900px) {
+  .activities .page-layout {
+    padding-top: 0;
+  }
+
   .activities__sidebar {
     display: none;
   }
 
-  .activities__project-grid {
+  .activities__mobile-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 0;
+    gap: 22px;
+    padding-inline: var(--container-padding);
+    border-bottom: 1px solid #e5e5e8;
+  }
+
+  .activities__mobile-tab {
+    flex-shrink: 0;
+    padding: 14px 0 12px;
+    border-bottom: 2px solid transparent;
+    font-family: var(--font-pretendard);
+    font-size: 14px;
+    color: #57575e;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .activities__mobile-tab.is-active {
+    font-weight: 700;
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .activities__year-select-wrap {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .activities__year-select {
+    width: 100%;
+    height: 48px;
+    padding: 0 36px 0 14px;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231F1F21' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #e5e5e8;
+    border-radius: 4px;
+    font-family: var(--font-pretendard);
+    font-weight: 500;
+    font-size: 14px;
+    color: #1f1f21;
+    cursor: pointer;
+  }
+
+  .activities__project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 12px;
   }
 
   .activities__project-card {
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    gap: 16px;
-    padding: 16px 4px;
     border: none;
-    border-bottom: 1px solid var(--color-border);
     border-radius: 0;
+    gap: 8px;
   }
 
   .activities__project-card:hover {
@@ -174,26 +229,25 @@
 
   .activities__project-image,
   .activities__project-image--empty {
-    flex-shrink: 0;
-    width: 100px;
-    height: 72px;
-    aspect-ratio: auto;
+    width: 100%;
+    height: 100px;
     border-radius: 6px;
   }
 
   .activities__project-card strong {
-    flex: 1;
-    min-width: 0;
     margin: 0;
     overflow: visible;
     white-space: normal;
     text-overflow: clip;
-    font-size: 15px;
-    line-height: 1.4;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.45;
   }
 
   .activities__project-link {
-    display: none;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
   }
 }
 
