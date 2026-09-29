@@ -118,7 +118,24 @@ a {
   }
 
   .page-layout:has(> .chapter-nav) {
-    padding-top: 0;
+    padding-block: 0;
+    gap: 0;
+  }
+
+  .page-layout:has(> .chapter-nav) .page-layout__main {
+    padding: 32px 0 56px;
+    gap: 44px;
+  }
+
+  .page-section h2 {
+    margin-bottom: 10px;
+    font-family: var(--font-pretendard);
+    font-size: 22px;
+  }
+
+  .page-section h2::after {
+    width: 48px;
+    margin-top: 10px;
   }
 }
 
