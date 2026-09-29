@@ -203,7 +203,7 @@ export default function NoticeSubscribe() {
                         className={
                           verified
                             ? 'notice-subscribe__side-btn notice-subscribe__side-btn--done'
-                            : 'notice-subscribe__side-btn'
+                            : 'notice-subscribe__side-btn notice-subscribe__side-btn--primary-outline'
                         }
                         onClick={handleVerify}
                         disabled={!codeSent || !code || verified || verifying}
