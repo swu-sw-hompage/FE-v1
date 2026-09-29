@@ -208,35 +208,264 @@
   right: calc(100% + 10px);
 }
 
-.roadmap__years-mobile {
+.roadmap__mobile-roadmap,
+.roadmap__mobile-liberal-wrap {
   display: none;
 }
 
 @media (max-width: 900px) {
-  .roadmap__liberal {
-    grid-template-columns: 1fr 1fr;
+  .roadmap .page-layout__main {
+    gap: 44px;
   }
 
   .roadmap__tooltip {
     display: none !important;
   }
 
-  .roadmap__years {
+  .roadmap__years,
+  .roadmap__liberal {
     display: none;
   }
 
-  .roadmap__years-mobile {
+  .roadmap__mobile-roadmap {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 20px;
+    width: 100%;
   }
 
-  .roadmap__years-mobile .roadmap__year-rule {
-    margin-bottom: 20px;
+  .roadmap__legend {
+    display: flex;
+    gap: 14px;
   }
 
-  .roadmap__years-mobile .roadmap__semester:not(:first-of-type) {
-    margin-top: 20px;
+  .roadmap__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-pretendard);
+    font-size: 12px;
+    color: #57575e;
+  }
+
+  .roadmap__legend-mark {
+    width: 3px;
+    height: 12px;
+  }
+
+  .roadmap__legend-mark--required {
+    background: #7d0e16;
+  }
+
+  .roadmap__legend-mark--elective {
+    background: #ba616e;
+  }
+
+  .roadmap__year-tabs {
+    display: flex;
+    width: 100%;
+  }
+
+  .roadmap__year-tab {
+    flex: 1;
+    padding-block: 10px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #e5e5e8;
+    font-family: var(--font-pretendard);
+    font-size: 15px;
+    color: #7a7a82;
+    cursor: pointer;
+  }
+
+  .roadmap__year-tab--active {
+    border-bottom: 2px solid #7d0e16;
+    font-weight: 700;
+    color: #1f1f21;
+  }
+
+  .roadmap__mobile-semester {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .roadmap__mobile-sem-label {
+    margin: 0 0 6px;
+    font-family: var(--font-pretendard);
+    font-weight: 700;
+    font-size: 13px;
+    color: #57575e;
+  }
+
+  .roadmap__mobile-empty {
+    margin: 0;
+    padding: 14px 0;
+    font-family: var(--font-pretendard);
+    font-size: 13px;
+    color: #7a7a82;
+  }
+
+  .roadmap__mobile-course {
+    border-bottom: 1px solid #e5e5e8;
+  }
+
+  .roadmap__mobile-course--open {
+    background: #fef6f7;
+  }
+
+  .roadmap__mobile-course-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 14px 14px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .roadmap__mobile-course-mark {
+    flex-shrink: 0;
+    width: 3px;
+    height: 36px;
+  }
+
+  .roadmap__mobile-course-mark--required {
+    background: #7d0e16;
+  }
+
+  .roadmap__mobile-course-mark--elective {
+    background: #ba616e;
+  }
+
+  .roadmap__mobile-course-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .roadmap__mobile-course-title {
+    font-family: var(--font-pretendard);
+    font-weight: 500;
+    font-size: 15px;
+    color: #1f1f21;
+  }
+
+  .roadmap__mobile-course-tag {
+    font-family: var(--font-pretendard);
+    font-size: 12px;
+    color: #7a7a82;
+  }
+
+  .roadmap__mobile-course-tag--required {
+    color: #7d0e16;
+  }
+
+  .roadmap__mobile-course--open .roadmap__mobile-course-title,
+  .roadmap__mobile-course--open .roadmap__mobile-course-tag {
+    color: #7d0e16;
+  }
+
+  .roadmap__mobile-course-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 16px 16px 15px;
+    font-family: var(--font-pretendard);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .roadmap__mobile-course-desc strong {
+    color: #1f1f21;
+  }
+
+  .roadmap__mobile-course-desc p {
+    margin: 0;
+    color: #7a7a82;
+  }
+
+  .roadmap__mobile-chevron {
+    flex-shrink: 0;
+    color: #7a7a82;
+    transition: transform 0.15s ease;
+  }
+
+  .roadmap__mobile-chevron--open {
+    transform: rotate(180deg);
+    color: #7d0e16;
+  }
+
+  .roadmap__mobile-liberal-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .roadmap__mobile-liberal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .roadmap__mobile-liberal {
+    border: 1px solid #e5e5e8;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  .roadmap__mobile-liberal--open {
+    background: #fef6f7;
+    border-color: #ba616e;
+  }
+
+  .roadmap__mobile-liberal-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .roadmap__mobile-liberal-title {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-pretendard);
+    font-weight: 500;
+    font-size: 14px;
+    color: #1f1f21;
+  }
+
+  .roadmap__mobile-liberal--open .roadmap__mobile-liberal-title {
+    color: #7d0e16;
+  }
+
+  .roadmap__mobile-liberal-reason {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 14px 14px;
+    font-family: var(--font-pretendard);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .roadmap__mobile-liberal-reason strong {
+    color: #7d0e16;
+  }
+
+  .roadmap__mobile-liberal-reason p {
+    margin: 0;
+    color: #1f1f21;
   }
 }
 

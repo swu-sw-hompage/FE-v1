@@ -118,6 +118,24 @@ export default function PdfViewer({ src, fileName, pageCount }) {
           />
         ))}
       </div>
+
+      <div className="pdf-viewer__mobile-card">
+        <div className="pdf-viewer__mobile-file">
+          <span className="pdf-viewer__mobile-badge">PDF</span>
+          <div className="pdf-viewer__mobile-info">
+            <strong>{fileName}</strong>
+            <span>서울여자대학교 · {numPages}페이지</span>
+          </div>
+        </div>
+        <div className="pdf-viewer__mobile-actions">
+          <a href={src} target="_blank" rel="noreferrer" className="pdf-viewer__mobile-btn">
+            새 창에서 보기 ↗
+          </a>
+          <a href={src} download={fileName} className="pdf-viewer__mobile-btn pdf-viewer__mobile-btn--primary">
+            다운로드 ↓
+          </a>
+        </div>
+      </div>
     </div>
   )
 }

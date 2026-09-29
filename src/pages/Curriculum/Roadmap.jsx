@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
 import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
@@ -204,6 +205,90 @@ const LIBERAL_ARTS = [
   },
 ]
 
+function Chevron({ open }) {
+  return (
+    <svg
+      className={open ? 'roadmap__mobile-chevron roadmap__mobile-chevron--open' : 'roadmap__mobile-chevron'}
+      width="10"
+      height="6"
+      viewBox="0 0 10 6"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function MobileYearTabs({ years, active, onChange }) {
+  return (
+    <div className="roadmap__year-tabs">
+      {years.map((label, i) => (
+        <button
+          key={label}
+          type="button"
+          className={i === active ? 'roadmap__year-tab roadmap__year-tab--active' : 'roadmap__year-tab'}
+          onClick={() => onChange(i)}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function MobileCourseItem({ course, expanded, onToggle }) {
+  return (
+    <div className={expanded ? 'roadmap__mobile-course roadmap__mobile-course--open' : 'roadmap__mobile-course'}>
+      <button type="button" className="roadmap__mobile-course-row" onClick={onToggle}>
+        <span
+          className={
+            course.tag === '필수'
+              ? 'roadmap__mobile-course-mark roadmap__mobile-course-mark--required'
+              : 'roadmap__mobile-course-mark roadmap__mobile-course-mark--elective'
+          }
+        />
+        <span className="roadmap__mobile-course-text">
+          <span className="roadmap__mobile-course-title">{course.title}</span>
+          <span
+            className={
+              course.tag === '필수'
+                ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--required'
+                : 'roadmap__mobile-course-tag roadmap__mobile-course-tag--elective'
+            }
+          >
+            {course.tag}
+          </span>
+        </span>
+        <Chevron open={expanded} />
+      </button>
+      {expanded && (
+        <div className="roadmap__mobile-course-desc">
+          <strong>{course.title.replace(/\(\d+\)$/, '')}</strong>
+          <p>{course.desc ?? COURSE_DESC_PLACEHOLDER}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function MobileLiberalItem({ course, expanded, onToggle }) {
+  return (
+    <div className={expanded ? 'roadmap__mobile-liberal roadmap__mobile-liberal--open' : 'roadmap__mobile-liberal'}>
+      <button type="button" className="roadmap__mobile-liberal-row" onClick={onToggle}>
+        <span className="roadmap__mobile-liberal-title">{course.title}</span>
+        <Chevron open={expanded} />
+      </button>
+      {expanded && (
+        <div className="roadmap__mobile-liberal-reason">
+          <strong>추천 이유</strong>
+          <p>{course.reason ?? LIBERAL_REASON_PLACEHOLDER}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function CourseItem({ course, flip }) {
   return (
     <div className={flip ? 'roadmap__course roadmap__course--flip' : 'roadmap__course'}>
@@ -235,6 +320,29 @@ function CourseItem({ course, flip }) {
 }
 
 export default function Roadmap() {
+  const [mobileYear, setMobileYear] = useState(0)
+  const [openCourses, setOpenCourses] = useState(new Set())
+  const [mobileLiberalYear, setMobileLiberalYear] = useState(0)
+  const [openLiberal, setOpenLiberal] = useState(new Set())
+
+  const toggleCourse = (key) => {
+    setOpenCourses((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
+
+  const toggleLiberal = (key) => {
+    setOpenLiberal((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
+
   return (
     <div className="roadmap">
       <PageHero photo title={['전공로드맵']} />
@@ -271,23 +379,35 @@ export default function Roadmap() {
               )}
             </div>
 
-            <div className="roadmap__years-mobile">
-              {YEARS.map((y) => (
-                <div className="roadmap__year-block" key={y.year}>
-                  <div className="roadmap__year">
-                    <span className="roadmap__year-no">{y.no}</span>
-                    <strong className="roadmap__year-title">{y.year}</strong>
-                    <span className={y.highlight ? 'roadmap__year-rule roadmap__year-rule--active' : 'roadmap__year-rule'} />
-                  </div>
-                  {y.semesters.map((sem, semIndex) => (
-                    <div className="roadmap__semester" key={sem.label}>
-                      {semIndex > 0 && <span className="roadmap__sem-divider" />}
-                      <p className="roadmap__sem-label">{sem.label}</p>
-                      {sem.courses.map((course) => (
-                        <CourseItem course={course} key={course.title} />
-                      ))}
-                    </div>
-                  ))}
+            <div className="roadmap__mobile-roadmap">
+              <div className="roadmap__legend">
+                <span className="roadmap__legend-item">
+                  <span className="roadmap__legend-mark roadmap__legend-mark--required" />
+                  필수
+                </span>
+                <span className="roadmap__legend-item">
+                  <span className="roadmap__legend-mark roadmap__legend-mark--elective" />
+                  선택
+                </span>
+              </div>
+
+              <MobileYearTabs years={YEARS.map((y) => y.year)} active={mobileYear} onChange={setMobileYear} />
+
+              {YEARS[mobileYear].semesters.map((sem) => (
+                <div className="roadmap__mobile-semester" key={sem.label}>
+                  <p className="roadmap__mobile-sem-label">{sem.label}</p>
+                  {sem.courses.length === 0 ? (
+                    <p className="roadmap__mobile-empty">개설 예정 과목이 없습니다.</p>
+                  ) : (
+                    sem.courses.map((course) => (
+                      <MobileCourseItem
+                        key={course.title}
+                        course={course}
+                        expanded={openCourses.has(course.title)}
+                        onToggle={() => toggleCourse(course.title)}
+                      />
+                    ))
+                  )}
                 </div>
               ))}
             </div>
@@ -318,6 +438,24 @@ export default function Roadmap() {
                   ))}
                 </div>
               ))}
+            </div>
+
+            <div className="roadmap__mobile-liberal-wrap">
+              <MobileYearTabs
+                years={LIBERAL_ARTS.map((g) => g.year)}
+                active={mobileLiberalYear}
+                onChange={setMobileLiberalYear}
+              />
+              <div className="roadmap__mobile-liberal-list">
+                {LIBERAL_ARTS[mobileLiberalYear].courses.map((course) => (
+                  <MobileLiberalItem
+                    key={course.title}
+                    course={course}
+                    expanded={openLiberal.has(course.title)}
+                    onToggle={() => toggleLiberal(course.title)}
+                  />
+                ))}
+              </div>
             </div>
           </section>
         </main>
