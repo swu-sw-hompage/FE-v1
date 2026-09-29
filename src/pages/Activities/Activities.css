@@ -218,6 +218,8 @@
   }
 
   .activities__project-card {
+    width: 100%;
+    height: auto;
     border: none;
     border-radius: 0;
     gap: 8px;
