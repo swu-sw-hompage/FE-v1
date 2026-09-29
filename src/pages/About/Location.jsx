@@ -53,16 +53,31 @@ export default function Location() {
               />
             </div>
 
-            <div className="location__info">
-              <p>
-                <strong>주소</strong> (01797) 서울특별시 노원구 화랑로 621 서울여자대학교
-              </p>
-              <p>
-                <strong>연락처</strong> 소프트웨어융합학과 02-970-5921
-              </p>
-            </div>
+            <a
+              className="location__map-open-btn"
+              href="https://maps.google.com/?q=서울여자대학교"
+              target="_blank"
+              rel="noreferrer"
+            >
+              지도 앱에서 열기 ↗
+            </a>
 
-            <h3 className="location__transport-title">교통편 안내</h3>
+            <div className="location__info">
+              <div className="location__info-row">
+                <p className="location__info-label">주소</p>
+                <p className="location__info-value">(01797) 서울특별시 노원구 화랑로 621 서울여자대학교</p>
+              </div>
+              <div className="location__info-row">
+                <p className="location__info-label">연락처</p>
+                <p className="location__info-value location__info-value--accent">
+                  소프트웨어융합학과 02-970-5921
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="page-section">
+            <h2>교통편 안내</h2>
             <div className="location__transport-list">
               {TRANSPORT.map((item) => (
                 <div className="location__transport-card" key={item.label}>

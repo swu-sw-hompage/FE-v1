@@ -4,7 +4,6 @@ import Home from '../pages/Home/Home'
 import About from '../pages/About/About'
 import History from '../pages/About/History'
 import EducationGoals from '../pages/About/EducationGoals'
-import Career from '../pages/About/Career'
 import CareerDetail from '../pages/About/CareerDetail'
 import Location from '../pages/About/Location'
 import Curriculum from '../pages/Curriculum/Curriculum'
@@ -33,7 +32,7 @@ export const router = createBrowserRouter([
       { path: 'about', element: <About /> },
       { path: 'about/history', element: <History /> },
       { path: 'about/education-goals', element: <EducationGoals /> },
-      { path: 'about/career', element: <Career /> },
+      { path: 'about/career', element: <Navigate to="/about/career/server-cloud" replace /> },
       { path: 'about/career/:slug', element: <CareerDetail /> },
       { path: 'about/location', element: <Location /> },
       { path: 'curriculum', element: <Curriculum /> },
