@@ -19,6 +19,9 @@ import Login from '../pages/Login/Login'
 import NotFound from '../pages/NotFound/NotFound'
 import Dashboard from '../pages/Admin/Dashboard'
 import AdminAccounts from '../pages/Admin/AdminAccounts'
+import AdminNoticeList from '../pages/Admin/AdminNoticeList'
+import AdminCapstoneList from '../pages/Admin/AdminCapstoneList'
+import AdminSubscribers from '../pages/Admin/AdminSubscribers'
 import NoticeWrite from '../pages/Admin/NoticeWrite'
 import CapstoneWrite from '../pages/Admin/CapstoneWrite'
 import RequireAdmin from './RequireAdmin'
@@ -51,6 +54,11 @@ export const router = createBrowserRouter([
   },
   { path: '/admin', element: <RequireAdmin><Dashboard /></RequireAdmin> },
   { path: '/admin/accounts', element: <RequireAdmin><AdminAccounts /></RequireAdmin> },
+  { path: '/admin/subscribers', element: <RequireAdmin><AdminSubscribers /></RequireAdmin> },
+  { path: '/admin/notices', element: <RequireAdmin><AdminNoticeList /></RequireAdmin> },
   { path: '/admin/notices/new', element: <RequireAdmin><NoticeWrite /></RequireAdmin> },
+  { path: '/admin/notices/:id/edit', element: <RequireAdmin><NoticeWrite /></RequireAdmin> },
+  { path: '/admin/capstone', element: <RequireAdmin><AdminCapstoneList /></RequireAdmin> },
   { path: '/admin/capstone/new', element: <RequireAdmin><CapstoneWrite /></RequireAdmin> },
+  { path: '/admin/capstone/:id/edit', element: <RequireAdmin><CapstoneWrite /></RequireAdmin> },
 ])

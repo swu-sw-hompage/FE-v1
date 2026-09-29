@@ -50,3 +50,10 @@ export const updateNotice = (id, payload, files) =>
 export const deleteNotice = (id) => apiClient.delete(`/admin/notices/${id}`)
 
 export const publishNotice = (id) => apiClient.patch(`/admin/notices/${id}/publish`)
+
+// 관리자 목록 조회 (임시저장 포함 전체) — 공개 /notices 는 게시된 것만 내려주므로 별도 엔드포인트 사용
+// NOTE: 백엔드에 /admin/notices GET이 아직 없다면 이 함수는 404가 날 수 있음 — 확인 필요
+export const getAdminNotices = ({ academic, employment, keyword, page = 0, size = 20 } = {}) =>
+  apiClient.get('/admin/notices', {
+    params: { academic, employment, keyword: keyword || undefined, page, size },
+  })
