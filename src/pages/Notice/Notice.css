@@ -118,13 +118,8 @@
 
 .notice__pin {
   flex-shrink: 0;
-  background: var(--color-primary-soft-bg);
+  display: inline-flex;
   color: var(--color-primary);
-  font-family: var(--font-en);
-  font-weight: 600;
-  font-size: 12px;
-  padding: 2px 10px;
-  border-radius: 9999px;
 }
 
 .notice__category {
