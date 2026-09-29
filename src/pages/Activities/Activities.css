@@ -399,3 +399,52 @@
   margin-top: 16px;
   color: var(--color-primary);
 }
+
+@media (max-width: 900px) {
+  .activities__page-title {
+    display: none;
+  }
+
+  .activity-detail__title {
+    font-size: 24px;
+  }
+
+  .activity-detail__header .activity-detail__divider {
+    display: none;
+  }
+
+  .activity-detail__info {
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid #e5e5e8;
+  }
+
+  .activity-detail__info-row {
+    padding: 14px 0;
+    font-size: 14px;
+  }
+
+  .activity-detail__info-row,
+  .activity-detail__info-row:not(:last-child) {
+    border-bottom: 1px solid #e5e5e8;
+  }
+
+  .activity-detail__info-label {
+    width: 64px;
+    font-weight: 500;
+    color: #7a7a82;
+  }
+
+  .activity-detail__actions {
+    justify-content: stretch;
+  }
+
+  .activity-detail__back-btn {
+    width: 100%;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid #e5e5e8;
+    text-align: center;
+    color: #1f1f21;
+  }
+}

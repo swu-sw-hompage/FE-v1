@@ -39,12 +39,21 @@ export default function ActivityDetail() {
     <div className="activities">
       <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
 
+      <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
+        <Link to={`/activities/${activeYear}`} className="activities__mobile-tab">
+          학생활동
+        </Link>
+        <Link to={`/activities/${activeYear}`} className="activities__mobile-tab is-active">
+          졸업프로젝트
+        </Link>
+      </nav>
+
       <div className="container page-layout">
         <ActivitiesSidebar activeYear={activeYear} />
 
         <main className="page-layout__main">
           <section className="page-section">
-            <h2>졸업프로젝트</h2>
+            <h2 className="activities__page-title">졸업프로젝트</h2>
 
             {loading && <p className="notice__loading">불러오는 중...</p>}
 
