@@ -158,6 +158,10 @@
     padding-top: 0;
   }
 
+  .activities .page-layout__main {
+    padding-top: 32px;
+  }
+
   .activities__sidebar {
     display: none;
   }

@@ -49,11 +49,8 @@ export default function Activities() {
       <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
 
       <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
-        <Link to={`/activities/${ACTIVITY_YEARS[0]}`} className="activities__mobile-tab">
-          학생활동
-        </Link>
         <Link to={`/activities/${activeYear}`} className="activities__mobile-tab is-active">
-          졸업프로젝트
+          학생활동
         </Link>
       </nav>
 
