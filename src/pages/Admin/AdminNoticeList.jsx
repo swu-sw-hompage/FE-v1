@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
-import { getAdminNotices, getNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { getNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import './Admin.css'
 
 const FILTERS = [
@@ -31,17 +31,15 @@ export default function AdminNoticeList() {
     let cancelled = false
     setLoading(true)
     setError('')
-    const params = {
+    // 관리자 전용 목록 조회 API가 없어 게시된 공지만 내려주는 공개 엔드포인트를 사용한다
+    // (임시저장 글은 이 목록에 나타나지 않는다).
+    getNotices({
       academic: filter === 'academic' ? true : undefined,
       employment: filter === 'employment' ? true : undefined,
       keyword: submittedKeyword,
       page: page - 1,
       size: PAGE_SIZE,
-    }
-    // 관리자 전용 목록(임시저장 포함) 조회를 우선 시도하고, 아직 백엔드에 없으면
-    // 게시된 공지만이라도 보여주도록 공개 목록 조회로 대체한다.
-    getAdminNotices(params)
-      .catch(() => getNotices(params))
+    })
       .then((result) => {
         if (cancelled) return
         setNotices(result?.content ?? [])
@@ -83,7 +81,7 @@ export default function AdminNoticeList() {
       breadcrumb="공지사항"
       eyebrow="NOTICE MANAGEMENT"
       title="공지사항 관리"
-      description="게시된 공지사항과 임시저장된 글을 확인하고 관리할 수 있습니다."
+      description="게시된 공지사항을 확인하고 관리할 수 있습니다."
       headActions={
         <Link to="/admin/notices/new" className="admin-btn admin-btn--primary">
           + 공지 작성

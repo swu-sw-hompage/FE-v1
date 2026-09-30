@@ -25,35 +25,15 @@ export const getNotices = ({ academic, employment, keyword, scope, page = 0, siz
 export const getNoticeById = (id) => apiClient.get(`/notices/${id}`)
 
 // 관리자 전용 (JWT 필요)
-// files가 있으면 multipart/form-data(request + files 파트)로, 없으면 순수 JSON으로 전송
-const buildNoticeBody = (payload, files) => {
-  if (!files || files.length === 0) return payload
+// 첨부파일은 별도 업로드 API가 없어 파일이 아닌 {name, url} 링크 형태로만 등록 가능하다.
+export const createNotice = (payload) => apiClient.post('/admin/notices', payload)
 
-  const formData = new FormData()
-  formData.append('request', new Blob([JSON.stringify(payload)], { type: 'application/json' }))
-  files.forEach((file) => formData.append('files', file))
-  return formData
-}
-
-// FormData 전송 시 axios가 boundary를 포함한 Content-Type을 직접 계산하도록
-// 인스턴스 기본값(application/json)을 명시적으로 제거해준다.
-export const createNotice = (payload, files) =>
-  apiClient.post('/admin/notices', buildNoticeBody(payload, files), {
-    headers: files?.length ? { 'Content-Type': undefined } : undefined,
-  })
-
-export const updateNotice = (id, payload, files) =>
-  apiClient.put(`/admin/notices/${id}`, buildNoticeBody(payload, files), {
-    headers: files?.length ? { 'Content-Type': undefined } : undefined,
-  })
+export const updateNotice = (id, payload) => apiClient.put(`/admin/notices/${id}`, payload)
 
 export const deleteNotice = (id) => apiClient.delete(`/admin/notices/${id}`)
 
 export const publishNotice = (id) => apiClient.patch(`/admin/notices/${id}/publish`)
 
-// 관리자 목록 조회 (임시저장 포함 전체) — 공개 /notices 는 게시된 것만 내려주므로 별도 엔드포인트 사용
-// NOTE: 백엔드에 /admin/notices GET이 아직 없다면 이 함수는 404가 날 수 있음 — 확인 필요
-export const getAdminNotices = ({ academic, employment, keyword, page = 0, size = 20 } = {}) =>
-  apiClient.get('/admin/notices', {
-    params: { academic, employment, keyword: keyword || undefined, page, size },
-  })
+// 관리자 전용 목록/임시저장 조회 API는 없다 — 목록/상세 조회는 게시된 공지만 내려주는
+// 공개 엔드포인트(getNotices/getNoticeById)만 존재하며, 임시저장 글은 생성 직후 응답으로만
+// 확인 가능하고 이후 다시 불러올 방법이 없다.

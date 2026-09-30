@@ -14,9 +14,6 @@ export const updateGraduationProject = (id, payload) =>
 
 export const deleteGraduationProject = (id) => apiClient.delete(`/admin/graduation-projects/${id}`)
 
-export const publishGraduationProject = (id) => apiClient.patch(`/admin/graduation-projects/${id}/publish`)
-
-// 관리자 목록 조회 (임시저장 포함 전체) — 공개 목록은 게시된 것만 내려주므로 별도 엔드포인트 사용
-// NOTE: 백엔드에 /admin/graduation-projects GET이 아직 없다면 이 함수는 404가 날 수 있음 — 확인 필요
-export const getAdminGraduationProjects = ({ year, page = 0, size = 20 } = {}) =>
-  apiClient.get('/admin/graduation-projects', { params: { year, page, size } })
+// 졸업작품은 생성/수정 시 status(DRAFT|PUBLISHED)를 함께 보내는 방식이라 별도 게시 API가 없다.
+// 목록/상세 조회도 게시된 작품만 내려주는 공개 엔드포인트만 존재하며, 관리자 전용 목록 조회는 없다
+// (임시저장은 생성 직후 응답으로만 확인 가능하고 이후 다시 불러올 방법이 없음).

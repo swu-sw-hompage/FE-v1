@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
-import { getAdminGraduationProjects, getGraduationProjects, deleteGraduationProject } from '../../api/graduation'
+import { getGraduationProjects, deleteGraduationProject } from '../../api/graduation'
 import { ACTIVITY_YEARS } from '../../constants/activities'
 import './Admin.css'
 
@@ -24,15 +24,13 @@ export default function AdminCapstoneList() {
     let cancelled = false
     setLoading(true)
     setError('')
-    const params = {
+    // 관리자 전용 목록 조회 API가 없어 게시된 작품만 내려주는 공개 엔드포인트를 사용한다
+    // (임시저장 작품은 이 목록에 나타나지 않는다).
+    getGraduationProjects({
       year: year === 'all' ? undefined : Number(year),
       page: page - 1,
       size: PAGE_SIZE,
-    }
-    // 관리자 전용 목록(임시저장 포함) 조회를 우선 시도하고, 아직 백엔드에 없으면
-    // 게시된 작품만이라도 보여주도록 공개 목록 조회로 대체한다.
-    getAdminGraduationProjects(params)
-      .catch(() => getGraduationProjects(params))
+    })
       .then((result) => {
         if (cancelled) return
         setProjects(result?.content ?? [])

@@ -1,12 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
-import {
-  createGraduationProject,
-  updateGraduationProject,
-  getGraduationProjectById,
-  getAdminGraduationProjects,
-} from '../../api/graduation'
+import { createGraduationProject, updateGraduationProject, getGraduationProjectById } from '../../api/graduation'
 import { ACTIVITY_YEARS } from '../../constants/activities'
 import './Admin.css'
 
@@ -21,13 +16,11 @@ export default function CapstoneWrite() {
   const [section, setSection] = useState('')
   const [members, setMembers] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
-  const [thumbnailFile, setThumbnailFile] = useState(null)
-  const [thumbnailPreview, setThumbnailPreview] = useState('')
+  const [thumbnailUrl, setThumbnailUrl] = useState('')
   const [desc, setDesc] = useState('')
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const fileInputRef = useRef(null)
 
   useEffect(() => {
     if (!isEdit) return undefined
@@ -35,46 +28,27 @@ export default function CapstoneWrite() {
     getGraduationProjectById(id)
       .then((project) => {
         if (cancelled || !project) return
-        applyProject(project)
+        setYear(String(project.year ?? ''))
+        setTitle(project.title ?? '')
+        setSummary(project.summary ?? '')
+        setTeamName(project.teamName ?? '')
+        setSection(project.section ?? '')
+        setMembers(project.members ?? '')
+        setVideoUrl(project.videoUrl ?? '')
+        setThumbnailUrl(project.thumbnailUrl ?? '')
+        setDesc(project.content ?? '')
       })
-      .catch(() =>
-        getAdminGraduationProjects({ size: 100 })
-          .then((result) => {
-            if (cancelled) return
-            const found = (result?.content ?? []).find((p) => String(p.id) === String(id))
-            if (found) applyProject(found)
-            else setError('졸업프로젝트를 불러오지 못했습니다.')
-          })
-          .catch((err) => {
-            if (!cancelled) setError(err.message)
-          }),
-      )
+      .catch(() => {
+        // 공개 조회는 게시된 작품만 내려준다 — 임시저장 작품은 다시 불러올 방법이 없다.
+        if (!cancelled) setError('졸업프로젝트를 불러오지 못했습니다. 게시되지 않은 작품은 다시 불러올 수 없습니다.')
+      })
       .finally(() => {
         if (!cancelled) setLoading(false)
       })
-
-    function applyProject(project) {
-      setYear(String(project.year ?? ''))
-      setTitle(project.title ?? '')
-      setSummary(project.summary ?? '')
-      setTeamName(project.teamName ?? '')
-      setSection(project.section ?? '')
-      setMembers(project.members ?? '')
-      setVideoUrl(project.videoUrl ?? '')
-      setThumbnailPreview(project.thumbnailUrl ?? '')
-      setDesc(project.content ?? '')
-    }
-
     return () => {
       cancelled = true
     }
   }, [id, isEdit])
-
-  const handleThumbnailChange = (file) => {
-    if (!file) return
-    setThumbnailFile(file)
-    setThumbnailPreview(URL.createObjectURL(file))
-  }
 
   const handleSubmit = async (targetStatus) => {
     if (!year || !title.trim() || !teamName.trim() || !members.trim()) {
@@ -92,11 +66,10 @@ export default function CapstoneWrite() {
         section: section || null,
         members,
         videoUrl: videoUrl || null,
+        thumbnailUrl: thumbnailUrl || null,
         content: desc,
         status: targetStatus === 'published' ? 'PUBLISHED' : 'DRAFT',
       }
-      // NOTE: 썸네일 파일 업로드는 백엔드 엔드포인트가 multipart를 지원하는지 확인이 필요합니다.
-      // 확인 전까지는 새로 선택한 파일이 있어도 URL 문자열 필드는 비워 보냅니다.
       if (isEdit) {
         await updateGraduationProject(id, payload)
       } else {
@@ -215,30 +188,19 @@ export default function CapstoneWrite() {
           </label>
 
           <label className="admin-field">
-            <span>
-              썸네일<em>*</em>
-            </span>
+            <span>썸네일 URL</span>
             <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/png,image/jpeg"
-              hidden
-              onChange={(e) => handleThumbnailChange(e.target.files?.[0])}
+              type="text"
+              placeholder="대표 이미지 URL을 입력해주세요"
+              value={thumbnailUrl}
+              onChange={(e) => setThumbnailUrl(e.target.value)}
             />
-            <button
-              type="button"
-              className="admin-upload"
-              onClick={() => fileInputRef.current?.click()}
-              style={thumbnailPreview ? { backgroundImage: `url(${thumbnailPreview})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' } : undefined}
-            >
-              {!thumbnailPreview && (
-                <>
-                  <span className="admin-upload__icon">↑</span>
-                  <span className="admin-upload__text">대표 이미지를 업로드해주세요</span>
-                  <span className="admin-upload__hint">JPG, PNG · 드래그하거나 클릭해서 선택</span>
-                </>
-              )}
-            </button>
+            {thumbnailUrl && (
+              <div
+                className="admin-upload"
+                style={{ backgroundImage: `url(${thumbnailUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+              />
+            )}
           </label>
 
           <label className="admin-field">

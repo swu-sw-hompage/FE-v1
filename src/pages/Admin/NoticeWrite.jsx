@@ -2,13 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import MarkdownLite from '../../components/common/MarkdownLite'
-import {
-  createNotice,
-  updateNotice,
-  publishNotice,
-  getNoticeById,
-  getAdminNotices,
-} from '../../api/notice'
+import { createNotice, updateNotice, publishNotice, getNoticeById } from '../../api/notice'
 import { getAdminEmail } from '../../api/auth'
 import './Admin.css'
 
@@ -22,16 +16,14 @@ export default function NoticeWrite() {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [previewMode, setPreviewMode] = useState(false)
-  const [files, setFiles] = useState([])
-  const [publishMode, setPublishMode] = useState('now')
-  const [scheduleDate, setScheduleDate] = useState('')
-  const [scheduleTime, setScheduleTime] = useState('09:00')
+  const [attachments, setAttachments] = useState([])
+  const [attachmentName, setAttachmentName] = useState('')
+  const [attachmentUrl, setAttachmentUrl] = useState('')
   const [createdAt, setCreatedAt] = useState(null)
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const textareaRef = useRef(null)
-  const fileInputRef = useRef(null)
 
   useEffect(() => {
     if (!isEdit) return undefined
@@ -39,43 +31,33 @@ export default function NoticeWrite() {
     getNoticeById(id)
       .then((notice) => {
         if (cancelled || !notice) return
-        applyNotice(notice)
+        setTitle(notice.title ?? '')
+        setBody(notice.content ?? '')
+        setCategory(notice.employmentNotice ? 'career' : 'academic')
+        setCreatedAt(notice.createdAt ?? null)
+        setAttachments(notice.attachments ?? [])
       })
-      .catch(() =>
-        // 공개 조회는 게시된 공지만 내려주므로, 임시저장 글은 관리자 목록에서 찾아온다
-        getAdminNotices({ size: 100 })
-          .then((result) => {
-            if (cancelled) return
-            const found = (result?.content ?? []).find((n) => String(n.id) === String(id))
-            if (found) applyNotice(found)
-            else setError('공지사항을 불러오지 못했습니다.')
-          })
-          .catch((err) => {
-            if (!cancelled) setError(err.message)
-          }),
-      )
+      .catch(() => {
+        // 공개 조회는 게시된 공지만 내려준다 — 임시저장 글은 다시 불러올 방법이 없다.
+        if (!cancelled) setError('공지사항을 불러오지 못했습니다. 게시되지 않은 글은 다시 불러올 수 없습니다.')
+      })
       .finally(() => {
         if (!cancelled) setLoading(false)
       })
-
-    function applyNotice(notice) {
-      setTitle(notice.title ?? '')
-      setBody(notice.content ?? '')
-      setCategory(notice.employmentNotice ? 'career' : 'academic')
-      setCreatedAt(notice.createdAt ?? null)
-    }
-
     return () => {
       cancelled = true
     }
   }, [id, isEdit])
 
-  const addFiles = (fileList) => {
-    setFiles((prev) => [...prev, ...Array.from(fileList)])
+  const addAttachment = () => {
+    if (!attachmentName.trim() || !attachmentUrl.trim()) return
+    setAttachments((prev) => [...prev, { name: attachmentName.trim(), url: attachmentUrl.trim() }])
+    setAttachmentName('')
+    setAttachmentUrl('')
   }
 
-  const removeFile = (index) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index))
+  const removeAttachment = (index) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index))
   }
 
   const wrapSelection = (before, after = before) => {
@@ -94,16 +76,9 @@ export default function NoticeWrite() {
 
   const applyColor = (hex) => wrapSelection(`{color:${hex}}`, '{/color}')
 
-  const scheduledAt =
-    publishMode === 'scheduled' && scheduleDate ? `${scheduleDate}T${scheduleTime}:00` : null
-
   const handleSubmit = async (targetStatus) => {
     if (!title.trim() || !body.trim()) {
       setError('제목과 내용을 입력해주세요.')
-      return
-    }
-    if (targetStatus === 'published' && publishMode === 'scheduled' && !scheduleDate) {
-      setError('예약 게시 일시를 선택해주세요.')
       return
     }
     setError('')
@@ -114,10 +89,10 @@ export default function NoticeWrite() {
         content: body,
         academicNotice: category === 'academic',
         employmentNotice: category === 'career',
-        ...(scheduledAt ? { scheduledAt } : {}),
+        attachments,
       }
-      const notice = isEdit ? await updateNotice(id, payload, files) : await createNotice(payload, files)
-      if (targetStatus === 'published' && publishMode === 'now') {
+      const notice = isEdit ? await updateNotice(id, payload) : await createNotice(payload)
+      if (targetStatus === 'published') {
         await publishNotice(notice?.id ?? id)
       }
       navigate('/admin/notices')
@@ -257,25 +232,33 @@ export default function NoticeWrite() {
               첨부파일<em className="admin-field__optional">선택</em>
             </span>
             <div className="admin-attachments">
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                hidden
-                onChange={(e) => {
-                  addFiles(e.target.files)
-                  e.target.value = ''
-                }}
-              />
-              <button type="button" className="admin-btn admin-btn--outline" onClick={() => fileInputRef.current?.click()}>
-                파일 선택
-              </button>
-              {files.length > 0 && (
+              <div className="admin-form-row">
+                <div className="admin-field admin-field--grow">
+                  <input
+                    type="text"
+                    placeholder="파일명 (예: 신청서 양식.pdf)"
+                    value={attachmentName}
+                    onChange={(e) => setAttachmentName(e.target.value)}
+                  />
+                </div>
+                <div className="admin-field admin-field--grow">
+                  <input
+                    type="text"
+                    placeholder="파일 URL"
+                    value={attachmentUrl}
+                    onChange={(e) => setAttachmentUrl(e.target.value)}
+                  />
+                </div>
+                <button type="button" className="admin-btn admin-btn--outline" onClick={addAttachment}>
+                  추가
+                </button>
+              </div>
+              {attachments.length > 0 && (
                 <ul className="admin-attachments__list">
-                  {files.map((file, index) => (
+                  {attachments.map((file, index) => (
                     <li key={`${file.name}-${index}`}>
                       <span>{file.name}</span>
-                      <button type="button" onClick={() => removeFile(index)} aria-label="첨부파일 삭제">
+                      <button type="button" onClick={() => removeAttachment(index)} aria-label="첨부파일 삭제">
                         ×
                       </button>
                     </li>
@@ -283,42 +266,6 @@ export default function NoticeWrite() {
                 </ul>
               )}
             </div>
-          </label>
-
-          <label className="admin-field">
-            <span>
-              게시 방식<em>*</em>
-            </span>
-            <div className="admin-radio-group">
-              <label className="admin-radio">
-                <input
-                  type="radio"
-                  checked={publishMode === 'now'}
-                  onChange={() => setPublishMode('now')}
-                />
-                즉시 게시
-              </label>
-              <label className="admin-radio">
-                <input
-                  type="radio"
-                  checked={publishMode === 'scheduled'}
-                  onChange={() => setPublishMode('scheduled')}
-                />
-                예약 게시
-              </label>
-            </div>
-            {publishMode === 'scheduled' && (
-              <div className="admin-schedule">
-                <p className="admin-schedule__label">게시 일시</p>
-                <div className="admin-schedule__pickers">
-                  <input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} />
-                  <input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} />
-                </div>
-                <p className="admin-schedule__note">
-                  설정한 시간에 자동으로 게시되고, 알림 신청자에게 메일도 그때 발송됩니다.
-                </p>
-              </div>
-            )}
           </label>
 
           <div className="admin-divider" />
@@ -342,7 +289,7 @@ export default function NoticeWrite() {
                 disabled={submitting}
                 onClick={() => handleSubmit('published')}
               >
-                {publishMode === 'scheduled' ? '예약하기' : '게시하기'}
+                게시하기
               </button>
             </div>
           </div>
@@ -366,17 +313,9 @@ export default function NoticeWrite() {
               {createdAt ? new Date(createdAt).toLocaleDateString('ko-KR') : new Date().toLocaleDateString('ko-KR')}
             </p>
           </div>
-          {publishMode === 'scheduled' && scheduleDate && (
-            <div className="admin-info-row admin-info-row--bordered">
-              <p className="admin-info-row__label">게시 예정</p>
-              <p className="admin-info-row__value admin-info-row__value--accent">
-                {scheduleDate} {scheduleTime}
-              </p>
-            </div>
-          )}
           <div className="admin-callout">
             <span className="admin-callout__icon">i</span>
-            <p>공지가 게시되는 시점(예약 시 예약 시간)에 알림 신청자에게 이메일이 발송됩니다.</p>
+            <p>공지를 게시하면 그 시점에 알림 신청자에게 이메일이 발송됩니다.</p>
           </div>
         </aside>
       </div>
