@@ -78,33 +78,21 @@ export default function AdminCapstoneList() {
     >
       <div className="admin-table-card">
         <div className="admin-table-toolbar">
-          <div className="admin-pill-filter">
-            <button
-              type="button"
-              className={year === 'all' ? 'admin-pill-filter__btn admin-pill-filter__btn--active' : 'admin-pill-filter__btn'}
-              onClick={() => {
-                setYear('all')
-                setPage(1)
-              }}
-            >
-              전체
-            </button>
+          <select
+            className="admin-year-select"
+            value={year}
+            onChange={(e) => {
+              setYear(e.target.value)
+              setPage(1)
+            }}
+          >
+            <option value="all">전체 연도</option>
             {ACTIVITY_YEARS.map((y) => (
-              <button
-                key={y}
-                type="button"
-                className={
-                  year === String(y) ? 'admin-pill-filter__btn admin-pill-filter__btn--active' : 'admin-pill-filter__btn'
-                }
-                onClick={() => {
-                  setYear(String(y))
-                  setPage(1)
-                }}
-              >
-                {y}
-              </button>
+              <option key={y} value={String(y)}>
+                {y}년
+              </option>
             ))}
-          </div>
+          </select>
         </div>
 
         {error && <p className="admin-writer__error" role="alert">{error}</p>}

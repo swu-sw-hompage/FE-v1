@@ -1,4 +1,11 @@
-export const ACTIVITY_YEARS = [2025, 2024, 2023, 2022, 2021, 2020]
+const ACTIVITY_START_YEAR = 2020
+
+// 매년 새 연도를 추가하기 위해 코드를 수정할 필요가 없도록,
+// 시작 연도부터 올해까지를 내림차순으로 자동 생성한다.
+export const ACTIVITY_YEARS = Array.from(
+  { length: new Date().getFullYear() - ACTIVITY_START_YEAR + 1 },
+  (_, i) => new Date().getFullYear() - i,
+)
 
 export const ACTIVITY_SOURCE_URLS = {
   2020: 'http://sw.swu.ac.kr/학생활동/졸업프로젝트/',

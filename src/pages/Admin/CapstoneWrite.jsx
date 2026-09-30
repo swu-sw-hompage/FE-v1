@@ -112,7 +112,7 @@ export default function CapstoneWrite() {
 
   if (loading) {
     return (
-      <AdminLayout breadcrumb="졸업프로젝트 작성" eyebrow="PROJECT ARCHIVE" title={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 작성'}>
+      <AdminLayout breadcrumb="졸업프로젝트 등록" eyebrow="PROJECT ARCHIVE" title={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 등록'}>
         <p className="admin-page__desc">불러오는 중...</p>
       </AdminLayout>
     )
@@ -120,9 +120,9 @@ export default function CapstoneWrite() {
 
   return (
     <AdminLayout
-      breadcrumb={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 작성'}
+      breadcrumb={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 등록'}
       eyebrow="PROJECT ARCHIVE"
-      title={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 작성'}
+      title={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 등록'}
       description="연도별 졸업작품 정보를 등록하고 학생활동 페이지에 공개할 수 있습니다."
     >
       <div className="admin-columns">
