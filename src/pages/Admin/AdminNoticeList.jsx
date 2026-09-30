@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
-import { getAdminNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { getAdminNotices, getNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import './Admin.css'
 
 const FILTERS = [
@@ -31,13 +31,17 @@ export default function AdminNoticeList() {
     let cancelled = false
     setLoading(true)
     setError('')
-    getAdminNotices({
+    const params = {
       academic: filter === 'academic' ? true : undefined,
       employment: filter === 'employment' ? true : undefined,
       keyword: submittedKeyword,
       page: page - 1,
       size: PAGE_SIZE,
-    })
+    }
+    // 관리자 전용 목록(임시저장 포함) 조회를 우선 시도하고, 아직 백엔드에 없으면
+    // 게시된 공지만이라도 보여주도록 공개 목록 조회로 대체한다.
+    getAdminNotices(params)
+      .catch(() => getNotices(params))
       .then((result) => {
         if (cancelled) return
         setNotices(result?.content ?? [])
