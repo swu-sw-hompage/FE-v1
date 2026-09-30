@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { login } from '../../api/auth'
+import logoFull from '../../assets/images/brand/logo-full.svg'
 import './Login.css'
 
 export default function Login() {
@@ -28,9 +29,12 @@ export default function Login() {
   return (
     <div className="admin-login">
       <header className="admin-login__topbar">
-        <a href="/" className="admin-login__site-link">
-          ← 학과 홈페이지로 돌아가기
-        </a>
+        <Link to="/" className="admin-login__logo">
+          <img src={logoFull} alt="서울여자대학교 소프트웨어학과" />
+        </Link>
+        <Link to="/" className="admin-login__site-link">
+          학과 홈페이지 바로가기 ↗
+        </Link>
       </header>
 
       <div className="admin-login__content">

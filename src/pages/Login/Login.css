@@ -5,13 +5,25 @@
 }
 
 .admin-login__topbar {
-  height: 56px;
+  height: 72px;
   background: #fff;
   border-bottom: 1px solid #e5e5e8;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding-inline: 48px;
+}
+
+.admin-login__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.admin-login__logo img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .admin-login__site-link {
