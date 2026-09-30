@@ -28,12 +28,8 @@ export default function Login() {
   return (
     <div className="admin-login">
       <header className="admin-login__topbar">
-        <a href="/" className="admin-login__brand">
-          <strong>서울여자대학교</strong>
-          <span>소프트웨어학과</span>
-        </a>
         <a href="/" className="admin-login__site-link">
-          학과 홈페이지 바로가기 ↗
+          ← 학과 홈페이지로 돌아가기
         </a>
       </header>
 
