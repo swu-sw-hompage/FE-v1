@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import { getGraduationProjects } from '../../api/graduation'
-import { ACTIVITY_YEARS } from '../../constants/activities'
+import { ACTIVITY_LATEST_YEAR, ACTIVITY_YEARS } from '../../constants/activities'
 import ActivitiesSidebar from './ActivitiesSidebar'
 import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
@@ -12,7 +12,7 @@ const PAGE_SIZE = 12
 export default function Activities() {
   const { year } = useParams()
   const navigate = useNavigate()
-  const activeYear = ACTIVITY_YEARS.includes(Number(year)) ? Number(year) : 2025
+  const activeYear = ACTIVITY_YEARS.includes(Number(year)) ? Number(year) : ACTIVITY_LATEST_YEAR
   const [page, setPage] = useState(1)
   const [projects, setProjects] = useState([])
   const [totalPages, setTotalPages] = useState(1)

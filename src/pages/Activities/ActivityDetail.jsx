@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import { getGraduationProjectById } from '../../api/graduation'
-import { ACTIVITY_YEARS } from '../../constants/activities'
+import { ACTIVITY_LATEST_YEAR, ACTIVITY_YEARS } from '../../constants/activities'
 import ActivitiesSidebar from './ActivitiesSidebar'
 import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
 
 export default function ActivityDetail() {
   const { year, id } = useParams()
-  const activeYear = ACTIVITY_YEARS.includes(Number(year)) ? Number(year) : 2025
+  const activeYear = ACTIVITY_YEARS.includes(Number(year)) ? Number(year) : ACTIVITY_LATEST_YEAR
   const [project, setProject] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

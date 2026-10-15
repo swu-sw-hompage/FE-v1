@@ -5,7 +5,8 @@ import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
 import './Roadmap.css'
 
 const COURSE_DESC_PLACEHOLDER = '과목 설명 · 강의계획서 기준 입력 예정'
-const LIBERAL_REASON_PLACEHOLDER = '학과 검토 후 입력'
+// 추천 이유가 없는 과목은 모두 교양필수 과목이다.
+const LIBERAL_REQUIRED_LABEL = '교양필수'
 
 const YEARS = [
   {
@@ -282,7 +283,7 @@ function MobileLiberalItem({ course, expanded, onToggle }) {
       {expanded && (
         <div className="roadmap__mobile-liberal-reason">
           <strong>추천 이유</strong>
-          <p>{course.reason ?? LIBERAL_REASON_PLACEHOLDER}</p>
+          <p>{course.reason ?? LIBERAL_REQUIRED_LABEL}</p>
         </div>
       )}
     </div>
@@ -432,7 +433,7 @@ export default function Roadmap() {
                       <span>{course.title}</span>
                       <div className="roadmap__tooltip roadmap__tooltip--liberal">
                         <strong>추천 이유</strong>
-                        <p>{course.reason ?? LIBERAL_REASON_PLACEHOLDER}</p>
+                        <p>{course.reason ?? LIBERAL_REQUIRED_LABEL}</p>
                       </div>
                     </div>
                   ))}

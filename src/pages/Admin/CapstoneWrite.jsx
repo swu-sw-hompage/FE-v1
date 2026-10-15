@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import { createGraduationProject, updateGraduationProject, getGraduationProjectById } from '../../api/graduation'
-import { ACTIVITY_YEARS } from '../../constants/activities'
+import { ADMIN_ACTIVITY_YEARS } from '../../constants/activities'
 import './Admin.css'
 
 export default function CapstoneWrite() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
-  const [year, setYear] = useState(String(ACTIVITY_YEARS[0] ?? ''))
+  const [year, setYear] = useState(String(ADMIN_ACTIVITY_YEARS[0] ?? ''))
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
   const [teamName, setTeamName] = useState('')
@@ -113,7 +113,7 @@ export default function CapstoneWrite() {
                 졸업연도<em>*</em>
               </span>
               <select value={year} onChange={(e) => setYear(e.target.value)}>
-                {ACTIVITY_YEARS.map((y) => (
+                {ADMIN_ACTIVITY_YEARS.map((y) => (
                   <option key={y} value={y}>
                     {y}
                   </option>

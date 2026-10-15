@@ -6,6 +6,7 @@ import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
 import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import { getGraduationProjects } from '../../api/graduation'
+import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
 import './Home.css'
 
 const QUICK_LINKS = [
@@ -37,7 +38,7 @@ export default function Home() {
   }, [noticeFilter])
 
   useEffect(() => {
-    getGraduationProjects({ year: 2025, page: 0, size: 4 })
+    getGraduationProjects({ year: ACTIVITY_LATEST_YEAR, page: 0, size: 4 })
       .then((result) => setProjects(result?.content ?? []))
       .catch(() => setProjects([]))
   }, [])
@@ -118,11 +119,11 @@ export default function Home() {
       <div className="home__mobile-section">
         <div className="home__mobile-section-head">
           <h2>학생활동</h2>
-          <Link to="/activities/2025">전체보기</Link>
+          <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`}>전체보기</Link>
         </div>
         <div className="home__mobile-scroller">
           {projects.map((project) => (
-            <Link to={`/activities/2025/${project.id}`} className="home__mobile-scroll-card" key={project.id}>
+            <Link to={`/activities/${ACTIVITY_LATEST_YEAR}/${project.id}`} className="home__mobile-scroll-card" key={project.id}>
               {project.thumbnailUrl ? (
                 <img className="home__mobile-scroll-image" src={project.thumbnailUrl} alt="" />
               ) : (
@@ -212,13 +213,13 @@ export default function Home() {
       <section className="home__projects container">
         <div className="home__projects-header">
           <h2>학생활동</h2>
-          <Link to="/activities/2025" className="home__see-all">
+          <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="home__see-all">
             전체보기 <span aria-hidden="true">+</span>
           </Link>
         </div>
         <div className="home__projects-grid">
           {projects.map((project) => (
-            <Link to={`/activities/2025/${project.id}`} className="project-card" key={project.id}>
+            <Link to={`/activities/${ACTIVITY_LATEST_YEAR}/${project.id}`} className="project-card" key={project.id}>
               {project.thumbnailUrl ? (
                 <img className="project-card__image" src={project.thumbnailUrl} alt="" />
               ) : (
