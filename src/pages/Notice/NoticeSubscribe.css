@@ -333,3 +333,56 @@
     font-size: 24px;
   }
 }
+
+/* 준비 중 안내: SUBSCRIBE_READY가 false일 때 폼 자리를 같은 크기의 안내 박스로 채운다 */
+.notice-subscribe__form-wrap {
+  position: relative;
+  max-width: 888px;
+}
+
+/* 폼은 보이지 않게 하되 자리(크기)는 그대로 차지한다 */
+.notice-subscribe__form-wrap--paused .notice-subscribe__form {
+  visibility: hidden;
+}
+
+.notice-subscribe__paused {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.notice-subscribe__paused-title {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.notice-subscribe__paused-text {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  word-break: keep-all;
+}
+
+@media (max-width: 700px) {
+  .notice-subscribe__paused-title {
+    font-size: 18px;
+  }
+
+  .notice-subscribe__paused-text {
+    font-size: 14px;
+  }
+}
