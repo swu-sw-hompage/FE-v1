@@ -13,6 +13,7 @@ export default function NoticeWrite() {
   const isEdit = Boolean(id)
   const navigate = useNavigate()
   const [category, setCategory] = useState('academic')
+  const [pinned, setPinned] = useState(false)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [previewMode, setPreviewMode] = useState(false)
@@ -34,6 +35,7 @@ export default function NoticeWrite() {
         setTitle(notice.title ?? '')
         setBody(notice.content ?? '')
         setCategory(notice.employmentNotice ? 'career' : 'academic')
+        setPinned(Boolean(notice.pinned))
         setCreatedAt(notice.createdAt ?? null)
         setAttachments(notice.attachments ?? [])
       })
@@ -89,6 +91,8 @@ export default function NoticeWrite() {
         content: body,
         academicNotice: category === 'academic',
         employmentNotice: category === 'career',
+        // 백엔드는 값이 없으면 고정 해제로 저장하므로 수정 시에도 항상 보낸다.
+        pinned,
         attachments,
       }
       const notice = isEdit ? await updateNotice(id, payload) : await createNotice(payload)
@@ -137,6 +141,13 @@ export default function NoticeWrite() {
                 <option value="career">취업</option>
               </select>
             </label>
+            <div className="admin-field admin-field--xs">
+              <span>상단 고정</span>
+              <label className="admin-pin-toggle">
+                <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} />
+                목록 맨 위에 고정
+              </label>
+            </div>
             <label className="admin-field admin-field--grow">
               <span>
                 제목<em>*</em>

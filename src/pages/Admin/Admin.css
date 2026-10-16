@@ -1053,3 +1053,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* 공지 작성: 상단 고정 체크박스 (select/input과 같은 48px 높이) */
+.admin-pin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding-inline: 14px;
+  border: 1px solid #e5e5e8;
+  border-radius: 6px;
+  background: #fff;
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  color: #1f1f21;
+  cursor: pointer;
+}
+
+.admin-pin-toggle input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #7d0e16;
+}
