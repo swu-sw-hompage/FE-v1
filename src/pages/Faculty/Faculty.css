@@ -244,3 +244,15 @@
     overflow-wrap: break-word;
   }
 }
+
+/* 연구실 홈페이지 링크 (homepage가 있는 교수님만) */
+.faculty__contact--homepage {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.faculty__contact--homepage:hover {
+  text-decoration: underline;
+}

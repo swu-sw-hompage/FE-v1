@@ -2,12 +2,12 @@
 const photos = import.meta.glob('../assets/images/faculty/*', { eager: true, import: 'default' })
 const photoUrl = (filename) => photos[`../assets/images/faculty/${filename}`]
 
-// 교수진 페이지에 이 순서 그대로 표시된다.
+// 교수진 페이지에 이 순서 그대로 표시된다. homepage(연구실 홈페이지)는 있는 교수님만 적는다.
 export const FACULTY = [
   {
     name: '엄성용',
     position: '교수',
-    major: '멀티미디어 · 그래픽스 · 스마트폰프로그래밍',
+    major: '멀티미디어 · 그래픽스 · 컴퓨터응용',
     phone: '02-970-5696',
     email: 'osy@swu.ac.kr',
     education: ['서울대학교 공학사', '서울대학교 공학석사', '서울대학교 공학박사'],
@@ -28,6 +28,7 @@ export const FACULTY = [
     major: '인공지능 및 영상분석',
     phone: '02-970-5756',
     email: 'hlhong@swu.ac.kr',
+    homepage: 'https://sites.google.com/view/vcmilab/home',
     education: ['이화여자대학교 이학사', '이화여자대학교 이학석사', '이화여자대학교 공학박사'],
     photo: photoUrl('prof-6.jpg'),
   },

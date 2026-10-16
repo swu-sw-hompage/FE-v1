@@ -41,6 +41,16 @@ export default function Faculty() {
                       </div>
                       <p className="faculty__contact faculty__contact--phone">{professor.phone}</p>
                       <p className="faculty__contact faculty__contact--email">{professor.email}</p>
+                      {professor.homepage && (
+                        <a
+                          className="faculty__contact faculty__contact--homepage"
+                          href={professor.homepage}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          연구실 홈페이지 ↗
+                        </a>
+                      )}
                     </div>
                   </div>
                   <div className="faculty__meta-row faculty__meta-row--major">
