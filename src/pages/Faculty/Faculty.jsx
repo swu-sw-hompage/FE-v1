@@ -48,7 +48,10 @@ export default function Faculty() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          연구실 홈페이지 ↗
+                          연구실 홈페이지
+                          <svg className="faculty__link-icon" viewBox="0 0 12 12" aria-hidden="true">
+                            <path d="M4 2h6v6M10 2 2.5 9.5" />
+                          </svg>
                         </a>
                       )}
                     </div>

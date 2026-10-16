@@ -245,14 +245,27 @@
   }
 }
 
-/* 연구실 홈페이지 링크 (homepage가 있는 교수님만) */
+/* 연구실 홈페이지 링크 (homepage가 있는 교수님만): 전화·이메일과 같은 글자색, 호버 시 밑줄 */
 .faculty__contact--homepage {
-  display: inline-block;
-  color: var(--color-primary);
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   text-decoration: none;
 }
 
-.faculty__contact--homepage:hover {
+/* ↗ 문자는 기기에 따라 컬러 이모지로 그려지므로 글자색(currentColor)을 따르는 SVG를 쓴다 */
+.faculty__link-icon {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.faculty__contact--homepage:hover,
+.faculty__contact--homepage:focus-visible {
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
