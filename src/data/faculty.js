@@ -35,7 +35,7 @@ export const FACULTY = [
   {
     name: '백종호',
     position: '교수',
-    major: '디지털통신',
+    major: '지능형 플랫폼, 서버/클라이언트 서비스 플랫폼, 유무선 방송통신 시스템',
     phone: '02-970-5606',
     email: 'paikjh@swu.ac.kr',
     education: ['중앙대학교 공학사', '중앙대학교 공학석사', '중앙대학교 공학박사'],

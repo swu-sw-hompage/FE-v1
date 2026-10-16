@@ -222,19 +222,6 @@
     color: var(--color-primary);
   }
 
-  .faculty__contact--phone::before,
-  .faculty__contact--email::before {
-    margin-right: 4px;
-  }
-
-  .faculty__contact--phone::before {
-    content: '\260E';
-  }
-
-  .faculty__contact--email::before {
-    content: '\2709';
-  }
-
   .faculty__divider {
     display: none;
   }
