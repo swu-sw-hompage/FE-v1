@@ -46,6 +46,16 @@
   flex-direction: column;
 }
 
+/* 2열일 때 같은 줄 카드끼리 행 높이를 공유해서, 연구분야 길이가 달라도 구분선·학력이 같은 높이에서 시작 */
+@media (min-width: 701px) {
+  .faculty__card {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}
+
 .faculty__top {
   display: flex;
   gap: 16px;
@@ -123,6 +133,7 @@
   font-size: 14px;
   line-height: 1.55;
   color: var(--color-text);
+  white-space: pre-line; /* 데이터의 \n을 줄바꿈으로 표시 */
 }
 
 .faculty__value--stacked p {
