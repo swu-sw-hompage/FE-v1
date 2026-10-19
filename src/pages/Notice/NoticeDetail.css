@@ -189,10 +189,6 @@
   }
 
   .notice-detail__category {
-    display: inline-block;
-    padding: 3px 8px;
-    background: var(--color-primary-soft-bg);
-    border-radius: 3px;
     font-weight: 700;
     font-size: 12px;
   }
