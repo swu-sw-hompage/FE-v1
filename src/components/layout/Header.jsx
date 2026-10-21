@@ -58,7 +58,7 @@ export default function Header() {
         <div className="header__mega-inner">
           <div className="header__mega-intro">
             <p className="header__mega-eyebrow">SEOUL WOMEN&apos;S UNIVERSITY</p>
-            <p className="header__mega-title">소프트웨어융합학과</p>
+            <p className="header__mega-title">소프트웨어학과</p>
           </div>
           {MEGA_MENU_COLUMNS.map((column) => (
             <div

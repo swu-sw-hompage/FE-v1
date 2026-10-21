@@ -42,7 +42,7 @@ export default function Login() {
           <div>
             <span className="admin-login__badge">ADMIN</span>
             <p className="admin-login__title">관리자 로그인</p>
-            <p className="admin-login__subtitle">소프트웨어융합학과 홈페이지 운영진 전용 페이지입니다.</p>
+            <p className="admin-login__subtitle">소프트웨어학과 홈페이지 운영진 전용 페이지입니다.</p>
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -92,7 +92,7 @@ export default function Login() {
         </div>
       </div>
 
-      <p className="admin-login__footer">© 2026 Seoul Women's University Software Convergence</p>
+      <p className="admin-login__footer">© 2026 Seoul Women's University Department of Software</p>
     </div>
   )
 }

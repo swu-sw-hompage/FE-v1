@@ -70,7 +70,7 @@ export default function Location() {
               <div className="location__info-row">
                 <p className="location__info-label">연락처</p>
                 <p className="location__info-value location__info-value--accent">
-                  소프트웨어융합학과 02-970-5921
+                  소프트웨어학과 02-970-5921
                 </p>
               </div>
             </div>
