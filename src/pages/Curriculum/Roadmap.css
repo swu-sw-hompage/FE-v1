@@ -79,7 +79,7 @@
 }
 
 .roadmap__course-mark--elective {
-  background: #a04b55;
+  background: #d2a9af;
 }
 
 .roadmap__course-body {
@@ -262,7 +262,7 @@
   }
 
   .roadmap__legend-mark--elective {
-    background: #a04b55;
+    background: #d2a9af;
   }
 
   .roadmap__year-tabs {
@@ -341,7 +341,7 @@
   }
 
   .roadmap__mobile-course-mark--elective {
-    background: #a04b55;
+    background: #d2a9af;
   }
 
   .roadmap__mobile-course-text {

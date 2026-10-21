@@ -169,12 +169,8 @@
   }
 }
 
-.location__email-link {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
+.location__email-link,
 .location__email-link:hover {
-  text-decoration-thickness: 2px;
+  color: inherit;
+  text-decoration: none;
 }
