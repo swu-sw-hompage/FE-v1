@@ -478,3 +478,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* 기존 로드맵 그리드와 모바일 상세 UI는 유지; 상단 선택 버튼만 추가 */
+.roadmap__mode-buttons, .roadmap__track-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.roadmap__mode-button, .roadmap__track-button {
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text-secondary);
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 1.3;
+  border-radius: 4px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.roadmap__mode-button.is-active, .roadmap__track-button.is-active {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  font-weight: 700;
+}
+
+.roadmap__mode-button:focus-visible, .roadmap__track-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.roadmap__mode-note {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.roadmap__course-mark--recommended, .roadmap__mobile-course-mark--recommended {
+  background: #8d8990;
+}
+
+.roadmap__course-tag--recommended, .roadmap__mobile-course-tag--recommended {
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 700px) {
+  .roadmap__mode-button, .roadmap__track-button { font-size: 12px; padding: 10px; }
+}

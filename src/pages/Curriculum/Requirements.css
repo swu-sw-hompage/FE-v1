@@ -303,69 +303,46 @@
 }
 
 
-/* 2026학년도 공식 졸업 인증 공지 반영 */
-.requirements__intro {
-  margin: 0 0 20px;
-  font-size: 15px;
-  line-height: 1.8;
+/* 종전 학번별 안내는 유지하고 최신 졸업인증 공지만 추가 표시 */
+.requirements__historical-note {
+  margin: -18px 0 36px;
+  font-size: 13px;
+  line-height: 1.75;
   color: var(--color-text-secondary);
 }
 
-.requirements__list li > div {
-  min-width: 0;
-}
-
-.requirements__list li .requirements__detail {
-  margin-top: 7px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.65;
-  color: var(--color-text-secondary);
-}
-
-.requirements__guru {
-  margin-bottom: 0;
-}
-
-.requirements__additional {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.requirements__notice {
+.requirements__official-note {
   margin-top: 24px;
-  padding: 24px;
+  padding: 20px 24px;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: 4px;
   background: #fafafa;
 }
 
-.requirements__notice strong {
+.requirements__official-note strong {
   display: block;
-  margin-bottom: 10px;
-  font-family: var(--font-pretendard);
+  margin-bottom: 8px;
   color: var(--color-text);
+  font-size: 16px;
 }
 
-.requirements__notice p {
-  margin: 0 0 10px;
+.requirements__official-note p {
   font-size: 14px;
   line-height: 1.7;
   color: var(--color-text-secondary);
+  margin: 0 0 10px;
 }
 
-.requirements__source {
+.requirements__official-note a {
   display: inline-block;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 14px;
   font-weight: 600;
   color: var(--color-primary);
-  text-underline-offset: 4px;
+  text-underline-offset: 3px;
 }
 
-@media (max-width: 900px) {
-  .requirements__notice {
-    padding: 18px;
-  }
+@media (max-width: 700px) {
+  .requirements__official-note { padding: 18px; }
+  .requirements__historical-note { margin: 16px 0 24px; }
 }

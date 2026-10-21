@@ -8,6 +8,48 @@ const COURSE_DESC_PLACEHOLDER = '과목 설명 · 강의계획서 기준 입력 
 // 추천 이유가 없는 과목은 모두 교양필수 과목이다.
 const LIBERAL_REQUIRED_LABEL = '교양필수'
 
+const GUIDEBOOK_TRACKS = [
+  {
+    id: 'research',
+    no: '01',
+    name: '학문·연구',
+    subtitle: '이론과 연구를 바탕으로 새로운 기술을 탐구하는 진로',
+    careers: ['정보통신기술자', '교수', '연구원'],
+    years: [
+      ['소프트웨어개론', '컴퓨터수학', '확률과통계', 'C++프로그래밍기초', 'C++프로그래밍응용', '소프트웨어진로탐색'],
+      ['자료구조', '컴퓨터알고리즘', '컴퓨터구조', '운영체제', '빅데이터수집및마이닝(캡스톤디자인)', 'JAVA프로그래밍기초', 'JAVA프로그래밍응용', '윈도우프로그래밍'],
+      ['기계학습', '데이터통신및네트워크', '영상처리', '컴퓨터그래픽스', '데이터베이스기초', '데이터베이스응용', '웹프로그래밍', '소프트웨어커리어디자인', '인공지능'],
+      ['빅데이터분석', 'VR/AR/MR프로그래밍', '프로젝트종합설계Ⅰ(캡스톤디자인)', '프로젝트종합설계Ⅱ(캡스톤디자인)', '딥러닝및응용'],
+    ],
+  },
+  {
+    id: 'cloud',
+    no: '02',
+    name: '서버·클라우드 플랫폼',
+    subtitle: '웹·앱 서비스와 클라우드 인프라를 설계하고 운영하는 진로',
+    careers: ['웹·앱 기획자', '웹·앱 프로그래머', '서버 관리자'],
+    years: [
+      ['소프트웨어개론', 'C++프로그래밍기초', 'C++프로그래밍응용', '웹디자인및기획', '소프트웨어진로탐색'],
+      ['자료구조', '컴퓨터알고리즘', 'JAVA프로그래밍기초', 'JAVA프로그래밍응용', '컴퓨터비전', '운영체제', '컴퓨터구조', '웹표준언어', '빅데이터수집및마이닝(캡스톤디자인)'],
+      ['웹프로그래밍', '데이터통신및네트워크', '데이터베이스기초', '데이터베이스응용', '영상처리', '소프트웨어커리어디자인', '클라우드오픈소스소프트웨어'],
+      ['프로젝트종합설계Ⅰ(캡스톤디자인)', '프로젝트종합설계Ⅱ(캡스톤디자인)', '유닉스프로그래밍', '소프트웨어와스타트업'],
+    ],
+  },
+  {
+    id: 'ai',
+    no: '03',
+    name: 'AI·SW 개발',
+    subtitle: '인공지능과 응용 소프트웨어를 기획·개발하는 진로',
+    careers: ['AI·SW 응용 프로그램 개발자'],
+    years: [
+      ['소프트웨어개론', '컴퓨터수학', 'C++프로그래밍기초', 'C++프로그래밍응용', '소프트웨어진로탐색'],
+      ['자료구조', '컴퓨터알고리즘', 'JAVA프로그래밍기초', 'JAVA프로그래밍응용', '컴퓨터비전', '빅데이터수집및마이닝(캡스톤디자인)', '윈도우프로그래밍'],
+      ['데이터통신및네트워크', '데이터베이스기초', '데이터베이스응용', '기계학습', '영상처리', 'DIY종합설계프로그래밍', '소프트웨어커리어디자인', '인공지능', '모바일프로그래밍'],
+      ['빅데이터분석', '딥러닝및응용', '프로젝트종합설계Ⅰ(캡스톤디자인)', '프로젝트종합설계Ⅱ(캡스톤디자인)', '소프트웨어와스타트업', 'VR/AR/MR프로그래밍', '유닉스프로그래밍'],
+    ],
+  },
+]
+
 const YEARS = [
   {
     no: '01',
@@ -20,7 +62,7 @@ const YEARS = [
           {
             title: '소프트웨어진로탐색(1)',
             tag: '필수',
-            desc: '소프트웨어 전공 학습에 필요한 동기를 부여받고, 다양한 전공실무영역을 미리 체험하여 장래 직업 및 진로탐색에 도움되는 정보를 체득할 수 있도록 전공과 관련된 세미나 및 특강 또는 취업 관련 행사에 참석한다.',
+            desc: '소프트웨어 전공을 수행하는 데 있어 필요한 학습동기를 부여받고, 다양한 전공실무영역을 미리 체험하여 장래 직업 및 진로탐색에 도움되는 정보를 체득할 수 있도록 전공과 관련된 세미나 및 특강 또는 취업 관련 행사에 참석한다.',
           },
           {
             title: 'C++프로그래밍 기초(3)',
@@ -100,7 +142,7 @@ const YEARS = [
           {
             title: '소프트웨어역량인증(0)',
             tag: '필수',
-            desc: '졸업 인증을 위한 전공필수 과목. 공인 외국어 성적, 논문발표 또는 특허출원 실적, 소프트웨어개발실무영어 I·II 이수, 프로그래밍 Guru 1·2 수료 증빙을 제출해 P/F 평가를 받는다. 2026학년도부터 SW 등록 실적은 지식재산권 요건으로 인정되지 않는다.',
+            desc: '졸업인증 조건을 확인하는 전공필수 과목. 공인외국어 성적, 논문발표 또는 특허출원, 소프트웨어개발실무영어 I·II 및 프로그래밍 Guru 1·2 수료증을 제출해 P/F 평가를 받는다. 2026학년도부터 SW 등록 실적은 인정되지 않는다.',
           },
           {
             title: '빅데이터분석(3)',
@@ -246,7 +288,9 @@ function MobileCourseItem({ course, expanded, onToggle }) {
           className={
             course.tag === '필수'
               ? 'roadmap__mobile-course-mark roadmap__mobile-course-mark--required'
-              : 'roadmap__mobile-course-mark roadmap__mobile-course-mark--elective'
+              : course.tag === '추천'
+                ? 'roadmap__mobile-course-mark roadmap__mobile-course-mark--recommended'
+                : 'roadmap__mobile-course-mark roadmap__mobile-course-mark--elective'
           }
         />
         <span className="roadmap__mobile-course-text">
@@ -254,7 +298,9 @@ function MobileCourseItem({ course, expanded, onToggle }) {
           <span
             className={
               course.tag === '필수'
-                ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--required'
+              ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--required'
+              : course.tag === '추천'
+                ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--recommended'
                 : 'roadmap__mobile-course-tag roadmap__mobile-course-tag--elective'
             }
           >
@@ -296,8 +342,10 @@ function CourseItem({ course, flip }) {
       <span
         className={
           course.tag === '필수'
-            ? 'roadmap__course-mark roadmap__course-mark--required'
-            : 'roadmap__course-mark roadmap__course-mark--elective'
+              ? 'roadmap__course-mark roadmap__course-mark--required'
+              : course.tag === '추천'
+                ? 'roadmap__course-mark roadmap__course-mark--recommended'
+                : 'roadmap__course-mark roadmap__course-mark--elective'
         }
       />
       <div className="roadmap__course-body">
@@ -306,7 +354,9 @@ function CourseItem({ course, flip }) {
           className={
             course.tag === '필수'
               ? 'roadmap__course-tag roadmap__course-tag--required'
-              : 'roadmap__course-tag roadmap__course-tag--elective'
+              : course.tag === '추천'
+                ? 'roadmap__course-tag roadmap__course-tag--recommended'
+                : 'roadmap__course-tag roadmap__course-tag--elective'
           }
         >
           {course.tag}
@@ -321,6 +371,22 @@ function CourseItem({ course, flip }) {
 }
 
 export default function Roadmap() {
+  const [roadmapMode, setRoadmapMode] = useState('semester')
+  const [guidebookTrackId, setGuidebookTrackId] = useState('research')
+  const guidebookTrack = GUIDEBOOK_TRACKS.find((item) => item.id === guidebookTrackId) ?? GUIDEBOOK_TRACKS[0]
+  const displayYears = roadmapMode === 'guidebook'
+    ? YEARS.map((year, index) => ({
+        ...year,
+        semesters: [{
+          label: '학년별 추천 교과목',
+          courses: guidebookTrack.years[index].map((title) => ({
+            title,
+            tag: '추천',
+            desc: '전공가이드북 이수 체계도의 진로별 추천 교과목입니다. 실제 개설 학기 및 전공 필수·선택 구분은 공식 수강편람에서 확인해 주세요.',
+          })),
+        }],
+      }))
+    : YEARS
   const [mobileYear, setMobileYear] = useState(0)
   const [openCourses, setOpenCourses] = useState(new Set())
   const [mobileLiberalYear, setMobileLiberalYear] = useState(0)
@@ -355,8 +421,24 @@ export default function Roadmap() {
           <section className="page-section">
             <h2>전공로드맵</h2>
 
+            <div className="roadmap__mode-buttons" role="group" aria-label="전공로드맵 보기">
+              <button type="button" className={roadmapMode === 'semester' ? 'roadmap__mode-button is-active' : 'roadmap__mode-button'} aria-pressed={roadmapMode === 'semester'} onClick={() => setRoadmapMode('semester')}>기존 학년·학기별</button>
+              <button type="button" className={roadmapMode === 'guidebook' ? 'roadmap__mode-button is-active' : 'roadmap__mode-button'} aria-pressed={roadmapMode === 'guidebook'} onClick={() => setRoadmapMode('guidebook')}>전공가이드북 진로별</button>
+            </div>
+
+            {roadmapMode === 'guidebook' && (
+              <>
+                <div className="roadmap__track-buttons" role="group" aria-label="추천 진로 선택">
+                  {GUIDEBOOK_TRACKS.map((track) => (
+                    <button type="button" key={track.id} className={guidebookTrackId === track.id ? 'roadmap__track-button is-active' : 'roadmap__track-button'} aria-pressed={guidebookTrackId === track.id} onClick={() => setGuidebookTrackId(track.id)}>{track.name}</button>
+                  ))}
+                </div>
+                <p className="roadmap__mode-note">{guidebookTrack.subtitle} · 학년별 추천과목이며, 개설 학기를 의미하지 않습니다.</p>
+              </>
+            )}
+
             <div className="roadmap__years">
-              {YEARS.map((y) => (
+              {displayYears.map((y) => (
                 <div className="roadmap__year" key={y.year}>
                   <span className="roadmap__year-no">{y.no}</span>
                   <strong className="roadmap__year-title">{y.year}</strong>
@@ -364,8 +446,8 @@ export default function Roadmap() {
                 </div>
               ))}
 
-              {[0, 1].map((semIndex) =>
-                YEARS.map((y) => {
+              {(roadmapMode === 'guidebook' ? [0] : [0, 1]).map((semIndex) =>
+                displayYears.map((y) => {
                   const sem = y.semesters[semIndex]
                   return (
                     <div className="roadmap__semester" key={`${y.year}-${sem.label}`}>
@@ -381,7 +463,7 @@ export default function Roadmap() {
             </div>
 
             <div className="roadmap__mobile-roadmap">
-              <div className="roadmap__legend">
+              {roadmapMode === 'semester' && <div className="roadmap__legend">
                 <span className="roadmap__legend-item">
                   <span className="roadmap__legend-mark roadmap__legend-mark--required" />
                   필수
@@ -390,11 +472,11 @@ export default function Roadmap() {
                   <span className="roadmap__legend-mark roadmap__legend-mark--elective" />
                   선택
                 </span>
-              </div>
+              </div>}
 
-              <MobileYearTabs years={YEARS.map((y) => y.year)} active={mobileYear} onChange={setMobileYear} />
+              <MobileYearTabs years={displayYears.map((y) => y.year)} active={mobileYear} onChange={setMobileYear} />
 
-              {YEARS[mobileYear].semesters.map((sem) => (
+              {displayYears[mobileYear].semesters.map((sem) => (
                 <div className="roadmap__mobile-semester" key={sem.label}>
                   <p className="roadmap__mobile-sem-label">{sem.label}</p>
                   {sem.courses.length === 0 ? (
