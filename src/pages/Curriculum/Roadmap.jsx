@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
 import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
+import { ROADMAP_COURSE_DETAILS } from '../../data/roadmapCourseDetails'
 import './Roadmap.css'
 
 const COURSE_DESC_PLACEHOLDER = '과목 설명 · 강의계획서 기준 입력 예정'
@@ -258,8 +259,8 @@ export default function Roadmap() {
     highlight: index === 0,
     courses: courses.map((title) => ({
       title,
-      tag: '추천',
-      desc: '전공가이드북 이수 체계도의 진로별 추천 교과목입니다. 실제 개설 학기·필수 및 선택 여부는 학년도별 공식 수강편람에서 확인해 주세요.',
+      tag: ROADMAP_COURSE_DETAILS[title]?.tag ?? '미확인',
+      desc: ROADMAP_COURSE_DETAILS[title]?.description ?? '2026학년도 학사편람에서 교과목 정보를 확인해 주세요.',
     })),
   }))
   const [mobileYear, setMobileYear] = useState(0)
@@ -313,7 +314,7 @@ export default function Roadmap() {
                 </button>
               ))}
             </div>
-            <p className="roadmap__mode-note">{guidebookTrack.subtitle} · 전공가이드북의 학년별 추천 교과목이며, 실제 개설 학기를 의미하지 않습니다.</p>
+            <p className="roadmap__mode-note">{guidebookTrack.subtitle} · 전필·전선 구분과 과목 소개는 2026학년도 학사편람 기준입니다. 학년별 추천 과목이며, 실제 개설 학기를 의미하지 않습니다.</p>
 
             <div className="roadmap__years">
               {displayYears.map((y) => (
