@@ -168,3 +168,13 @@
     line-height: 1.65;
   }
 }
+
+.location__email-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.location__email-link:hover {
+  text-decoration-thickness: 2px;
+}

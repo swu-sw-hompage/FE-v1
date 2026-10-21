@@ -314,7 +314,6 @@ export default function Roadmap() {
                 </button>
               ))}
             </div>
-            <p className="roadmap__mode-note">{guidebookTrack.subtitle} · 전필·전선 구분과 과목 소개는 2026학년도 학사편람 기준입니다. 학년별 추천 과목이며, 실제 개설 학기를 의미하지 않습니다.</p>
 
             <div className="roadmap__years">
               {displayYears.map((y) => (

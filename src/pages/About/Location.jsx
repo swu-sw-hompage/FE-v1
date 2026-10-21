@@ -73,6 +73,12 @@ export default function Location() {
                   소프트웨어학과 02-970-5921
                 </p>
               </div>
+              <div className="location__info-row">
+                <p className="location__info-label">이메일</p>
+                <p className="location__info-value location__info-value--accent">
+                  <a className="location__email-link" href="mailto:sw@swu.ac.kr">sw@swu.ac.kr</a>
+                </p>
+              </div>
             </div>
           </section>
 

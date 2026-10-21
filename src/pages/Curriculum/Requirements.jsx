@@ -14,17 +14,6 @@ const COHORTS = [
     id: 'from2017',
     label: '2017학번부터',
     items: [
-      '공인외국어 성적',
-      '취업준비 프로그램 이수 인증',
-      "'Guru 1', 'Guru 2' 이수",
-      "'소프트웨어개발실무영어 I', '소프트웨어개발실무영어 II' 이수",
-      '1인 1 SW지적재산권 취득 (SW등록, 논문, 특허출원 등)',
-    ],
-  },
-  {
-    id: 'from2026',
-    label: '2026학년도 공지',
-    items: [
       '공인 외국어 성적 인증 (TOEIC, TOEFL 등)',
       '1인 1지식재산권 획득 (논문발표 또는 특허출원, 2026학년도부터 SW 등록 실적은 불인정)',
       '소프트웨어개발실무영어 I·II 과목 이수',
@@ -58,7 +47,7 @@ const CERTIFICATION_STEPS = [
 ]
 
 export default function Requirements() {
-  const [cohortId, setCohortId] = useState('from2026')
+  const [cohortId, setCohortId] = useState('from2017')
   const cohort = COHORTS.find((c) => c.id === cohortId)
 
   return (
@@ -104,14 +93,7 @@ export default function Requirements() {
               ))}
             </ol>
 
-            {cohortId !== 'from2026' && (
-              <p className="requirements__historical-note">
-                기존 학번별 안내를 보존한 내용입니다. 2026학년도에 졸업인증을 신청하는 경우
-                ‘2026학년도 공지’ 탭의 변경 사항을 함께 확인해 주세요.
-              </p>
-            )}
-
-            {(cohortId === 'from2017' || cohortId === 'from2026') && (
+            {cohortId === 'from2017' && (
               <div className="requirements__guru">
                 <p className="requirements__guru-title">GURU 1·2 이수 여부 확인 방법</p>
                 <div className="requirements__guru-divider" />
@@ -119,19 +101,17 @@ export default function Requirements() {
                   학생성장지원시스템 &gt; 마이페이지 &gt; 학습활동 &gt; GURU 비교과목 &gt; 활동 &gt; 수료증 다운로드
                 </p>
                 <p className="requirements__guru-note">
-                  {cohortId === 'from2026'
-                    ? '※ 2026학년도부터 지식재산권 조건에서 SW 등록 실적은 인정되지 않습니다.'
-                    : '※ 일정 기간 이전의 이수 여부는 확인이 불가하므로, 학과사무실(970-5921)로 문의 바랍니다.'}
+                  {'※ 2026학년도부터 지식재산권 조건에서 SW 등록 실적은 인정되지 않습니다.'}
                 </p>
               </div>
             )}
           </section>
 
           <section className="page-section">
-            <h2>{cohortId === 'from2026' ? '2026학년도 졸업인증 신청 절차' : '전형별 추가 졸업요건'}</h2>
+            <h2>{cohortId === 'from2017' ? '졸업인증 신청 절차' : '전형별 추가 졸업요건'}</h2>
 
             <div className="requirements__additional">
-              {(cohortId === 'from2026' ? CERTIFICATION_STEPS : ADDITIONAL).map((row) => (
+              {(cohortId === 'from2017' ? CERTIFICATION_STEPS : ADDITIONAL).map((row) => (
                 <div className="requirements__row" key={row.no}>
                   <div className="requirements__row-label">
                     <span>{row.no}</span>
@@ -145,7 +125,7 @@ export default function Requirements() {
                 </div>
               ))}
             </div>
-            {cohortId === 'from2026' && (
+            {cohortId === 'from2017' && (
               <div className="requirements__official-note">
                 <strong>2026학년도 공식 안내</strong>
                 <p>2016학년도 이전 입학생, 외국인 학생 또는 학과 교수회의에서 특별한 사유로 인정한 경우 예외 적용 대상이 될 수 있습니다. 적용 여부는 학과사무실에 확인해 주세요.</p>
