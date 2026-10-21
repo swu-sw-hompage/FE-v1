@@ -1,0 +1,34 @@
+# develop에 push되면 S3 + CloudFront(https://sw.swu.ac.kr)로 자동 배포.
+# Actions 탭에서 "Run workflow"로 수동 실행도 가능.
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+# 연달아 push되면 앞 배포는 취소하고 마지막 커밋만 배포
+concurrency:
+  group: deploy-aws
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
+
+      - run: bash scripts/deploy-aws.sh
