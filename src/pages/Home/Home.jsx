@@ -4,8 +4,7 @@ import heroHome from '../../assets/images/brand/hero-home.jpg'
 import iconQuick1 from '../../assets/images/brand/icon-quick1.svg'
 import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
-import { noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
-import { getNoticesNewestFirst, isNewNotice } from '../../api/noticeOrdering'
+import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import { getGraduationProjects } from '../../api/graduation'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
 import './Home.css'
@@ -28,18 +27,14 @@ export default function Home() {
   const [noticeFilter, setNoticeFilter] = useState('all')
 
   useEffect(() => {
-    let cancelled = false
-    getNoticesNewestFirst({
+    getNotices({
       academic: noticeFilter === 'academic' ? true : undefined,
       employment: noticeFilter === 'employment' ? true : undefined,
+      page: 0,
+      size: 5,
     })
-      .then((result) => {
-        if (!cancelled) setNotices(result.slice(0, 5))
-      })
-      .catch(() => {
-        if (!cancelled) setNotices([])
-      })
-    return () => { cancelled = true }
+      .then((result) => setNotices(result?.content ?? []))
+      .catch(() => setNotices([]))
   }, [noticeFilter])
 
   useEffect(() => {
@@ -112,11 +107,7 @@ export default function Home() {
               >
                 {noticeCategoryLabel(notice)}
               </span>
-              <Link to={`/notice/${notice.id}`}>
-                  {notice.pinned && <span className="home__notice-label home__notice-label--pinned">필독</span>}
-                  {isNewNotice(notice) && <span className="home__notice-label home__notice-label--new">NEW</span>}
-                  {notice.title}
-                </Link>
+              <Link to={`/notice/${notice.id}`}>{notice.title}</Link>
               <span className="home__mobile-notice-date">
                 {formatNoticeDate(notice.publishedAt ?? notice.createdAt)}
               </span>
@@ -197,11 +188,7 @@ export default function Home() {
             {notices.map((notice) => (
               <li key={notice.id}>
                 <span className="home__notice-category">{noticeCategoryLabel(notice)} ·</span>
-                <Link to={`/notice/${notice.id}`}>
-                  {notice.pinned && <span className="home__notice-label home__notice-label--pinned">필독</span>}
-                  {isNewNotice(notice) && <span className="home__notice-label home__notice-label--new">NEW</span>}
-                  {notice.title}
-                </Link>
+                <Link to={`/notice/${notice.id}`}>{notice.title}</Link>
                 <span className="home__notice-date">{formatNoticeDate(notice.publishedAt ?? notice.createdAt)}</span>
               </li>
             ))}
