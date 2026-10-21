@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
-import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { getNoticesNewestFirst, isNewNotice } from '../../api/noticeOrdering'
 import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import iconPrev from '../../assets/icons/pagination-prev.svg'
 import iconNext from '../../assets/icons/pagination-next.svg'
@@ -19,36 +20,36 @@ const PAGE_SIZE = 8
 export default function Notice() {
   const [searchParams, setSearchParams] = useSearchParams()
   const filter = searchParams.get('filter') ?? 'all'
-  const page = Number(searchParams.get('page') ?? '1')
+  const requestedPage = Number(searchParams.get('page') ?? '1')
+  const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1
+  const pinnedOnly = searchParams.get('pinned') === '1'
   const submittedKeyword = searchParams.get('q') ?? ''
   const submittedScope = searchParams.get('scope') ?? 'title-body'
 
   const [scope, setScope] = useState(submittedScope)
   const [keyword, setKeyword] = useState(submittedKeyword)
   const [notices, setNotices] = useState([])
-  const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  const visibleNotices = useMemo(() => (pinnedOnly ? notices.filter((notice) => notice.pinned) : notices), [notices, pinnedOnly])
+  const totalPages = Math.max(1, Math.ceil(visibleNotices.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const currentNotices = visibleNotices.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
     setError('')
-    getNotices({
+    getNoticesNewestFirst({
       academic: filter === 'academic' ? true : undefined,
       employment: filter === 'employment' ? true : undefined,
       keyword: submittedKeyword,
       scope: submittedScope,
-      page: page - 1,
-      size: PAGE_SIZE,
     })
       .then((result) => {
         if (cancelled) return
-        const content = result?.content ?? []
-        const pinned = content.filter((n) => n.pinned)
-        const rest = content.filter((n) => !n.pinned)
-        setNotices([...pinned, ...rest])
-        setTotalPages(Math.max(1, result?.totalPages ?? 1))
+        setNotices(result)
       })
       .catch((err) => {
         if (!cancelled) setError(err.message)
@@ -59,7 +60,7 @@ export default function Notice() {
     return () => {
       cancelled = true
     }
-  }, [filter, page, submittedKeyword, submittedScope])
+  }, [filter, submittedKeyword, submittedScope])
 
   const setFilter = (key) => {
     const next = new URLSearchParams(searchParams)
@@ -76,6 +77,14 @@ export default function Notice() {
       next.delete('q')
     }
     next.set('scope', scope)
+    next.set('page', '1')
+    setSearchParams(next)
+  }
+
+  const togglePinnedOnly = () => {
+    const next = new URLSearchParams(searchParams)
+    if (pinnedOnly) next.delete('pinned')
+    else next.set('pinned', '1')
     next.set('page', '1')
     setSearchParams(next)
   }
@@ -139,20 +148,37 @@ export default function Notice() {
               </button>
             </div>
 
+            <div className="notice__view-bar">
+              <span className="notice__sort-label">최신순</span>
+              <button
+                type="button"
+                className={pinnedOnly ? 'notice__pinned-filter notice__pinned-filter--active' : 'notice__pinned-filter'}
+                aria-pressed={pinnedOnly}
+                onClick={togglePinnedOnly}
+              >
+                {pinnedOnly ? '전체 공지 보기' : '필독만 보기'}
+              </button>
+            </div>
+
             {error && <p className="notice__error">{error}</p>}
 
             {!error && loading && <p className="notice__loading">불러오는 중...</p>}
 
-            {!error && !loading && notices.length === 0 && (
-              <p className="notice__empty">등록된 공지사항이 없습니다.</p>
+            {!error && !loading && currentNotices.length === 0 && (
+              <p className="notice__empty">{pinnedOnly ? '필독 공지사항이 없습니다.' : '등록된 공지사항이 없습니다.'}</p>
             )}
 
-            {!error && !loading && notices.length > 0 && (
+            {!error && !loading && currentNotices.length > 0 && (
               <ul className="notice__list">
-                {notices.map((notice) => (
+                {currentNotices.map((notice) => (
                   <li key={notice.id}>
                     <Link to={`/notice/${notice.id}`}>
-                      {notice.pinned && <span className="notice__pin">필독</span>}
+                      {(notice.pinned || isNewNotice(notice)) && (
+                        <span className="notice__flags">
+                          {notice.pinned && <span className="notice__pin">필독</span>}
+                          {isNewNotice(notice) && <span className="notice__new">NEW</span>}
+                        </span>
+                      )}
                       <span className="notice__category">{noticeCategoryLabel(notice)}</span>
                       <span className="notice__title">{notice.title}</span>
                     </Link>
@@ -162,13 +188,13 @@ export default function Notice() {
               </ul>
             )}
 
-            {totalPages > 1 && (
+            {!error && !loading && totalPages > 1 && (
               <nav className="notice__pagination" aria-label="공지사항 페이지">
                 <button
                   type="button"
                   className="notice__page-arrow"
-                  disabled={page === 1}
-                  onClick={() => goToPage(page - 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => goToPage(currentPage - 1)}
                   aria-label="이전 페이지"
                 >
                   <img src={iconPrev} alt="" />
@@ -177,7 +203,7 @@ export default function Notice() {
                   <button
                     key={n}
                     type="button"
-                    className={n === page ? 'notice__page-num is-active' : 'notice__page-num'}
+                    className={n === currentPage ? 'notice__page-num is-active' : 'notice__page-num'}
                     onClick={() => goToPage(n)}
                   >
                     {n}
@@ -186,8 +212,8 @@ export default function Notice() {
                 <button
                   type="button"
                   className="notice__page-arrow"
-                  disabled={page === totalPages}
-                  onClick={() => goToPage(page + 1)}
+                  disabled={currentPage === totalPages}
+                  onClick={() => goToPage(currentPage + 1)}
                   aria-label="다음 페이지"
                 >
                   <img src={iconNext} alt="" />

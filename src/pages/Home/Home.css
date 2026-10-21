@@ -715,3 +715,30 @@
     color: #1f1f21;
   }
 }
+
+/* 최신순 공지의 작은 필독 / NEW 표식: 기존 목록 레이아웃 유지 */
+.home__notice-label {
+  display: inline-block;
+  margin-right: 5px;
+  font-family: var(--font-pretendard);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+.home__notice-label--pinned {
+  color: var(--color-primary);
+}
+
+.home__notice-label--new {
+  color: #2863a0;
+}
+
+.home__notice-list a {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
