@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import MarkdownLite from '../../components/common/MarkdownLite'
-import { createNotice, updateNotice, publishNotice, getNoticeById } from '../../api/notice'
+import { createNotice, updateNotice, publishNotice, getNoticeById, uploadAttachment } from '../../api/notice'
 import { getAdminEmail } from '../../api/auth'
 import './Admin.css'
 
@@ -20,11 +20,14 @@ export default function NoticeWrite() {
   const [attachments, setAttachments] = useState([])
   const [attachmentName, setAttachmentName] = useState('')
   const [attachmentUrl, setAttachmentUrl] = useState('')
+  const [uploading, setUploading] = useState(false)
+  const [dragOver, setDragOver] = useState(false)
   const [createdAt, setCreatedAt] = useState(null)
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const textareaRef = useRef(null)
+  const fileInputRef = useRef(null)
 
   useEffect(() => {
     if (!isEdit) return undefined
@@ -56,6 +59,24 @@ export default function NoticeWrite() {
     setAttachments((prev) => [...prev, { name: attachmentName.trim(), url: attachmentUrl.trim() }])
     setAttachmentName('')
     setAttachmentUrl('')
+  }
+
+  const uploadFiles = async (fileList) => {
+    const files = Array.from(fileList ?? [])
+    if (files.length === 0) return
+    setUploading(true)
+    setError('')
+    try {
+      for (const file of files) {
+        const uploaded = await uploadAttachment(file)
+        setAttachments((prev) => [...prev, { name: uploaded.name, url: uploaded.url }])
+      }
+    } catch (err) {
+      setError(`첨부파일 업로드에 실패했습니다: ${err.message}`)
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
   }
 
   const removeAttachment = (index) => {
@@ -238,12 +259,43 @@ export default function NoticeWrite() {
             </div>
           </label>
 
-          <label className="admin-field">
+          {/* label로 감싸면 영역 아무 데나 눌러도 첫 입력칸이 반응해서 div로 둔다 */}
+          <div className="admin-field">
             <span>
               첨부파일<em className="admin-field__optional">선택</em>
             </span>
             <div className="admin-attachments">
-              <div className="admin-form-row">
+              <button
+                type="button"
+                className={`admin-upload admin-upload--compact${dragOver ? ' admin-upload--active' : ''}`}
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setDragOver(true)
+                }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  setDragOver(false)
+                  uploadFiles(e.dataTransfer.files)
+                }}
+                disabled={uploading}
+              >
+                <span className="admin-upload__icon">+</span>
+                <span className="admin-upload__text">
+                  {uploading ? '업로드 중...' : '파일을 끌어다 놓거나 클릭해서 선택하세요'}
+                </span>
+                <span className="admin-upload__hint">PDF, HWP, 한글/오피스 문서, 이미지, ZIP · 파일당 최대 30MB</span>
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                hidden
+                onChange={(e) => uploadFiles(e.target.files)}
+              />
+              <p className="admin-attachments__or">또는 외부 링크로 추가</p>
+              <div className="admin-form-row admin-attachments__link-row">
                 <div className="admin-field admin-field--grow">
                   <input
                     type="text"
@@ -268,7 +320,9 @@ export default function NoticeWrite() {
                 <ul className="admin-attachments__list">
                   {attachments.map((file, index) => (
                     <li key={`${file.name}-${index}`}>
-                      <span>{file.name}</span>
+                      <a href={file.url} target="_blank" rel="noopener noreferrer">
+                        {file.name}
+                      </a>
                       <button type="button" onClick={() => removeAttachment(index)} aria-label="첨부파일 삭제">
                         ×
                       </button>
@@ -277,7 +331,7 @@ export default function NoticeWrite() {
                 </ul>
               )}
             </div>
-          </label>
+          </div>
 
           <div className="admin-divider" />
 

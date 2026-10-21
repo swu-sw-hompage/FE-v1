@@ -535,6 +535,29 @@
   color: #1f1f21;
 }
 
+.admin-attachments__or {
+  margin: 4px 0 0;
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  color: #7a7a82;
+}
+
+.admin-attachments__link-row {
+  width: 100%;
+}
+
+.admin-attachments__list li a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+}
+
+.admin-attachments__list li a:hover {
+  text-decoration: underline;
+}
+
 .admin-attachments__list li span {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -743,6 +766,21 @@
   cursor: pointer;
   font-family: var(--font-pretendard);
   width: 100%;
+}
+
+.admin-upload--compact {
+  height: 120px;
+  padding: 0;
+}
+
+.admin-upload--active {
+  border-color: #7d0e16;
+  background: #fbf3f4;
+}
+
+.admin-upload:disabled {
+  cursor: progress;
+  opacity: 0.7;
 }
 
 .admin-upload__icon {

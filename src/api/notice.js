@@ -34,6 +34,14 @@ export const deleteNotice = (id) => apiClient.delete(`/admin/notices/${id}`)
 
 export const publishNotice = (id) => apiClient.patch(`/admin/notices/${id}/publish`)
 
+// 첨부파일 업로드: 응답 { name, url }을 attachments에 그대로 넣으면 된다.
+// client 기본 헤더가 JSON이라 multipart로 덮어써야 FormData가 JSON으로 바뀌지 않는다.
+export const uploadAttachment = (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return apiClient.post('/admin/uploads', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+}
+
 // 관리자 전용 목록/임시저장 조회 API는 없다 — 목록/상세 조회는 게시된 공지만 내려주는
 // 공개 엔드포인트(getNotices/getNoticeById)만 존재하며, 임시저장 글은 생성 직후 응답으로만
 // 확인 가능하고 이후 다시 불러올 방법이 없다.
