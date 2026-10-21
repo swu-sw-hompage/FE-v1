@@ -3,14 +3,17 @@
 #
 #   npm run deploy:aws
 #
-# Uses the AWS CLI profile "swu-homepage" (aws configure --profile swu-homepage).
+# Uses the AWS CLI profile "swu-homepage" (aws configure --profile swu-homepage),
+# or the AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY env vars when set (GitHub Actions).
 # The API is served from the same CloudFront domain under /api, so the build
 # always uses VITE_API_BASE_URL=/api regardless of what .env says.
 set -euo pipefail
 
 BUCKET="${BUCKET:-swu-homepage-fe-2026}"
 DISTRIBUTION_ID="${CLOUDFRONT_DISTRIBUTION_ID:-E5IL85KSIOBV}"
-export AWS_PROFILE="${AWS_PROFILE:-swu-homepage}"
+if [[ -z "${AWS_ACCESS_KEY_ID:-}" ]]; then
+  export AWS_PROFILE="${AWS_PROFILE:-swu-homepage}"
+fi
 
 cd "$(dirname "$0")/.."
 
