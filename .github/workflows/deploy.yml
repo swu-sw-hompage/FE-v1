@@ -1,10 +1,10 @@
-# develop에 push되면 S3 + CloudFront(https://sw.swu.ac.kr)로 자동 배포.
+# main에 push(PR merge 포함)되면 S3 + CloudFront(https://sw.swu.ac.kr)로 자동 배포.
 # Actions 탭에서 "Run workflow"로 수동 실행도 가능.
 name: Deploy to AWS
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
   workflow_dispatch:
 
 # 연달아 push되면 앞 배포는 취소하고 마지막 커밋만 배포
