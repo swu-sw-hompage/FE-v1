@@ -11,7 +11,7 @@ import './Home.css'
 
 const QUICK_LINKS = [
   { id: 'roadmap', icon: iconQuick3, title: '전공 로드맵', to: '/curriculum/roadmap' },
-  { id: 'requirements', icon: iconQuick2, title: '졸업 요건', to: '/curriculum/requirements' },
+  { id: 'requirements', icon: iconQuick2, title: '졸업 인증', to: '/curriculum/requirements' },
   { id: 'notice-sub', icon: iconQuick1, title: '공지 알림 신청', mobileTitle: '공지 알림', to: '/notice/subscribe' },
 ]
 

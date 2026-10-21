@@ -301,3 +301,71 @@
     content: '• ';
   }
 }
+
+
+/* 2026학년도 공식 졸업 인증 공지 반영 */
+.requirements__intro {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+
+.requirements__list li > div {
+  min-width: 0;
+}
+
+.requirements__list li .requirements__detail {
+  margin-top: 7px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+.requirements__guru {
+  margin-bottom: 0;
+}
+
+.requirements__additional {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.requirements__notice {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.requirements__notice strong {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--font-pretendard);
+  color: var(--color-text);
+}
+
+.requirements__notice p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.requirements__source {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .requirements__notice {
+    padding: 18px;
+  }
+}

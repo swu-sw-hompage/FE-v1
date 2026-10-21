@@ -55,7 +55,7 @@ export default function EducationGoals() {
             <h2>인재상</h2>
             <p className="education-goals__lead">
               기술 전문성과 의사소통 역량을 갖추고 사회의 지속적인 성장과 발전에 기여하는
-              소프트웨어학과 인재
+              소프트웨어 인재
             </p>
 
             <div className="talent-diagram">
