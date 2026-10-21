@@ -18,6 +18,7 @@ export const MEGA_MENU_COLUMNS = [
       { to: '/about/history', label: '연혁' },
       { to: '/about/education-goals', label: '교육 목표 및 인재상' },
       { to: '/about/career', label: '졸업 후 진로' },
+      { to: '/about/location', label: '찾아오시는 길' },
     ],
   },
   {
@@ -26,7 +27,7 @@ export const MEGA_MENU_COLUMNS = [
     links: [
       { to: '/curriculum', label: '교육과정' },
       { to: '/curriculum/roadmap', label: '전공로드맵' },
-      { to: '/curriculum/requirements', label: '졸업 요건' },
+      { to: '/curriculum/requirements', label: '졸업 인증' },
     ],
   },
   {

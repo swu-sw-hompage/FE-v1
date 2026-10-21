@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { NAV_ITEMS, MEGA_MENU_COLUMNS } from '../../constants/nav'
-import logoMark from '../../assets/images/brand/logo-mark.svg'
+import logoFull from '../../assets/images/brand/logo-full.svg'
 import './Header.css'
 
 export default function Header() {
@@ -16,12 +16,8 @@ export default function Header() {
   return (
     <header className="header" onMouseLeave={() => setHoveredKey(null)}>
       <div className="header__inner">
-        <Link to="/" className="header__logo" aria-label="서울여자대학교 소프트웨어학과 홈으로">
-          <img className="header__logo-mark" src={logoMark} alt="" />
-          <span className="header__logo-text">
-            <span className="header__school-name">서울여자대학교</span>
-            <strong className="header__department-name">소프트웨어학과</strong>
-          </span>
+        <Link to="/" className="header__logo">
+          <img className="header__logo-full" src={logoFull} alt="서울여자대학교 소프트웨어학과" />
         </Link>
 
         <nav className="header__nav">

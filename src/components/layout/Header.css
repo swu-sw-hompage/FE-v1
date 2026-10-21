@@ -33,39 +33,10 @@
   text-decoration: none;
 }
 
-.header__logo-mark {
-  width: 72px;
+.header__logo-full {
   height: 72px;
-  flex-shrink: 0;
+  width: auto;
   display: block;
-}
-
-.header__logo {
-  gap: 12px;
-}
-
-.header__logo-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-  font-family: var(--font-pretendard);
-  line-height: 1.16;
-  white-space: nowrap;
-}
-
-.header__school-name {
-  font-size: 17px;
-  font-weight: 600;
-  color: #231815;
-  letter-spacing: -0.03em;
-}
-
-.header__department-name {
-  font-size: clamp(26px, 2.45vw, 34px);
-  font-weight: 800;
-  color: #231815;
-  letter-spacing: -0.055em;
 }
 
 .header__nav {
@@ -216,21 +187,8 @@
     padding-block: 12px;
   }
 
-  .header__logo {
-    gap: 8px;
-  }
-
-  .header__logo-mark {
-    width: 44px;
+  .header__logo-full {
     height: 44px;
-  }
-
-  .header__school-name {
-    font-size: 12px;
-  }
-
-  .header__department-name {
-    font-size: clamp(18px, 4.4vw, 23px);
   }
 
   .header__mega {
