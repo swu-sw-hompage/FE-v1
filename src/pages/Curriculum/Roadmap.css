@@ -480,53 +480,80 @@
 }
 
 
-/* 기존 로드맵 그리드와 모바일 상세 UI는 유지; 상단 선택 버튼만 추가 */
-.roadmap__mode-buttons, .roadmap__track-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+/* 진로 상세 페이지의 3열 카드 탭을 낮고 넓은 형태로 적용 */
+.roadmap__career-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
-.roadmap__mode-button, .roadmap__track-button {
-  border: 1px solid var(--color-border);
+.roadmap__career-tab {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  height: 54px;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   background: #fff;
-  color: var(--color-text-secondary);
+  color: var(--color-text);
   font-family: var(--font-pretendard);
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 1.3;
-  border-radius: 4px;
-  padding: 10px 14px;
+  text-align: center;
+  word-break: keep-all;
   cursor: pointer;
 }
 
-.roadmap__mode-button.is-active, .roadmap__track-button.is-active {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  background: var(--color-primary-soft);
+.roadmap__career-tab:hover:not(.roadmap__career-tab--active) {
+  background: #fff5f5;
+  border-color: #fff5f5;
+}
+
+.roadmap__career-tab--active {
+  background: #fcf2f5;
+  border: 2px solid #94141f;
+  color: #7d0e16;
   font-weight: 700;
 }
 
-.roadmap__mode-button:focus-visible, .roadmap__track-button:focus-visible {
-  outline: 2px solid var(--color-primary);
+.roadmap__career-tab:focus-visible {
+  outline: 2px solid #94141f;
   outline-offset: 2px;
 }
 
 .roadmap__mode-note {
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   font-size: 13px;
   line-height: 1.7;
   color: var(--color-text-secondary);
 }
 
-.roadmap__course-mark--recommended, .roadmap__mobile-course-mark--recommended {
+.roadmap__course-mark--recommended,
+.roadmap__mobile-course-mark--recommended {
   background: #8d8990;
 }
 
-.roadmap__course-tag--recommended, .roadmap__mobile-course-tag--recommended {
+.roadmap__course-tag--recommended,
+.roadmap__mobile-course-tag--recommended {
   color: var(--color-text-secondary);
 }
 
 @media (max-width: 700px) {
-  .roadmap__mode-button, .roadmap__track-button { font-size: 12px; padding: 10px; }
+  .roadmap__career-tabs {
+    gap: 6px;
+  }
+
+  .roadmap__career-tab {
+    height: 50px;
+    padding: 5px 4px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
 }
