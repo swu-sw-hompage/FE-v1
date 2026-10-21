@@ -1,83 +1,108 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
+import { getNotices } from '../../api/notice'
+import { getGraduationProjects } from '../../api/graduation'
+import { getAdminEmail } from '../../api/auth'
 import './Admin.css'
 
-const RECENT_NOTICES = [
-  { id: 1, title: '2027학년도 AI·데이터 신규 트랙 교육과정 설명회 안내', date: '2026.08.06', status: '게시' },
-  { id: 2, title: '소프트웨어융합학과 명칭 변경 및 학사 안내', date: '2026.07.28', status: '게시' },
-  { id: 3, title: '2026 하계 캡스톤 프로젝트 결과 발표회', date: '2026.07.15', status: '게시' },
-  { id: 4, title: '신입생 오리엔테이션 일정 안내', date: '2026.06.20', status: '임시저장' },
-]
-
-const RECENT_PROJECTS = [
-  { year: 2025, title: 'AI·데이터 서비스', count: 12 },
-  { year: 2024, title: '캠퍼스 생활 개선', count: 9 },
-  { year: 2023, title: '새로운 기술 탐구', count: 8 },
-]
-
 export default function Dashboard() {
-  return (
-    <AdminLayout title="관리자 대시보드">
-      <p className="admin-page__title">안녕하세요, 김관리자님</p>
-      <p className="admin-page__desc">오늘의 학과 홈페이지 운영 현황을 확인하세요.</p>
+  const [notices, setNotices] = useState([])
+  const [noticeTotal, setNoticeTotal] = useState(0)
+  const [projects, setProjects] = useState([])
+  const [projectTotal, setProjectTotal] = useState(0)
+  const [error, setError] = useState('')
 
-      <div className="admin-kpis">
-        <div className="admin-kpi admin-kpi--pink">
-          <p className="admin-kpi__label">게시된 공지사항</p>
-          <p className="admin-kpi__value">24</p>
-          <p className="admin-kpi__meta">이번 달 +3</p>
+  useEffect(() => {
+    let cancelled = false
+    Promise.all([getNotices({ page: 0, size: 5 }), getGraduationProjects({ page: 0, size: 3 })])
+      .then(([noticePage, projectPage]) => {
+        if (cancelled) return
+        setNotices(noticePage?.content ?? [])
+        setNoticeTotal(noticePage?.totalElements ?? 0)
+        setProjects(projectPage?.content ?? [])
+        setProjectTotal(projectPage?.totalElements ?? 0)
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return (
+    <AdminLayout
+      breadcrumb="대시보드"
+      eyebrow="OVERVIEW"
+      title={`안녕하세요, ${getAdminEmail() ?? '관리자'}님`}
+      description="오늘의 학과 홈페이지 운영 현황을 확인하세요."
+    >
+      {error && <p className="admin-writer__error" role="alert">{error}</p>}
+
+      <div className="admin-stats">
+        <div className="admin-stat">
+          <p className="admin-stat__label">게시된 공지사항</p>
+          <p className="admin-stat__value">{noticeTotal}</p>
         </div>
-        <div className="admin-kpi">
-          <p className="admin-kpi__label">등록된 졸업작품</p>
-          <p className="admin-kpi__value">38</p>
-          <p className="admin-kpi__meta">2020–2025</p>
-        </div>
-        <div className="admin-kpi admin-kpi--blue">
-          <p className="admin-kpi__label">알림 신청자</p>
-          <p className="admin-kpi__value">186</p>
-          <p className="admin-kpi__meta">인증 완료 172명</p>
-        </div>
-        <div className="admin-kpi">
-          <p className="admin-kpi__label">검토 대기</p>
-          <p className="admin-kpi__value">3</p>
-          <p className="admin-kpi__meta">확인 필요</p>
+        <div className="admin-stat">
+          <p className="admin-stat__label">등록된 졸업작품</p>
+          <p className="admin-stat__value">{projectTotal}</p>
         </div>
       </div>
 
-      <div className="admin-card admin-card--notices">
-        <div className="admin-card__head">
-          <h2>최근 공지사항</h2>
+      <div className="admin-table-card">
+        <div className="admin-table-toolbar">
+          <h2 className="admin-form-card__title" style={{ margin: 0 }}>
+            최근 공지사항
+          </h2>
           <Link to="/admin/notices/new" className="admin-btn admin-btn--primary admin-btn--sm">
             공지 작성
           </Link>
         </div>
-        <div className="admin-notice-rows">
-          {RECENT_NOTICES.map((n) => (
-            <div className="admin-notice-row" key={n.id}>
-              <p>{n.title}</p>
-              <span className="admin-notice-row__date">{n.date}</span>
-              <span
-                className={
-                  n.status === '게시'
-                    ? 'admin-notice-row__status admin-notice-row__status--live'
-                    : 'admin-notice-row__status admin-notice-row__status--draft'
-                }
-              >
-                {n.status}
-              </span>
-            </div>
-          ))}
-        </div>
+        <table className="admin-table">
+          <tbody>
+            {notices.length === 0 && (
+              <tr>
+                <td className="admin-table__empty">등록된 공지사항이 없습니다.</td>
+              </tr>
+            )}
+            {notices.map((n) => (
+              <tr key={n.id}>
+                <td className="admin-table__title">{n.title}</td>
+                <td className="admin-table__muted" style={{ width: 120 }}>
+                  {n.publishedAt ? new Date(n.publishedAt).toLocaleDateString('ko-KR') : '-'}
+                </td>
+                <td style={{ width: 90 }}>
+                  <span
+                    className={
+                      n.status === 'PUBLISHED' ? 'admin-badge admin-badge--green' : 'admin-badge admin-badge--gray'
+                    }
+                  >
+                    {n.status === 'PUBLISHED' ? '게시' : '임시저장'}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
-      <div className="admin-card">
-        <h2 className="admin-card__title">최근 졸업작품</h2>
+      <div className="admin-table-card">
+        <div className="admin-table-toolbar">
+          <h2 className="admin-form-card__title" style={{ margin: 0 }}>
+            최근 졸업작품
+          </h2>
+          <Link to="/admin/capstone/new" className="admin-btn admin-btn--primary admin-btn--sm">
+            작품 등록
+          </Link>
+        </div>
         <div className="admin-project-grid">
-          {RECENT_PROJECTS.map((p) => (
-            <div className="admin-project-card" key={p.year}>
+          {projects.length === 0 && <p className="admin-page__desc">등록된 졸업작품이 없습니다.</p>}
+          {projects.map((p) => (
+            <div className="admin-project-card" key={p.id}>
               <p className="admin-project-card__year">{p.year}</p>
               <p className="admin-project-card__title">{p.title}</p>
-              <p className="admin-project-card__count">{p.count}개 작품</p>
             </div>
           ))}
         </div>

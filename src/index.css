@@ -117,8 +117,35 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .chapter-nav {
-    display: none;
+  .page-layout:has(> .chapter-nav) {
+    padding-block: 0;
+    gap: 0;
+  }
+
+  .page-layout:has(> .chapter-nav) .page-layout__main {
+    padding: 32px 0 56px;
+    gap: 44px;
+  }
+
+  .page-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .page-section > *:not(h2) {
+    width: 100%;
+  }
+
+  .page-section h2 {
+    margin-bottom: 0;
+    font-family: var(--font-pretendard);
+    font-size: 22px;
+  }
+
+  .page-section h2::after {
+    margin-top: 10px;
   }
 }
 

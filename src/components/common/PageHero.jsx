@@ -1,11 +1,11 @@
 import heroPhoto from '../../assets/images/brand/hero-photo.jpg'
 import './PageHero.css'
 
-export default function PageHero({ tone = 'light', eyebrow, title, subtitle, photo = false }) {
+export default function PageHero({ tone = 'light', eyebrow, title, subtitle, photo = false, photoSrc }) {
   if (photo) {
     return (
       <section className="page-hero page-hero--photo">
-        <img className="page-hero__photo" src={heroPhoto} alt="" />
+        <img className="page-hero__photo" src={photoSrc ?? heroPhoto} alt="" />
         <div className="page-hero__overlay" />
         <h1 className="page-hero__photo-title">{title.join(' ')}</h1>
       </section>

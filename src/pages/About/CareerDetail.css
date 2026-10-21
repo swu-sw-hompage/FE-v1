@@ -1,3 +1,7 @@
+.career-detail__chips {
+  display: none;
+}
+
 .career-detail__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -134,25 +138,83 @@
 }
 
 @media (max-width: 900px) {
+  .career-detail .page-section > h2 {
+    display: none;
+  }
+
+  .career-detail__accent {
+    display: none;
+  }
+
+  .career-detail__chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .career-detail__chip {
+    flex-shrink: 0;
+    padding: 9px 14px;
+    background: #fff;
+    border: 1px solid #e5e5e8;
+    border-radius: 4px;
+    font-family: var(--font-pretendard);
+    font-size: 13px;
+    color: #57575e;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .career-detail__chip--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    font-weight: 700;
+    color: #fff;
+  }
+
   .career-detail__grid {
-    grid-template-columns: 1fr;
+    display: none;
+  }
+
+  .career-detail__field-title {
+    font-size: 22px;
   }
 
   .career-detail__panel {
-    padding: 28px 20px;
+    padding: 0;
   }
 
   .career-detail__summary-row {
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
+    margin-top: 18px;
+    padding: 18px;
+    background: var(--color-primary-soft);
+    border-radius: 6px;
+    border-bottom: none;
   }
 
   .career-detail__info-row {
     flex-direction: column;
     gap: 8px;
+    padding: 18px 0;
   }
 
   .career-detail__info-row .career-detail__label {
     width: auto;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f1f21;
+  }
+
+  .career-detail__info-row ul {
+    gap: 0;
+    line-height: 1.65;
+  }
+
+  .career-detail__value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f1f21;
   }
 }

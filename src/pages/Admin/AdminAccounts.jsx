@@ -1,103 +1,68 @@
-import { useState } from 'react'
 import AdminLayout from '../../layouts/AdminLayout'
+import { getAdminEmail } from '../../api/auth'
 import './Admin.css'
 
-const ACCOUNTS = [
-  { id: 'root-admin', role: 'ROOT ADMIN', active: true },
-  { id: 'swu-admin01', role: 'ADMIN', active: true },
-  { id: 'swu-admin02', role: 'ADMIN', active: false },
+const CONTACTS = [
+  { label: '관리자 계정 담당자', email: 'thotemily@naver.com' },
+  { label: '관리자 계정 담당자', email: 'j_yujin_swu22@naver.com' },
 ]
 
 export default function AdminAccounts() {
-  const [form, setForm] = useState({ id: '', password: '', confirm: '' })
+  const adminEmail = getAdminEmail() ?? 'admin'
 
   return (
-    <AdminLayout title="관리자 계정 관리">
-      <p className="admin-page__title">관리자 계정 관리</p>
-      <p className="admin-page__desc">Root 관리자만 새로운 관리자 계정을 추가하거나 비활성화할 수 있습니다.</p>
-
-      <div className="admin-banner">
-        <p className="admin-banner__label">ROOT ADMIN</p>
-        <p className="admin-banner__text">현재 계정: root-admin · 모든 관리자 계정 관리 권한 보유</p>
-      </div>
-
-      <div className="admin-accounts-grid">
-        <div className="admin-card admin-add-admin">
-          <h2 className="admin-card__title">새 관리자 추가</h2>
-          <p className="admin-card__subtitle">관리자 계정은 아이디와 비밀번호로만 로그인합니다.</p>
-
-          <form
-            className="admin-form"
-            onSubmit={(e) => {
-              e.preventDefault()
-            }}
-          >
-            <label className="admin-field">
-              <span>관리자 아이디 *</span>
-              <input
-                type="text"
-                placeholder="아이디를 입력해주세요"
-                value={form.id}
-                onChange={(e) => setForm({ ...form, id: e.target.value })}
-              />
-            </label>
-            <label className="admin-field">
-              <span>비밀번호 *</span>
-              <input
-                type="password"
-                placeholder="비밀번호를 입력해주세요"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-            </label>
-            <label className="admin-field">
-              <span>비밀번호 확인 *</span>
-              <input
-                type="password"
-                placeholder="비밀번호를 다시 입력해주세요"
-                value={form.confirm}
-                onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-              />
-            </label>
-
-            <button type="submit" className="admin-btn admin-btn--primary admin-btn--block">
-              관리자 추가
-            </button>
-            <p className="admin-form__note">※ Root 관리자만 계정을 추가할 수 있습니다.</p>
-          </form>
-        </div>
-
-        <div className="admin-card admin-account-list">
-          <div className="admin-card__head">
-            <h2>등록된 관리자</h2>
-            <span className="admin-account-list__count">{ACCOUNTS.length}명</span>
+    <AdminLayout
+      breadcrumb="관리자 계정"
+      eyebrow="ACCOUNT"
+      title="관리자 계정"
+      description="학과 홈페이지는 하나의 관리자 계정으로 운영됩니다. 계정 추가·삭제·비밀번호 변경은 담당자를 통해서만 가능합니다."
+    >
+      <div className="admin-settings-card">
+        <div className="admin-settings-row">
+          <div className="admin-settings-row__desc">
+            <p className="admin-settings-row__title">계정 정보</p>
+            <p className="admin-settings-row__text">현재 로그인한 관리자 계정입니다.</p>
           </div>
-          <div className="admin-account-rows">
-            {ACCOUNTS.map((a) => (
-              <div className="admin-account-row" key={a.id}>
-                <div>
-                  <p className="admin-account-row__id">{a.id}</p>
-                  <p className="admin-account-row__role">{a.role}</p>
-                </div>
-                <span
-                  className={
-                    a.active
-                      ? 'admin-account-row__status admin-account-row__status--active'
-                      : 'admin-account-row__status'
-                  }
-                >
-                  {a.active ? '활성' : '비활성'}
-                </span>
+          <div className="admin-settings-row__body">
+            <div className="admin-account-profile">
+              <span className="admin-account-profile__avatar">{adminEmail.charAt(0).toUpperCase()}</span>
+              <div className="admin-account-profile__info">
+                <p className="admin-account-profile__name">{adminEmail}</p>
+                <p className="admin-account-profile__role">단일 관리자 계정</p>
               </div>
-            ))}
+              <span className="admin-badge admin-badge--green">사용 중</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="admin-policy">
-        <p className="admin-policy__title">관리자 계정 운영 원칙</p>
-        <p>Root 관리자 계정은 최초 1개로 운영하며, 추가된 관리자는 공지사항·졸업작품 관리만 수행할 수 있습니다.</p>
-        <p>Root 관리자 권한은 다른 관리자에게 위임하지 않습니다.</p>
+        <div className="admin-divider" />
+
+        <div className="admin-settings-row">
+          <div className="admin-settings-row__desc">
+            <p className="admin-settings-row__title">비밀번호 변경</p>
+            <p className="admin-settings-row__text">
+              보안을 위해 관리자 페이지에서는 비밀번호를 변경할 수 없습니다. 변경이 필요하면 담당자에게 메일로
+              문의해주세요.
+            </p>
+          </div>
+          <div className="admin-settings-row__body">
+            <div className="admin-contacts">
+              {CONTACTS.map((c) => (
+                <div className="admin-contact-card" key={c.email}>
+                  <span className="admin-contact-card__icon">✉</span>
+                  <div className="admin-contact-card__info">
+                    <p className="admin-contact-card__label">{c.label}</p>
+                    <p className="admin-contact-card__email">{c.email}</p>
+                  </div>
+                  <a href={`mailto:${c.email}`} className="admin-btn admin-btn--outline admin-btn--sm">
+                    메일 보내기
+                  </a>
+                </div>
+              ))}
+              <p className="admin-contacts__note">문의할 때 이름과 소속, 변경이 필요한 이유를 함께 적어주세요.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </AdminLayout>
   )

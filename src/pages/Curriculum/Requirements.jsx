@@ -99,8 +99,10 @@ export default function Requirements() {
                 </p>
               </div>
             )}
+          </section>
 
-            <h2 className="requirements__additional-title">전형별 추가 졸업요건</h2>
+          <section className="page-section">
+            <h2>전형별 추가 졸업요건</h2>
 
             <div className="requirements__additional">
               {ADDITIONAL.map((row) => (

@@ -5,10 +5,6 @@ export default function ActivitiesSidebar({ activeYear }) {
   return (
     <aside className="activities__sidebar">
       <p className="activities__sidebar-label">ON THIS PAGE</p>
-      <div className="activities__sidebar-heading">
-        <span className="activities__sidebar-rail" />
-        <p>졸업프로젝트</p>
-      </div>
       <nav className="activities__year-nav">
         {ACTIVITY_YEARS.map((y) => (
           <Link
