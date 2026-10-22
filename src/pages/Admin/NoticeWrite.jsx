@@ -99,6 +99,28 @@ export default function NoticeWrite() {
 
   const applyColor = (hex) => wrapSelection(`{color:${hex}}`, '{/color}')
 
+  // 커서가 있는 줄 맨 앞에 "## " / "### "를 붙인다. 같은 단계를 다시 누르면 제목을 해제한다.
+  const toggleHeading = (level) => {
+    const el = textareaRef.current
+    if (!el) return
+    const { selectionStart, selectionEnd, value } = el
+    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1
+    const lineEndIndex = value.indexOf('\n', selectionStart)
+    const lineEnd = lineEndIndex === -1 ? value.length : lineEndIndex
+    const line = value.slice(lineStart, lineEnd)
+    const current = line.match(/^(#{1,6})\s+/)
+    const marker = `${'#'.repeat(level)} `
+    const stripped = current ? line.slice(current[0].length) : line
+    const nextLine = current && current[1].length === level ? stripped : marker + stripped
+    const delta = nextLine.length - line.length
+    setBody(value.slice(0, lineStart) + nextLine + value.slice(lineEnd))
+    requestAnimationFrame(() => {
+      el.focus()
+      el.selectionStart = Math.max(lineStart, selectionStart + delta)
+      el.selectionEnd = Math.max(lineStart, selectionEnd + delta)
+    })
+  }
+
   const handleSubmit = async (targetStatus) => {
     if (!title.trim() || !body.trim()) {
       setError('제목과 내용을 입력해주세요.')
@@ -190,6 +212,25 @@ export default function NoticeWrite() {
               <div className="admin-editor__toolbar">
                 <button
                   type="button"
+                  className="admin-editor__btn admin-editor__btn--heading"
+                  onClick={() => toggleHeading(2)}
+                  title="제목 (## )"
+                  disabled={previewMode}
+                >
+                  H2
+                </button>
+                <button
+                  type="button"
+                  className="admin-editor__btn admin-editor__btn--heading"
+                  onClick={() => toggleHeading(3)}
+                  title="소제목 (### )"
+                  disabled={previewMode}
+                >
+                  H3
+                </button>
+                <span className="admin-editor__divider" />
+                <button
+                  type="button"
                   className="admin-editor__btn admin-editor__btn--bold"
                   onClick={() => wrapSelection('**')}
                   title="굵게"
@@ -214,6 +255,15 @@ export default function NoticeWrite() {
                   disabled={previewMode}
                 >
                   S
+                </button>
+                <button
+                  type="button"
+                  className="admin-editor__btn admin-editor__btn--underline"
+                  onClick={() => wrapSelection('__')}
+                  title="밑줄 (__텍스트__)"
+                  disabled={previewMode}
+                >
+                  U
                 </button>
                 <span className="admin-editor__divider" />
                 {COLOR_SWATCHES.map((hex) => (

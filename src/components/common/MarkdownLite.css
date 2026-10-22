@@ -1,0 +1,24 @@
+/* 공지 본문과 관리자 미리보기에서 같이 쓰므로 크기는 em으로 둬서 각 화면의 글자 크기를 따라가게 한다 */
+.md-heading {
+  margin: 1.6em 0 0.6em;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-text, #1f1f21);
+}
+
+.md-heading:first-child {
+  margin-top: 0;
+}
+
+.md-heading--2 {
+  font-size: 1.3em;
+}
+
+.md-heading--3 {
+  font-size: 1.1em;
+}
+
+.md-heading + p {
+  margin-top: 0;
+}
