@@ -21,6 +21,13 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response.data?.result,
   (error) => {
+    // 관리자 API가 401이면 토큰이 만료됐거나 무효다. 로그인 요청 자체의 실패(비밀번호 오류)는 제외.
+    const url = error.config?.url ?? ''
+    if (error.response?.status === 401 && url.startsWith('/admin') && !url.startsWith('/admin/auth/login')) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('adminEmail')
+      window.dispatchEvent(new Event('admin-session-expired'))
+    }
     const message = error.response?.data?.message ?? error.message ?? '요청 처리 중 오류가 발생했습니다.'
     return Promise.reject(new Error(message))
   },

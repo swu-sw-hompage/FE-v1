@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { login } from '../../api/auth'
 import logoFull from '../../assets/images/brand/logo-full.svg'
 import './Login.css'
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  // RequireAdmin이 넘겨준 정보: 원래 가려던 관리자 화면, 세션 만료로 튕겨났는지 여부
+  const redirectTo = location.state?.from?.startsWith('/admin') ? location.state.from : '/admin'
+  const sessionExpired = Boolean(location.state?.expired)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
@@ -18,7 +22,7 @@ export default function Login() {
     setLoading(true)
     try {
       await login({ email, password })
-      navigate('/admin')
+      navigate(redirectTo, { replace: true })
     } catch (err) {
       setError(err.message)
     } finally {
@@ -73,6 +77,12 @@ export default function Login() {
               <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
               로그인 상태 유지
             </label>
+
+            {sessionExpired && !error && (
+              <p className="admin-login__error" role="alert">
+                로그인 시간이 만료되었습니다. 다시 로그인해 주세요.
+              </p>
+            )}
 
             {error && (
               <p className="admin-login__error" role="alert">
