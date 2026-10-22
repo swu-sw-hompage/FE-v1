@@ -53,7 +53,7 @@ export const FACULTY = [
   {
     name: '김영진',
     position: '조교수',
-    major: '자연어처리',
+    major: '인공지능 · 자연어처리',
     phone: '02-970-5760',
     email: 'kimyj@swu.ac.kr',
     education: ['연세대학교 공학사', 'Michigan State Univ. Ph.D'],
