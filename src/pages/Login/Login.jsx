@@ -12,7 +12,6 @@ export default function Login() {
   const sessionExpired = Boolean(location.state?.expired)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [remember, setRemember] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -71,11 +70,6 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-            </label>
-
-            <label className="admin-login__remember">
-              <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
-              로그인 상태 유지
             </label>
 
             {sessionExpired && !error && (
