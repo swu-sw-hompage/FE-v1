@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import heroLecture from '../../assets/images/brand/hero-slide-lecture.jpg'
+import heroTeam from '../../assets/images/brand/hero-slide-team.jpg'
 import heroLab from '../../assets/images/brand/hero-slide-lab.jpg'
-import heroCampus from '../../assets/images/brand/hero-slide-campus.jpg'
+import heroLecture from '../../assets/images/brand/hero-slide-lecture.jpg'
 import iconQuick1 from '../../assets/images/brand/icon-quick1.svg'
 import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
@@ -32,11 +32,11 @@ const noticeTime = (notice) => {
 const sortByLatest = (list) =>
   [...list].sort((a, b) => noticeTime(b) - noticeTime(a) || (b.id ?? 0) - (a.id ?? 0))
 
-// 메인 hero 배경 슬라이드 (강의실 → 실습실 → 캠퍼스 순으로 자동 전환)
+// 메인 hero 배경 슬라이드 (팀 프로젝트 → 실습실 → 전공 수업 순으로 자동 전환)
 const HERO_SLIDES = [
-  { id: 'lecture', src: heroLecture, label: '소프트웨어융합학과 전공 수업' },
-  { id: 'lab', src: heroLab, label: '학과 실습실에서 함께 작업하는 학생들' },
-  { id: 'campus', src: heroCampus, label: '서울여대 캠퍼스 잔디밭의 학생들' },
+  { id: 'team', src: heroTeam, label: '회의실에서 코드를 함께 보며 팀 프로젝트를 하는 학생들' },
+  { id: 'lab', src: heroLab, label: '학과 컴퓨터 실습실' },
+  { id: 'lecture', src: heroLecture, label: '강의실에서 진행되는 소프트웨어 전공 수업' },
 ]
 const HERO_INTERVAL_MS = 5000
 
