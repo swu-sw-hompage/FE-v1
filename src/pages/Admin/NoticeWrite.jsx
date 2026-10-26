@@ -157,24 +157,11 @@ export default function NoticeWrite() {
     )
   }
 
-  const publishInfo = (
-    <>
-      <div className="admin-info-row admin-info-row--bordered">
-        <p className="admin-info-row__label">작성자</p>
-        <p className="admin-info-row__value">{getAdminEmail() ?? '관리자'}</p>
-      </div>
-      <div className="admin-info-row admin-info-row--bordered">
-        <p className="admin-info-row__label">작성일</p>
-        <p className="admin-info-row__value">
-          {createdAt ? new Date(createdAt).toLocaleDateString('ko-KR') : new Date().toLocaleDateString('ko-KR')}
-        </p>
-      </div>
-      <div className="admin-callout">
-        <span className="admin-callout__icon">i</span>
-        <p>공지를 게시하면 그 시점에 알림 신청자에게 이메일이 발송됩니다.</p>
-      </div>
-    </>
-  )
+  const author = getAdminEmail() ?? '관리자'
+  const writtenOn = createdAt
+    ? new Date(createdAt).toLocaleDateString('ko-KR')
+    : new Date().toLocaleDateString('ko-KR')
+  const mailNotice = '공지를 게시하면 그 시점에 알림 신청자에게 이메일이 발송됩니다.'
 
   return (
     <AdminLayout
@@ -184,11 +171,18 @@ export default function NoticeWrite() {
       description="학과 구성원에게 전달할 공지사항을 작성하고 게시할 수 있습니다."
     >
       <div className="admin-columns admin-columns--writer">
-        {/* 화면이 좁으면 오른쪽 게시 정보 카드를 숨기고, 작성 영역 위에 접힌 상태로 둔다 */}
-        <details className="admin-info-collapse">
-          <summary>게시 정보</summary>
-          <div className="admin-info-collapse__body">{publishInfo}</div>
-        </details>
+        {/* 화면이 좁으면 오른쪽 게시 정보 카드 대신 작성 영역 위에 한 줄로 보여준다 */}
+        <div className="admin-info-strip">
+          <p>
+            <span>작성자</span>
+            {author}
+          </p>
+          <p>
+            <span>작성일</span>
+            {writtenOn}
+          </p>
+          <p className="admin-info-strip__note">{mailNotice}</p>
+        </div>
 
         <form
           className="admin-form-card"
@@ -442,7 +436,18 @@ export default function NoticeWrite() {
 
         <aside className="admin-info-card">
           <h2 className="admin-info-card__title">게시 정보</h2>
-          {publishInfo}
+          <div className="admin-info-row admin-info-row--bordered">
+            <p className="admin-info-row__label">작성자</p>
+            <p className="admin-info-row__value">{author}</p>
+          </div>
+          <div className="admin-info-row admin-info-row--bordered">
+            <p className="admin-info-row__label">작성일</p>
+            <p className="admin-info-row__value">{writtenOn}</p>
+          </div>
+          <div className="admin-callout">
+            <span className="admin-callout__icon">i</span>
+            <p>{mailNotice}</p>
+          </div>
         </aside>
       </div>
     </AdminLayout>
