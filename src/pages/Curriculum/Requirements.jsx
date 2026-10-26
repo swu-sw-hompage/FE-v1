@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
+import SegmentTabs from '../../components/common/SegmentTabs'
+import InfoRows from '../../components/common/InfoRows'
 import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
 import './Requirements.css'
 
@@ -61,22 +63,12 @@ export default function Requirements() {
           <section className="page-section">
             <h2>졸업 요건</h2>
 
-            <div className="requirements__tabs">
-              {COHORTS.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={
-                    c.id === cohortId
-                      ? 'requirements__tab requirements__tab--active'
-                      : 'requirements__tab'
-                  }
-                  onClick={() => setCohortId(c.id)}
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
+            <SegmentTabs
+              label="입학 연도 선택"
+              items={COHORTS.map((c) => ({ id: c.id, label: c.label }))}
+              active={cohortId}
+              onChange={setCohortId}
+            />
 
             <ol
               className={
@@ -110,21 +102,7 @@ export default function Requirements() {
           <section className="page-section">
             <h2>{cohortId === 'from2017' ? '졸업인증 신청 절차' : '전형별 추가 졸업요건'}</h2>
 
-            <div className="requirements__additional">
-              {(cohortId === 'from2017' ? CERTIFICATION_STEPS : ADDITIONAL).map((row) => (
-                <div className="requirements__row" key={row.no}>
-                  <div className="requirements__row-label">
-                    <span>{row.no}</span>
-                    <strong>{row.title}</strong>
-                  </div>
-                  <div className="requirements__row-copy">
-                    {row.items.map((item) => (
-                      <p key={item}>{item}</p>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InfoRows rows={cohortId === 'from2017' ? CERTIFICATION_STEPS : ADDITIONAL} />
             {cohortId === 'from2017' && (
               <div className="requirements__official-note">
                 <strong>2026학년도 공식 안내</strong>
