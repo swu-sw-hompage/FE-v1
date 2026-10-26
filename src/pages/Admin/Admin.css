@@ -491,6 +491,7 @@
 .admin-field input[type='text'],
 .admin-field input[type='date'],
 .admin-field input[type='time'],
+.admin-field input[type='datetime-local'],
 .admin-field select,
 .admin-field textarea {
   height: 48px;
@@ -501,6 +502,18 @@
   font-family: var(--font-pretendard);
   font-size: 14px;
   color: #1f1f21;
+}
+
+/* 기본 select 모양은 브라우저마다 높이·화살표가 달라(사파리는 높이를 무시) 직접 그린다 */
+.admin-field select {
+  padding-right: 44px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231f1f21' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px 16px;
+  cursor: pointer;
 }
 
 .admin-field textarea {
@@ -1119,7 +1132,9 @@
   color: #7a7a82;
 }
 
+/* 안내 문구는 작성자·작성일 아래 줄로 */
 .admin-info-strip .admin-info-strip__note {
+  flex-basis: 100%;
   font-size: 12px;
   color: #7b1e22;
 }
@@ -1210,4 +1225,70 @@
   height: 16px;
   margin: 0;
   accent-color: #7d0e16;
+}
+
+/* 공지 예약 게시 */
+.admin-schedule-banner,
+.admin-schedule-panel {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  color: #1f1f21;
+}
+
+.admin-schedule-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff5f5;
+  border: 1px solid #f3d6d8;
+}
+
+.admin-schedule-banner p {
+  margin: 0;
+}
+
+.admin-schedule-banner strong {
+  color: #7b1e22;
+}
+
+.admin-schedule-banner__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-schedule-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f7f7f8;
+  border: 1px solid #e5e5e8;
+}
+
+.admin-schedule-panel .admin-field {
+  max-width: 320px;
+}
+
+.admin-schedule-panel__hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7a7a82;
+}
+
+.admin-schedule-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.admin-table__sub {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #7b1e22;
+  white-space: nowrap;
 }

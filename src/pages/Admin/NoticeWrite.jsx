@@ -2,7 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import MarkdownLite from '../../components/common/MarkdownLite'
-import { createNotice, updateNotice, publishNotice, getAdminNoticeById, uploadAttachment } from '../../api/notice'
+import {
+  createNotice,
+  updateNotice,
+  publishNotice,
+  scheduleNotice,
+  cancelNoticeSchedule,
+  formatScheduleTime,
+  getAdminNoticeById,
+  uploadAttachment,
+} from '../../api/notice'
 import { getAdminEmail } from '../../api/auth'
 import './Admin.css'
 
@@ -26,6 +35,10 @@ export default function NoticeWrite() {
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  // 이미 예약된 글이면 그 시각, 예약 패널에서 고르는 중인 값은 scheduleInput
+  const [scheduledAt, setScheduledAt] = useState(null)
+  const [scheduleOpen, setScheduleOpen] = useState(false)
+  const [scheduleInput, setScheduleInput] = useState('')
   const textareaRef = useRef(null)
   const fileInputRef = useRef(null)
 
@@ -41,6 +54,7 @@ export default function NoticeWrite() {
         setPinned(Boolean(notice.pinned))
         setCreatedAt(notice.createdAt ?? null)
         setAttachments(notice.attachments ?? [])
+        setScheduledAt(notice.scheduledAt ?? null)
       })
       .catch(() => {
         if (!cancelled) setError('공지사항을 불러오지 못했습니다.')
@@ -120,6 +134,31 @@ export default function NoticeWrite() {
     })
   }
 
+  // datetime-local 입력의 최솟값: 지금으로부터 1분 뒤 (로컬 시간)
+  const minScheduleInput = () => {
+    const d = new Date(Date.now() + 60_000)
+    const pad = (n) => String(n).padStart(2, '0')
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+  }
+
+  const openSchedule = () => {
+    setScheduleInput(scheduledAt ? scheduledAt.slice(0, 16) : '')
+    setScheduleOpen(true)
+  }
+
+  const handleCancelSchedule = async () => {
+    setError('')
+    setSubmitting(true)
+    try {
+      await cancelNoticeSchedule(id)
+      setScheduledAt(null)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   const handleSubmit = async (targetStatus) => {
     if (!title.trim() || !body.trim()) {
       setError('제목과 내용을 입력해주세요.')
@@ -137,9 +176,16 @@ export default function NoticeWrite() {
         pinned,
         attachments,
       }
+      if (targetStatus === 'scheduled' && !scheduleInput) {
+        setError('예약할 날짜와 시간을 선택해주세요.')
+        return
+      }
       const notice = isEdit ? await updateNotice(id, payload) : await createNotice(payload)
       if (targetStatus === 'published') {
         await publishNotice(notice?.id ?? id)
+      }
+      if (targetStatus === 'scheduled') {
+        await scheduleNotice(notice?.id ?? id, `${scheduleInput}:00`)
       }
       navigate('/admin/notices')
     } catch (err) {
@@ -403,6 +449,58 @@ export default function NoticeWrite() {
 
           <div className="admin-divider" />
 
+          {scheduledAt && !scheduleOpen && (
+            <div className="admin-schedule-banner">
+              <p>
+                <strong>{formatScheduleTime(scheduledAt)}</strong>에 자동으로 게시되도록 예약되어 있습니다.
+              </p>
+              <div className="admin-schedule-banner__actions">
+                <button type="button" className="admin-table__btn" onClick={openSchedule} disabled={submitting}>
+                  시간 변경
+                </button>
+                <button
+                  type="button"
+                  className="admin-table__btn admin-table__btn--danger"
+                  onClick={handleCancelSchedule}
+                  disabled={submitting}
+                >
+                  예약 취소
+                </button>
+              </div>
+            </div>
+          )}
+
+          {scheduleOpen && (
+            <div className="admin-schedule-panel">
+              <label className="admin-field">
+                <span>예약 게시 시간</span>
+                <input
+                  type="datetime-local"
+                  value={scheduleInput}
+                  min={minScheduleInput()}
+                  onChange={(e) => setScheduleInput(e.target.value)}
+                />
+              </label>
+              <p className="admin-schedule-panel__hint">
+                지정한 시간이 되면 공지가 게시되고, 그때 알림 신청자에게 메일이 발송됩니다. 그 전까지는 임시저장 상태로
+                남습니다.
+              </p>
+              <div className="admin-schedule-panel__actions">
+                <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setScheduleOpen(false)}>
+                  닫기
+                </button>
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--primary"
+                  disabled={submitting || !scheduleInput}
+                  onClick={() => handleSubmit('scheduled')}
+                >
+                  {scheduledAt ? '예약 시간 변경' : '예약하기'}
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="admin-form-actions">
             <Link to="/admin/notices" className="admin-btn admin-btn--ghost">
               취소
@@ -415,6 +513,14 @@ export default function NoticeWrite() {
                 onClick={() => handleSubmit('draft')}
               >
                 임시저장
+              </button>
+              <button
+                type="button"
+                className="admin-btn admin-btn--outline"
+                disabled={submitting}
+                onClick={openSchedule}
+              >
+                예약 게시
               </button>
               <button
                 type="button"

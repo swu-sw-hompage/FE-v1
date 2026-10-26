@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
-import { getAdminNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import {
+  getAdminNotices,
+  deleteNotice,
+  noticeCategoryLabel,
+  formatNoticeDate,
+  formatScheduleTime,
+} from '../../api/notice'
 import './Admin.css'
 
 const FILTERS = [
@@ -177,8 +183,11 @@ export default function AdminNoticeList() {
                           : 'admin-badge admin-badge--gray'
                       }
                     >
-                      {notice.status === 'PUBLISHED' ? '게시중' : '임시저장'}
+                      {notice.status === 'PUBLISHED' ? '게시중' : notice.scheduledAt ? '예약' : '임시저장'}
                     </span>
+                    {notice.status === 'DRAFT' && notice.scheduledAt && (
+                      <p className="admin-table__sub">{formatScheduleTime(notice.scheduledAt)}</p>
+                    )}
                   </td>
                   <td className="admin-table__muted">
                     {formatNoticeDate(
