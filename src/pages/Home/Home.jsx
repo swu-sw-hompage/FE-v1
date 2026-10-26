@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import heroLecture from '../../assets/images/brand/hero-slide-lecture.jpg'
 import heroLab from '../../assets/images/brand/hero-slide-lab.jpg'
@@ -85,6 +85,38 @@ function HeroDots({ className, index, onSelect }) {
   )
 }
 
+// 모바일 hero 좌우 스와이프. 세로 스크롤은 그대로 두고, 가로로 충분히 민 경우에만 넘김
+const SWIPE_THRESHOLD_PX = 40
+
+function useHeroSwipe(setIndex, count, setPaused) {
+  const start = useRef(null)
+
+  const onTouchStart = (e) => {
+    const t = e.touches[0]
+    start.current = { x: t.clientX, y: t.clientY }
+    setPaused(true)
+  }
+
+  const onTouchEnd = (e) => {
+    setPaused(false)
+    if (!start.current) return
+    const t = e.changedTouches[0]
+    const dx = t.clientX - start.current.x
+    const dy = t.clientY - start.current.y
+    start.current = null
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy)) return
+    // 왼쪽으로 밀면 다음 사진, 오른쪽으로 밀면 이전 사진
+    setIndex((i) => (dx < 0 ? (i + 1) % count : (i - 1 + count) % count))
+  }
+
+  const onTouchCancel = () => {
+    start.current = null
+    setPaused(false)
+  }
+
+  return { onTouchStart, onTouchEnd, onTouchCancel }
+}
+
 const NOTICE_FILTERS = [
   { key: 'all', label: '전체' },
   { key: 'academic', label: '학사' },
@@ -97,6 +129,7 @@ export default function Home() {
   const [noticeFilter, setNoticeFilter] = useState('all')
   const [heroPaused, setHeroPaused] = useState(false)
   const [heroIndex, setHeroIndex] = useHeroSlide(HERO_SLIDES.length, heroPaused)
+  const heroSwipe = useHeroSwipe(setHeroIndex, HERO_SLIDES.length, setHeroPaused)
 
   useEffect(() => {
     getNotices({
@@ -117,7 +150,7 @@ export default function Home() {
 
   return (
     <div className="home">
-      <section className="home__hero-mobile">
+      <section className="home__hero-mobile" {...heroSwipe}>
         <HeroSlides className="home__hero-mobile-bg" index={heroIndex} />
         <div className="home__hero-mobile-gradient" />
         <HeroDots className="home__hero-dots--mobile" index={heroIndex} onSelect={setHeroIndex} />

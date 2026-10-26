@@ -534,6 +534,19 @@
     display: block;
     height: 260px;
     overflow: hidden;
+    /* 세로 스크롤은 브라우저에 맡기고 가로 제스처만 스와이프로 사용 */
+    touch-action: pan-y;
+  }
+
+  /* 모바일 점은 손가락으로 누르기 쉽게 터치 영역을 넓힘 (보이는 크기는 그대로) */
+  .home__hero-dots--mobile .home__hero-dot {
+    position: relative;
+  }
+
+  .home__hero-dots--mobile .home__hero-dot::after {
+    content: '';
+    position: absolute;
+    inset: -10px -4px;
   }
 
   .home__hero-mobile-bg {
