@@ -14,7 +14,7 @@ const FILTERS = [
   { key: 'employment', label: '취업' },
 ]
 
-const PAGE_SIZE = 8
+const PAGE_SIZE = 15
 
 export default function Notice() {
   const [searchParams, setSearchParams] = useSearchParams()
