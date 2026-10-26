@@ -11,8 +11,10 @@ const FILTERS = [
   { key: 'all', label: '전체' },
   { key: 'academic', label: '학사' },
   { key: 'employment', label: '취업' },
-  { key: 'draft', label: '임시저장' },
 ]
+
+// 임시저장은 분류가 아니라 게시 상태라 분류 탭과 떨어진 별도 묶음으로 보여준다.
+const DRAFT_FILTER = { key: 'draft', label: '임시저장' }
 
 const PAGE_SIZE = 10
 
@@ -93,19 +95,25 @@ export default function AdminNoticeList() {
     >
       <div className="admin-table-card">
         <div className="admin-table-toolbar">
-          <div className="admin-pill-filter">
-            {FILTERS.map((f) => (
-              <button
-                key={f.key}
-                type="button"
-                className={filter === f.key ? 'admin-pill-filter__btn admin-pill-filter__btn--active' : 'admin-pill-filter__btn'}
-                onClick={() => {
-                  setFilter(f.key)
-                  setPage(1)
-                }}
-              >
-                {f.label}
-              </button>
+          <div className="admin-pill-filter-group">
+            {[FILTERS, [DRAFT_FILTER]].map((group) => (
+              <div key={group[0].key} className="admin-pill-filter">
+                {group.map((f) => (
+                  <button
+                    key={f.key}
+                    type="button"
+                    className={
+                      filter === f.key ? 'admin-pill-filter__btn admin-pill-filter__btn--active' : 'admin-pill-filter__btn'
+                    }
+                    onClick={() => {
+                      setFilter(f.key)
+                      setPage(1)
+                    }}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
           <div className="admin-search">

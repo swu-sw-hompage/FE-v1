@@ -138,6 +138,13 @@
   border-radius: 8px;
 }
 
+/* 성격이 다른 필터 묶음(분류 / 임시저장)을 나란히 두되 서로 떨어뜨린다 */
+.admin-pill-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .admin-pill-filter__btn {
   height: 36px;
   padding-inline: 16px;
@@ -1087,28 +1094,34 @@
   white-space: nowrap;
 }
 
-/* 공지 작성 화면: 좁을 때만 보이는 접이식 게시 정보 */
-.admin-info-collapse {
+/* 공지 작성 화면: 좁을 때만 보이는 한 줄짜리 게시 정보 */
+.admin-info-strip {
   display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  padding: 14px 20px;
   background: #fff;
   border: 1px solid #e5e5e8;
   border-radius: 10px;
-}
-
-.admin-info-collapse summary {
-  padding: 14px 20px;
   font-family: var(--font-pretendard);
-  font-weight: 600;
   font-size: 14px;
   color: #1f1f21;
-  cursor: pointer;
 }
 
-.admin-info-collapse__body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 20px 20px;
+.admin-info-strip p {
+  margin: 0;
+}
+
+.admin-info-strip span {
+  margin-right: 8px;
+  font-size: 12px;
+  color: #7a7a82;
+}
+
+.admin-info-strip .admin-info-strip__note {
+  font-size: 12px;
+  color: #7b1e22;
 }
 
 /* 사이드바(약 250px) + 게시 정보(340px)를 빼면 작성 영역이 모자라는 폭 */
@@ -1123,8 +1136,8 @@
     display: none;
   }
 
-  .admin-columns--writer .admin-info-collapse {
-    display: block;
+  .admin-columns--writer .admin-info-strip {
+    display: flex;
   }
 }
 
