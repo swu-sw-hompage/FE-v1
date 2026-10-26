@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
+import heroCurriculum from '../../assets/images/brand/hero-curriculum.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import SegmentTabs from '../../components/common/SegmentTabs'
 import { CAREER_FIELDS, CURRICULUM_SECTIONS } from '../../constants/aboutNav'
@@ -317,7 +318,7 @@ export default function Roadmap() {
 
   return (
     <div className="roadmap">
-      <PageHero photo title={['전공로드맵']} />
+      <PageHero photo photoSrc={heroCurriculum} title={['전공로드맵']} />
 
       <div className="container page-layout">
         <ChapterNav sections={CURRICULUM_SECTIONS} />
