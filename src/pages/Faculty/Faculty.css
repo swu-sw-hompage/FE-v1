@@ -189,6 +189,16 @@
     display: none;
   }
 
+  /* index.css의 모바일 공통 규칙(.page-section h2 / .page-section > *:not(h2) { width: 100% })이
+     위 규칙보다 우선순위가 높아서, 제목이 안 숨겨지고 '전임교수'·'명예교수' 밑줄이 화면 끝까지 늘어났음 */
+  .page-section .faculty__page-title {
+    display: none;
+  }
+
+  .page-section > .faculty__group-label {
+    width: auto;
+  }
+
   .faculty__grid {
     grid-template-columns: 1fr;
     gap: 0;
