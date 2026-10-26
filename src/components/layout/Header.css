@@ -93,9 +93,11 @@
 }
 
 .header__mega-intro {
-  flex-shrink: 0;
-  width: 320px;
-  padding: 48px 32px;
+  /* 1320px보다 좁은 화면에선 소개·메뉴 열이 함께 줄어든다.
+     (고정 폭이면 숨겨진 상태에서도 페이지 폭을 1320px로 밀어 가로 스크롤·푸터 어긋남이 생겼음) */
+  flex: 0 1 320px;
+  min-width: 0;
+  padding: 48px clamp(20px, 2.5vw, 32px);
   background: var(--color-bg-soft);
 }
 
@@ -117,9 +119,9 @@
 }
 
 .header__mega-column {
-  flex-shrink: 0;
-  width: 200px;
-  padding: 40px 28px 32px;
+  flex: 0 1 200px;
+  min-width: 0;
+  padding: 40px clamp(14px, 2vw, 28px) 32px;
   border-left: 1px solid var(--color-border);
 }
 
