@@ -110,7 +110,7 @@ export default function NoticeDetail() {
 
             {notFound && (
               <EmptyState
-                title="공지사항을 찾을 수 없습니다"
+                title="찾으시는 공지사항이 없습니다"
                 description="삭제되었거나 주소가 바뀌었을 수 있어요. 목록에서 다시 찾아봐 주세요."
                 actions={[
                   { label: '목록으로 돌아가기', to: listHref },
@@ -140,8 +140,6 @@ export default function NoticeDetail() {
 
             {loadFailed && (
               <EmptyState
-                icon="error"
-                code="ERROR"
                 title="공지사항을 불러오지 못했습니다"
                 description="일시적인 문제일 수 있어요. 잠시 후 다시 시도해 주세요."
                 actions={[
