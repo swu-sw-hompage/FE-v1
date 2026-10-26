@@ -265,6 +265,8 @@
     grid-column: 1 / -1;
     overflow: visible;
     white-space: normal;
+    min-width: 0;
+    overflow-wrap: anywhere;
     text-overflow: clip;
     font-weight: 500;
     font-size: 15px;
@@ -278,5 +280,11 @@
     width: 34px;
     height: 34px;
     border-radius: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  .notice__pagination {
+    gap: 4px;
   }
 }

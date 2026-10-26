@@ -5,6 +5,7 @@ import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
 import { getNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import './Admin.css'
+import { getPageWindow } from '../../utils/pagination'
 
 const FILTERS = [
   { key: 'all', label: '전체' },
@@ -197,7 +198,7 @@ export default function AdminNoticeList() {
             <button type="button" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
               ‹
             </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            {getPageWindow(page, totalPages).map((n) => (
               <button
                 key={n}
                 type="button"

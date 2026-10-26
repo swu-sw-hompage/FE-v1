@@ -7,6 +7,7 @@ import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import iconPrev from '../../assets/icons/pagination-prev.svg'
 import iconNext from '../../assets/icons/pagination-next.svg'
 import './Notice.css'
+import { getPageWindow } from '../../utils/pagination'
 
 const FILTERS = [
   { key: 'all', label: '전체' },
@@ -181,7 +182,7 @@ export default function Notice() {
                 >
                   <img src={iconPrev} alt="" />
                 </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                {getPageWindow(page, totalPages).map((n) => (
                   <button
                     key={n}
                     type="button"
