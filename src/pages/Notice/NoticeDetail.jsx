@@ -73,6 +73,10 @@ export default function NoticeDetail() {
                 <Link to={f.key === 'all' ? '/notice' : `/notice?filter=${f.key}`}>{f.label}</Link>
               </li>
             ))}
+            <li>
+              <span className="chapter-nav__bar" />
+              <Link to="/notice/subscribe">공지 알림 신청</Link>
+            </li>
           </ul>
         </nav>
 
