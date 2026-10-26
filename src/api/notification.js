@@ -14,5 +14,5 @@ export const subscribe = ({ email, academicNotice, employmentNotice, privacyCons
     privacyConsent,
   })
 
-export const unsubscribe = ({ email }) =>
-  apiClient.delete('/notifications/subscribe', { data: { email } })
+export const unsubscribe = ({ email, token }) =>
+  apiClient.delete('/notifications/subscribe', { data: { email, token } })

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
-import { requestVerificationCode, verifyCode, subscribe } from '../../api/notification'
+import { requestVerificationCode, verifyCode, subscribe, unsubscribe } from '../../api/notification'
 import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import './NoticeSubscribe.css'
 
 // 메일(SMTP) 발송 설정이 끝나기 전까지 신청 폼을 막고 안내 문구를 덮어 둔다.
 // 설정이 완료되면 true로 바꾸면 폼이 그대로 다시 열린다.
-const SUBSCRIBE_READY = false
+const SUBSCRIBE_READY = true
 
 const FILTERS = [
   { key: 'all', label: '전체' },
@@ -34,6 +34,35 @@ export default function NoticeSubscribe() {
   const [verifying, setVerifying] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [toastMessage, setToastMessage] = useState('')
+
+  // 알림 메일의 "취소" 링크(?unsubscribe=이메일&token=서명)로 들어오면 해지 확인 창을 띄운다.
+  // token은 메일을 받은 본인임을 증명하는 값이라 그대로 백엔드에 넘긴다.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const unsubscribeEmail = searchParams.get('unsubscribe')
+  const unsubscribeToken = searchParams.get('token') ?? ''
+  const [unsubscribing, setUnsubscribing] = useState(false)
+  const [unsubscribeError, setUnsubscribeError] = useState('')
+
+  const closeUnsubscribe = () => {
+    setUnsubscribeError('')
+    setSearchParams({}, { replace: true })
+  }
+
+  const handleUnsubscribe = async () => {
+    setUnsubscribeError('')
+    setUnsubscribing(true)
+    try {
+      await unsubscribe({ email: unsubscribeEmail, token: unsubscribeToken })
+      closeUnsubscribe()
+      setToastMessage('알림 신청이 취소되었습니다.')
+      setShowToast(true)
+    } catch (err) {
+      setUnsubscribeError(err.message)
+    } finally {
+      setUnsubscribing(false)
+    }
+  }
 
   useEffect(() => {
     if (!showToast) return undefined
@@ -87,6 +116,7 @@ export default function NoticeSubscribe() {
         privacyConsent: agreed,
       })
       setSubmitted(true)
+      setToastMessage('신청이 완료되었습니다🎉')
       setShowToast(true)
     } catch (err) {
       setError(err.message)
@@ -285,7 +315,49 @@ export default function NoticeSubscribe() {
 
       {showToast && (
         <div className="notice-subscribe__toast" role="status">
-          신청이 완료되었습니다🎉
+          {toastMessage}
+        </div>
+      )}
+
+      {unsubscribeEmail && (
+        <div className="notice-subscribe__dialog-backdrop">
+          <div
+            className="notice-subscribe__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="unsubscribe-title"
+          >
+            <p id="unsubscribe-title" className="notice-subscribe__dialog-title">
+              알림 신청을 취소하시겠습니까?
+            </p>
+            <p className="notice-subscribe__dialog-email">{unsubscribeEmail}</p>
+            <p className="notice-subscribe__dialog-text">
+              취소하면 이 이메일로 공지 알림이 더 이상 발송되지 않습니다.
+            </p>
+            {unsubscribeError && (
+              <p className="notice-subscribe__hint notice-subscribe__hint--error" role="alert">
+                {unsubscribeError}
+              </p>
+            )}
+            <div className="notice-subscribe__dialog-actions">
+              <button
+                type="button"
+                className="notice-subscribe__dialog-btn"
+                onClick={closeUnsubscribe}
+                disabled={unsubscribing}
+              >
+                닫기
+              </button>
+              <button
+                type="button"
+                className="notice-subscribe__dialog-btn notice-subscribe__dialog-btn--primary"
+                onClick={handleUnsubscribe}
+                disabled={unsubscribing}
+              >
+                {unsubscribing ? '취소 중...' : '알림 신청 취소'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
