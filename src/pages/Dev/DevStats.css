@@ -398,6 +398,27 @@
   font-size: 13px;
 }
 
+/* 유입 경로 이름은 "에브리타임 · 캠페인"처럼 길어질 수 있어 칸을 넓힌다 */
+.dev-stats__rank-row {
+  grid-template-columns: minmax(112px, 40%) minmax(0, 1fr) 56px;
+}
+
+.dev-stats__rank-row--source {
+  grid-template-columns: minmax(104px, 34%) minmax(0, 1fr) 44px 84px;
+}
+
+.dev-stats__rank-signups {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+}
+
+.dev-stats__rank-signups small {
+  margin-left: 4px;
+  color: var(--color-text-muted);
+}
+
 .dev-stats__rank-label {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -461,9 +482,66 @@
     font-size: 24px;
   }
 
-  .dev-stats__funnel-row,
-  .dev-stats__rank-row {
+  .dev-stats__funnel-row {
     grid-template-columns: 96px minmax(0, 1fr) 64px;
     gap: 8px;
   }
+
+  .dev-stats__rank-row {
+    grid-template-columns: minmax(96px, 45%) minmax(0, 1fr) 48px;
+    gap: 8px;
+  }
+
+  .dev-stats__rank-row--source {
+    grid-template-columns: minmax(80px, 34%) minmax(0, 1fr) 36px 72px;
+  }
+}
+
+/* 홍보 링크 만들기 */
+.dev-stats__builder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dev-stats__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.dev-stats__field .dev-stats__input {
+  font-weight: 400;
+  color: var(--color-text);
+  background: #fff;
+}
+
+.dev-stats__link-result {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 8px;
+}
+
+.dev-stats__link-url {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  min-height: 44px;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.dev-stats__link-result .dev-stats__primary-btn {
+  flex-shrink: 0;
+  width: 80px;
 }

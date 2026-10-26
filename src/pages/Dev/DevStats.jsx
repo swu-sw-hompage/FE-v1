@@ -31,7 +31,43 @@ const shortDate = (iso) => {
   return `${Number(m)}/${Number(d)}`
 }
 
-const SOURCE_LABELS = { direct: '직접 접속', email: '알림 메일', internal: '사이트 내부' }
+// 홍보 링크 채널. value가 utm_source로 들어가고 통계의 유입 경로 이름이 된다.
+const CHANNELS = [
+  { value: 'everytime', label: '에브리타임' },
+  { value: 'kakao', label: '카카오톡 단톡방' },
+  { value: 'instagram_story', label: '인스타 스토리' },
+  { value: 'instagram', label: '인스타 게시물' },
+]
+
+const LINK_TARGETS = [
+  { path: '/', label: '홈' },
+  { path: '/notice/subscribe', label: '공지 알림 신청' },
+  { path: '/notice', label: '공지사항' },
+]
+
+const SOURCE_LABELS = {
+  unknown: '알 수 없음',
+  direct: '직접 접속',
+  email: '알림 메일',
+  internal: '사이트 내부',
+  ...Object.fromEntries(CHANNELS.map((c) => [c.value, c.label])),
+}
+
+// "채널:캠페인" 형태면 "에브리타임 · 캠페인"으로 보여준다.
+const sourceLabel = (key) => {
+  const [channel, ...rest] = key.split(':')
+  const name = SOURCE_LABELS[channel] ?? channel
+  return rest.length ? `${name} · ${rest.join(':')}` : name
+}
+
+// utm 값은 영문 소문자·숫자·-·_만 남긴다 (공백은 -로).
+const slug = (text) =>
+  text
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9_-]/g, '')
+    .slice(0, 40)
 
 function StatTile({ label, value, sub }) {
   return (
@@ -205,6 +241,132 @@ function RankList({ title, desc, rows, labelOf }) {
   )
 }
 
+function LinkBuilder() {
+  const [channel, setChannel] = useState(CHANNELS[0].value)
+  const [customChannel, setCustomChannel] = useState('')
+  const [target, setTarget] = useState(LINK_TARGETS[0].path)
+  const [campaign, setCampaign] = useState('')
+  const [copied, setCopied] = useState(false)
+
+  const source = channel === 'custom' ? slug(customChannel) : channel
+  const params = new URLSearchParams()
+  if (source) params.set('utm_source', source)
+  if (slug(campaign)) params.set('utm_campaign', slug(campaign))
+  const url = source ? `${window.location.origin}${target}?${params.toString()}` : ''
+
+  useEffect(() => setCopied(false), [url])
+
+  const copy = async () => {
+    if (!url) return
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <section className="dev-stats__card">
+      <h2 className="dev-stats__card-title">홍보 링크 만들기</h2>
+      <p className="dev-stats__card-desc">
+        채널마다 다른 링크를 붙이면 위 유입 경로에 채널 이름으로 따로 집계됩니다. 캠페인 이름은 영문·숫자만
+        들어갑니다.
+      </p>
+
+      <div className="dev-stats__builder">
+        <label className="dev-stats__field">
+          <span>채널</span>
+          <select value={channel} onChange={(e) => setChannel(e.target.value)} className="dev-stats__input">
+            {CHANNELS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+            <option value="custom">직접 입력</option>
+          </select>
+        </label>
+        {channel === 'custom' && (
+          <label className="dev-stats__field">
+            <span>채널 이름 (영문)</span>
+            <input
+              className="dev-stats__input"
+              placeholder="예: poster"
+              value={customChannel}
+              onChange={(e) => setCustomChannel(e.target.value)}
+            />
+          </label>
+        )}
+        <label className="dev-stats__field">
+          <span>연결할 페이지</span>
+          <select value={target} onChange={(e) => setTarget(e.target.value)} className="dev-stats__input">
+            {LINK_TARGETS.map((t) => (
+              <option key={t.path} value={t.path}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="dev-stats__field">
+          <span>캠페인 이름 (선택)</span>
+          <input
+            className="dev-stats__input"
+            placeholder="예: alert-launch"
+            value={campaign}
+            onChange={(e) => setCampaign(e.target.value)}
+          />
+        </label>
+      </div>
+
+      <div className="dev-stats__link-result">
+        <code className="dev-stats__link-url">{url || '채널 이름을 입력하세요'}</code>
+        <button type="button" className="dev-stats__primary-btn" onClick={copy} disabled={!url}>
+          {copied ? '복사됨' : '복사'}
+        </button>
+      </div>
+      {source && (
+        <p className="dev-stats__card-desc">
+          통계에는 <strong>{sourceLabel(slug(campaign) ? `${source}:${slug(campaign)}` : source)}</strong>(으)로
+          표시됩니다.
+        </p>
+      )}
+    </section>
+  )
+}
+
+function SourceList({ rows }) {
+  const top = Math.max(1, ...rows.map((r) => r.visits))
+  return (
+    <section className="dev-stats__card">
+      <h2 className="dev-stats__card-title">유입 경로</h2>
+      <p className="dev-stats__card-desc">
+        막대는 방문 수, 오른쪽은 그 경로로 들어와 알림을 신청한 수와 방문 대비 비율입니다 (상위 10개).
+      </p>
+      {rows.length === 0 ? (
+        <p className="dev-stats__empty">아직 데이터가 없습니다.</p>
+      ) : (
+        <ul className="dev-stats__rank">
+          {rows.map((r) => (
+            <li key={r.key} className="dev-stats__rank-row dev-stats__rank-row--source">
+              <span className="dev-stats__rank-label" title={r.key}>
+                {sourceLabel(r.key)}
+              </span>
+              <span className="dev-stats__rank-track">
+                <span className="dev-stats__rank-bar" style={{ width: `${(r.visits / top) * 100}%` }} />
+              </span>
+              <span className="dev-stats__rank-value">{fmt(r.visits)}</span>
+              <span className="dev-stats__rank-signups">
+                신청 {fmt(r.subscribed)}
+                <small>{r.visits ? pct(r.subscribed, r.visits) : ''}</small>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
 export default function DevStats() {
   const [key, setKey] = useState(readKey)
   const [keyInput, setKeyInput] = useState('')
@@ -337,12 +499,7 @@ export default function DevStats() {
 
           <div className="dev-stats__grid">
             <Funnel totals={t} />
-            <RankList
-              title="유입 경로"
-              desc="방문이 어디서 왔는지 (상위 10개)"
-              rows={stats.sources}
-              labelOf={(k) => SOURCE_LABELS[k] ?? k}
-            />
+            <SourceList rows={stats.sources} />
           </div>
 
           <RankList
@@ -351,6 +508,8 @@ export default function DevStats() {
             rows={stats.landingPaths}
             labelOf={(k) => k}
           />
+
+          <LinkBuilder />
         </div>
       )}
     </div>
