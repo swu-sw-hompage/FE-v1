@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PageHero from '../../components/common/PageHero'
+import heroCurriculum from '../../assets/images/brand/hero-curriculum.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import SegmentTabs from '../../components/common/SegmentTabs'
 import InfoRows from '../../components/common/InfoRows'
@@ -54,7 +55,7 @@ export default function Requirements() {
 
   return (
     <div className="requirements">
-      <PageHero photo title={['졸업 요건']} />
+      <PageHero photo photoSrc={heroCurriculum} title={['졸업 요건']} />
 
       <div className="container page-layout">
         <ChapterNav sections={CURRICULUM_SECTIONS} />

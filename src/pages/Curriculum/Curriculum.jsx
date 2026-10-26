@@ -1,4 +1,5 @@
 import PageHero from '../../components/common/PageHero'
+import heroCurriculum from '../../assets/images/brand/hero-curriculum.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import PdfViewer from '../../components/common/PdfViewer'
 import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
@@ -26,7 +27,7 @@ const PILLARS = [
 export default function Curriculum() {
   return (
     <div className="curriculum">
-      <PageHero photo title={['교육과정']} />
+      <PageHero photo photoSrc={heroCurriculum} title={['교육과정']} />
 
       <div className="container page-layout">
         <ChapterNav sections={CURRICULUM_SECTIONS} />
