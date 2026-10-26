@@ -69,7 +69,12 @@ export default function Dashboard() {
             )}
             {notices.map((n) => (
               <tr key={n.id}>
-                <td className="admin-table__title">{n.title}</td>
+                <td className="admin-table__title">
+                  {/* 관리 화면은 그대로 두고 실제 공지 상세를 새 탭에서 연다 */}
+                  <Link to={`/notice/${n.id}`} target="_blank" rel="noopener noreferrer" className="admin-table__link">
+                    {n.title}
+                  </Link>
+                </td>
                 <td className="admin-table__muted" style={{ width: 120 }}>
                   {n.publishedAt ? new Date(n.publishedAt).toLocaleDateString('ko-KR') : '-'}
                 </td>
