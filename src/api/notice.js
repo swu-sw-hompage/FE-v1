@@ -24,6 +24,38 @@ export const getNotices = ({ academic, employment, keyword, scope, page = 0, siz
 
 export const getNoticeById = (id) => apiClient.get(`/notices/${id}`)
 
+const noticeTime = (n) => new Date(n.publishedAt ?? n.createdAt ?? 0).getTime() || 0
+
+// 상세 응답의 previousPost/nextPost는 분류와 상관없이 전체 공지 기준이라,
+// 학사·취업 분류나 검색 결과 안에서 보던 경우엔 같은 조건의 목록을 받아 앞뒤 글을 직접 찾는다.
+// 이전글 = 바로 전에 올라온(더 오래된) 글, 다음글 = 바로 뒤에 올라온(더 최근) 글.
+// 현재 글이 그 목록에 없으면 null을 돌려주고, 화면에서는 서버 값을 그대로 쓴다.
+export const getAdjacentNotices = async (id, { academic, employment, keyword, scope } = {}) => {
+  const SIZE = 100
+  const MAX_PAGES = 20
+  const all = []
+  for (let page = 0; page < MAX_PAGES; page += 1) {
+    const result = await getNotices({ academic, employment, keyword, scope, page, size: SIZE })
+    const content = result?.content ?? []
+    all.push(...content)
+    const totalPages = result?.totalPages ?? 1
+    if (content.length === 0 || page + 1 >= totalPages) break
+  }
+
+  // 고정글 여부와 상관없이 게시 시각 기준 최신순으로 정렬 (같으면 id 큰 쪽이 최신)
+  const sorted = [...new Map(all.map((n) => [String(n.id), n])).values()].sort(
+    (a, b) => noticeTime(b) - noticeTime(a) || Number(b.id) - Number(a.id),
+  )
+  const index = sorted.findIndex((n) => String(n.id) === String(id))
+  if (index === -1) return null
+
+  const pick = (n) => (n ? { id: n.id, title: n.title } : null)
+  return {
+    previousPost: pick(sorted[index + 1]),
+    nextPost: pick(sorted[index - 1]),
+  }
+}
+
 // 관리자 전용 (JWT 필요)
 // status: 'PUBLISHED'(기본) | 'DRAFT'. 임시저장 글은 최근 수정순으로 내려온다.
 export const getAdminNotices = ({ status, academic, employment, keyword, page = 0, size = 10 } = {}) =>

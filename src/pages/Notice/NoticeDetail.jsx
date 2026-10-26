@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
-import { getNoticeById, getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import {
+  getNoticeById,
+  getNotices,
+  getAdjacentNotices,
+  noticeCategoryLabel,
+  formatNoticeDate,
+} from '../../api/notice'
 import EmptyState from '../../components/common/EmptyState'
 import MarkdownLite from '../../components/common/MarkdownLite'
 import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
@@ -23,6 +29,8 @@ export default function NoticeDetail() {
   const [error, setError] = useState(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [recent, setRecent] = useState([])
+  // 분류·검색 기준으로 다시 찾은 이전/다음글. 'pending'이면 아직 찾는 중, null이면 서버 값 사용
+  const [adjacent, setAdjacent] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -73,6 +81,52 @@ export default function NoticeDetail() {
 
   // 이전/다음글 이동 시에도 같은 분류 상태 유지
   const detailQuery = searchParams.toString() || `filter=${activeFilter}`
+
+  // 전체가 아닌 분류나 검색어로 보던 중이면 이전/다음글도 그 범위 안에서 찾는다
+  const keywordParam = searchParams.get('q') ?? ''
+  const scopeParam = searchParams.get('scope') ?? undefined
+  const scopedAdjacent = activeFilter !== 'all' || keywordParam !== ''
+
+  useEffect(() => {
+    if (!notice || String(notice.id) !== String(id) || !scopedAdjacent) {
+      setAdjacent(null)
+      return
+    }
+    let cancelled = false
+    setAdjacent('pending')
+    getAdjacentNotices(id, {
+      academic: activeFilter === 'academic' ? true : undefined,
+      employment: activeFilter === 'employment' ? true : undefined,
+      keyword: keywordParam,
+      scope: keywordParam ? scopeParam : undefined,
+    })
+      .then((result) => {
+        if (cancelled) return
+        if (!result) {
+          setAdjacent(null)
+          return
+        }
+        // 서버가 '이전글'을 더 최근 글로 쓰고 있으면(id가 더 큼) 방향을 서버에 맞춘다
+        const serverPrevIsNewer =
+          (notice.previousPost && Number(notice.previousPost.id) > Number(notice.id)) ||
+          (notice.nextPost && Number(notice.nextPost.id) < Number(notice.id))
+        setAdjacent(
+          serverPrevIsNewer
+            ? { previousPost: result.nextPost, nextPost: result.previousPost }
+            : result,
+        )
+      })
+      .catch(() => {
+        if (!cancelled) setAdjacent(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [id, notice, scopedAdjacent, activeFilter, keywordParam, scopeParam])
+
+  const adjacentPending = adjacent === 'pending'
+  const previousPost = adjacent && !adjacentPending ? adjacent.previousPost : notice?.previousPost
+  const nextPost = adjacent && !adjacentPending ? adjacent.nextPost : notice?.nextPost
 
   // '목록으로'는 들어왔던 분류·페이지·검색 상태로 복귀
   const listParams = new URLSearchParams(searchParams)
@@ -195,8 +249,10 @@ export default function NoticeDetail() {
                 <div className="notice-detail__adjacent">
                   <div className="notice-detail__adjacent-row">
                     <span className="notice-detail__adjacent-label">이전글</span>
-                    {notice.previousPost ? (
-                      <Link to={`/notice/${notice.previousPost.id}?${detailQuery}`}>{notice.previousPost.title}</Link>
+                    {adjacentPending ? (
+                      <span className="notice-detail__adjacent-empty">불러오는 중...</span>
+                    ) : previousPost ? (
+                      <Link to={`/notice/${previousPost.id}?${detailQuery}`}>{previousPost.title}</Link>
                     ) : (
                       <span className="notice-detail__adjacent-empty">이전글이 없습니다.</span>
                     )}
@@ -204,8 +260,10 @@ export default function NoticeDetail() {
                   <div className="notice-detail__adjacent-divider" />
                   <div className="notice-detail__adjacent-row">
                     <span className="notice-detail__adjacent-label">다음글</span>
-                    {notice.nextPost ? (
-                      <Link to={`/notice/${notice.nextPost.id}?${detailQuery}`}>{notice.nextPost.title}</Link>
+                    {adjacentPending ? (
+                      <span className="notice-detail__adjacent-empty">불러오는 중...</span>
+                    ) : nextPost ? (
+                      <Link to={`/notice/${nextPost.id}?${detailQuery}`}>{nextPost.title}</Link>
                     ) : (
                       <span className="notice-detail__adjacent-empty">다음글이 없습니다.</span>
                     )}
