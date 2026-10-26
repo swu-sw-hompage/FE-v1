@@ -38,10 +38,14 @@ const visitorId = () => {
   }
 }
 
-// 알림 메일 링크는 ?utm_source=email을 달고 온다. 그 외에는 리퍼러 도메인, 없으면 direct.
+// 알림 메일 링크는 ?utm_source=email, 홍보 링크는 ?utm_source=채널&utm_campaign=이름을 달고 온다
+// (/dev/stats의 홍보 링크 만들기). 캠페인이 있으면 "채널:캠페인"으로 기록한다.
+// 그 외에는 리퍼러 도메인, 없으면 direct.
 const visitSource = () => {
-  const utm = new URLSearchParams(window.location.search).get('utm_source')
-  if (utm) return utm.toLowerCase().slice(0, 100)
+  const params = new URLSearchParams(window.location.search)
+  const utm = params.get('utm_source')
+  const campaign = params.get('utm_campaign')
+  if (utm) return (campaign ? `${utm}:${campaign}` : utm).toLowerCase().slice(0, 100)
   if (!document.referrer) return 'direct'
   try {
     const host = new URL(document.referrer).hostname
@@ -67,6 +71,9 @@ export const trackVisit = () => {
   }
   send({ type: 'VISIT', path: window.location.pathname.slice(0, 255), source: visitSource() })
 }
+
+/** 알림 신청에 같이 실어 보내서, 신청이 어느 유입 경로에서 왔는지 통계에서 이어 볼 수 있게 한다. */
+export const visitorIdForAttribution = () => (import.meta.env.DEV || isQaBrowser() ? undefined : visitorId())
 
 export const trackSubscribePageView = () =>
   send({ type: 'SUBSCRIBE_PAGE_VIEW', path: window.location.pathname.slice(0, 255) })

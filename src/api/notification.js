@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import { visitorIdForAttribution } from './analytics'
 
 export const requestVerificationCode = ({ email }) =>
   apiClient.post('/notifications/verification-code', { email })
@@ -12,6 +13,7 @@ export const subscribe = ({ email, academicNotice, employmentNotice, privacyCons
     academicNotice,
     employmentNotice,
     privacyConsent,
+    visitorId: visitorIdForAttribution(),
   })
 
 export const unsubscribe = ({ email, token }) =>
