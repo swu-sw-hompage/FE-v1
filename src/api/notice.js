@@ -25,6 +25,15 @@ export const getNotices = ({ academic, employment, keyword, scope, page = 0, siz
 export const getNoticeById = (id) => apiClient.get(`/notices/${id}`)
 
 // 관리자 전용 (JWT 필요)
+// status: 'PUBLISHED'(기본) | 'DRAFT'. 임시저장 글은 최근 수정순으로 내려온다.
+export const getAdminNotices = ({ status, academic, employment, keyword, page = 0, size = 10 } = {}) =>
+  apiClient.get('/admin/notices', {
+    params: { status, academic, employment, keyword: keyword || undefined, page, size },
+  })
+
+// 임시저장 글도 포함해서 한 건 조회 (공지 수정 화면용)
+export const getAdminNoticeById = (id) => apiClient.get(`/admin/notices/${id}`)
+
 // 첨부파일은 별도 업로드 API가 없어 파일이 아닌 {name, url} 링크 형태로만 등록 가능하다.
 export const createNotice = (payload) => apiClient.post('/admin/notices', payload)
 
@@ -41,7 +50,3 @@ export const uploadAttachment = (file) => {
   formData.append('file', file)
   return apiClient.post('/admin/uploads', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
 }
-
-// 관리자 전용 목록/임시저장 조회 API는 없다 — 목록/상세 조회는 게시된 공지만 내려주는
-// 공개 엔드포인트(getNotices/getNoticeById)만 존재하며, 임시저장 글은 생성 직후 응답으로만
-// 확인 가능하고 이후 다시 불러올 방법이 없다.

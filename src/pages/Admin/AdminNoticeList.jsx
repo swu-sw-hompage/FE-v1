@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
-import { getNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { getAdminNotices, deleteNotice, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import './Admin.css'
 import { getPageWindow } from '../../utils/pagination'
 
@@ -11,6 +11,7 @@ const FILTERS = [
   { key: 'all', label: '전체' },
   { key: 'academic', label: '학사' },
   { key: 'employment', label: '취업' },
+  { key: 'draft', label: '임시저장' },
 ]
 
 const PAGE_SIZE = 10
@@ -27,14 +28,15 @@ export default function AdminNoticeList() {
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
   const [toast, setToast] = useState('')
+  const isDraftTab = filter === 'draft'
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
     setError('')
-    // 관리자 전용 목록 조회 API가 없어 게시된 공지만 내려주는 공개 엔드포인트를 사용한다
-    // (임시저장 글은 이 목록에 나타나지 않는다).
-    getNotices({
+    // 전체/학사/취업은 게시된 공지, 임시저장 탭은 아직 게시하지 않은 글(최근 수정순)을 보여준다.
+    getAdminNotices({
+      status: isDraftTab ? 'DRAFT' : 'PUBLISHED',
       academic: filter === 'academic' ? true : undefined,
       employment: filter === 'employment' ? true : undefined,
       keyword: submittedKeyword,
@@ -55,7 +57,7 @@ export default function AdminNoticeList() {
     return () => {
       cancelled = true
     }
-  }, [filter, submittedKeyword, page])
+  }, [filter, isDraftTab, submittedKeyword, page])
 
   const runSearch = () => {
     setSubmittedKeyword(keyword.trim())
@@ -82,7 +84,7 @@ export default function AdminNoticeList() {
       breadcrumb="공지사항"
       eyebrow="NOTICE MANAGEMENT"
       title="공지사항 관리"
-      description="게시된 공지사항을 확인하고 관리할 수 있습니다."
+      description="게시된 공지사항과 임시저장한 글을 확인하고 관리할 수 있습니다."
       headActions={
         <Link to="/admin/notices/new" className="admin-btn admin-btn--primary">
           + 공지 작성
@@ -128,7 +130,7 @@ export default function AdminNoticeList() {
               <th style={{ width: 96 }}>분류</th>
               <th>제목</th>
               <th style={{ width: 110 }}>상태</th>
-              <th style={{ width: 120 }}>작성일</th>
+              <th style={{ width: 120 }}>{isDraftTab ? '최근 수정' : '작성일'}</th>
               <th style={{ width: 140 }}>관리</th>
             </tr>
           </thead>
@@ -143,7 +145,7 @@ export default function AdminNoticeList() {
             {!loading && notices.length === 0 && (
               <tr>
                 <td colSpan={5} className="admin-table__empty">
-                  등록된 공지사항이 없습니다.
+                  {isDraftTab ? '임시저장한 글이 없습니다.' : '등록된 공지사항이 없습니다.'}
                 </td>
               </tr>
             )}
@@ -172,7 +174,9 @@ export default function AdminNoticeList() {
                     </span>
                   </td>
                   <td className="admin-table__muted">
-                    {formatNoticeDate(notice.publishedAt ?? notice.createdAt)}
+                    {formatNoticeDate(
+                      notice.status === 'DRAFT' ? notice.updatedAt : (notice.publishedAt ?? notice.createdAt),
+                    )}
                   </td>
                   <td>
                     <div className="admin-table__actions">
