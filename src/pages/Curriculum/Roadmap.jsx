@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
-import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
+import SegmentTabs from '../../components/common/SegmentTabs'
+import { CAREER_FIELDS, CURRICULUM_SECTIONS } from '../../constants/aboutNav'
 import { ROADMAP_COURSE_DETAILS } from '../../data/roadmapCourseDetails'
 import './Roadmap.css'
 
@@ -51,9 +53,32 @@ const GUIDEBOOK_TRACKS = [
   },
 ]
 
-const TRACK_TABS = ['cloud', 'ai', 'research'].map((id) =>
-  GUIDEBOOK_TRACKS.find((track) => track.id === id),
-)
+// 탭 순서와 번호는 '졸업 후 진로' 페이지(CAREER_FIELDS)와 맞춘다.
+const TRACK_CAREER_SLUG = { cloud: 'server-cloud', ai: 'ai-sw', research: 'research' }
+
+const TRACK_TABS = ['cloud', 'ai', 'research'].map((id, i) => ({
+  ...GUIDEBOOK_TRACKS.find((track) => track.id === id),
+  no: String(i + 1).padStart(2, '0'),
+}))
+
+const LEGEND = [
+  { tag: '필수', className: 'required' },
+  { tag: '선택', className: 'elective' },
+  { tag: '추천', className: 'recommended' },
+]
+
+function RoadmapLegend() {
+  return (
+    <div className="roadmap__legend" aria-label="이수구분 표시">
+      {LEGEND.map((item) => (
+        <span className="roadmap__legend-item" key={item.tag}>
+          <span className={`roadmap__legend-mark roadmap__legend-mark--${item.className}`} />
+          {item.tag}
+        </span>
+      ))}
+    </div>
+  )
+}
 
 const LIBERAL_ARTS = [
   {
@@ -251,12 +276,16 @@ function CourseItem({ course, flip }) {
 }
 
 export default function Roadmap() {
-  const [guidebookTrackId, setGuidebookTrackId] = useState('cloud')
+  // 졸업 후 진로 페이지에서 ?track=ai 처럼 넘어오면 그 진로 탭을 먼저 연다.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const trackParam = searchParams.get('track')
+  const guidebookTrackId = TRACK_TABS.some((t) => t.id === trackParam) ? trackParam : 'cloud'
+  const setGuidebookTrackId = (id) => setSearchParams({ track: id }, { replace: true, preventScrollReset: true })
   const guidebookTrack = GUIDEBOOK_TRACKS.find((item) => item.id === guidebookTrackId) ?? GUIDEBOOK_TRACKS[0]
+  const careerField = CAREER_FIELDS.find((f) => f.slug === TRACK_CAREER_SLUG[guidebookTrack.id])
   const displayYears = guidebookTrack.years.map((courses, index) => ({
     no: String(index + 1).padStart(2, '0'),
     year: `${index + 1}학년`,
-    highlight: index === 0,
     courses: courses.map((title) => ({
       title,
       tag: ROADMAP_COURSE_DETAILS[title]?.tag ?? '미확인',
@@ -297,30 +326,44 @@ export default function Roadmap() {
           <section className="page-section">
             <h2>전공로드맵</h2>
 
-            <div className="roadmap__career-tabs" role="group" aria-label="전공로드맵 진로 선택">
-              {TRACK_TABS.map((track) => (
-                <button
-                  type="button"
-                  key={track.id}
-                  className={guidebookTrackId === track.id ? 'roadmap__career-tab roadmap__career-tab--active' : 'roadmap__career-tab'}
-                  aria-pressed={guidebookTrackId === track.id}
-                  onClick={() => {
-                    setGuidebookTrackId(track.id)
-                    setMobileYear(0)
-                    setOpenCourses(new Set())
-                  }}
-                >
-                  {track.name}
-                </button>
-              ))}
+            <SegmentTabs
+              label="전공로드맵 진로 선택"
+              items={TRACK_TABS.map((track) => ({ id: track.id, no: track.no, label: track.name }))}
+              active={guidebookTrackId}
+              onChange={(id) => {
+                setGuidebookTrackId(id)
+                setMobileYear(0)
+                setOpenCourses(new Set())
+              }}
+            />
+
+            <div className="roadmap__intro">
+              <div className="roadmap__intro-head">
+                <p className="roadmap__intro-title">{guidebookTrack.name} 분야</p>
+                <p className="roadmap__intro-summary">{guidebookTrack.subtitle}</p>
+              </div>
+              <div className="roadmap__intro-divider" />
+              <div className="roadmap__intro-foot">
+                <p className="roadmap__intro-jobs">
+                  <span>대표 직무</span>
+                  {guidebookTrack.careers.join('  ·  ')}
+                </p>
+                {careerField && (
+                  <Link className="roadmap__intro-link" to={`/about/career/${careerField.slug}`}>
+                    졸업 후 진로 자세히 보기 →
+                  </Link>
+                )}
+              </div>
             </div>
+
+            <RoadmapLegend />
 
             <div className="roadmap__years">
               {displayYears.map((y) => (
                 <div className="roadmap__year" key={y.year}>
                   <span className="roadmap__year-no">{y.no}</span>
                   <strong className="roadmap__year-title">{y.year}</strong>
-                  <span className={y.highlight ? 'roadmap__year-rule roadmap__year-rule--active' : 'roadmap__year-rule'} />
+                  <span className="roadmap__year-rule" />
                 </div>
               ))}
 
@@ -355,7 +398,11 @@ export default function Roadmap() {
             <div className="roadmap__liberal">
               {LIBERAL_ARTS.map((group) => (
                 <div className="roadmap__liberal-col" key={group.year}>
-                  <p className="roadmap__liberal-year">{group.year}</p>
+                  <div className="roadmap__year">
+                    <span className="roadmap__year-no">{String(LIBERAL_ARTS.indexOf(group) + 1).padStart(2, '0')}</span>
+                    <strong className="roadmap__year-title">{group.year}</strong>
+                    <span className="roadmap__year-rule" />
+                  </div>
                   {group.courses.map((course) => (
                     <div
                       className={

@@ -1,0 +1,121 @@
+.info-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-rows__row {
+  display: flex;
+  min-height: 120px;
+  border-top: 1px solid var(--color-border);
+}
+
+.info-rows__row:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-rows__label {
+  flex-shrink: 0;
+  width: 244px;
+  padding: 24px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  border-right: 1px solid var(--color-border);
+}
+
+.info-rows__label span {
+  font-family: var(--font-en);
+  font-size: 12px;
+  color: var(--color-primary);
+}
+
+.info-rows__label strong {
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.info-rows__copy {
+  flex: 1;
+  padding: 24px 24px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-rows__copy p {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.info-rows__copy--list {
+  gap: 4px;
+}
+
+.info-rows__copy--list p {
+  position: relative;
+  padding-left: 12px;
+}
+
+.info-rows__copy--list p::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-text-faint);
+}
+
+@media (max-width: 900px) {
+  .info-rows__row {
+    flex-direction: column;
+    min-height: 0;
+    gap: 8px;
+    padding: 20px;
+    background: #f8f8f9;
+    border: none;
+    border-radius: 6px;
+  }
+
+  .info-rows__row:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .info-rows__row:last-child {
+    border-bottom: none;
+  }
+
+  .info-rows__label {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    border: none;
+  }
+
+  .info-rows__label span {
+    font-family: var(--font-pretendard);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .info-rows__copy {
+    padding: 0;
+  }
+
+  .info-rows__copy p {
+    line-height: 1.65;
+    color: #57575e;
+  }
+}
