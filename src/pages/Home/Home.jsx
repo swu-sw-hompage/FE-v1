@@ -15,6 +15,21 @@ const QUICK_LINKS = [
   { id: 'notice-sub', icon: iconQuick1, title: '공지 알림 신청', mobileTitle: '공지 알림', to: '/notice/subscribe' },
 ]
 
+// 홈 미리보기에 보여줄 공지 개수
+const HOME_NOTICE_COUNT = 5
+// 백엔드는 필독(pinned) 글을 맨 앞에 붙여서 내려주기 때문에, 필독이 많으면 첫 페이지 5개가
+// 전부 필독으로 채워진다. 넉넉하게 받아와서 날짜순으로 다시 정렬한 뒤 앞에서 잘라 쓴다.
+const HOME_NOTICE_FETCH_SIZE = 50
+
+const noticeTime = (notice) => {
+  const t = Date.parse(notice.publishedAt ?? notice.createdAt ?? '')
+  return Number.isNaN(t) ? 0 : t
+}
+
+// 필독 여부와 상관없이 최신 글이 위로 오도록 정렬 (같은 시각이면 id 큰 글이 위)
+const sortByLatest = (list) =>
+  [...list].sort((a, b) => noticeTime(b) - noticeTime(a) || (b.id ?? 0) - (a.id ?? 0))
+
 const NOTICE_FILTERS = [
   { key: 'all', label: '전체' },
   { key: 'academic', label: '학사' },
@@ -31,9 +46,9 @@ export default function Home() {
       academic: noticeFilter === 'academic' ? true : undefined,
       employment: noticeFilter === 'employment' ? true : undefined,
       page: 0,
-      size: 5,
+      size: HOME_NOTICE_FETCH_SIZE,
     })
-      .then((result) => setNotices(result?.content ?? []))
+      .then((result) => setNotices(sortByLatest(result?.content ?? []).slice(0, HOME_NOTICE_COUNT)))
       .catch(() => setNotices([]))
   }, [noticeFilter])
 
