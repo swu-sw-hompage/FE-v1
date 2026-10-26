@@ -140,8 +140,6 @@ export default function NoticeDetail() {
 
             {loadFailed && (
               <EmptyState
-                icon="error"
-                code="ERROR"
                 title="공지사항을 불러오지 못했습니다"
                 description="일시적인 문제일 수 있어요. 잠시 후 다시 시도해 주세요."
                 actions={[
