@@ -4,6 +4,7 @@ import ConfirmModal from '../../components/admin/ConfirmModal'
 import AdminToast from '../../components/admin/AdminToast'
 import { getSubscribers, deleteSubscriber } from '../../api/subscriber'
 import './Admin.css'
+import { getPageWindow } from '../../utils/pagination'
 
 const FILTERS = [
   { key: 'all', label: '전체' },
@@ -226,7 +227,7 @@ export default function AdminSubscribers() {
             <button type="button" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
               ‹
             </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            {getPageWindow(page, totalPages).map((n) => (
               <button key={n} type="button" className={n === page ? 'is-active' : ''} onClick={() => setPage(n)}>
                 {n}
               </button>

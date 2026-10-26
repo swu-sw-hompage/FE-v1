@@ -28,6 +28,8 @@
   display: flex;
   flex-direction: column;
   gap: 34px;
+  /* 본문에 띄어쓰기 없는 긴 URL이 들어와도 줄바꿈되게 */
+  overflow-wrap: anywhere;
 }
 
 .notice-detail__header {
@@ -122,6 +124,7 @@
 }
 
 .notice-detail__attachment-row span:first-child {
+  min-width: 0;
   color: var(--color-text-secondary);
 }
 
@@ -145,6 +148,7 @@
 }
 
 .notice-detail__adjacent-row a {
+  min-width: 0;
   color: var(--color-text);
   text-decoration: none;
 }

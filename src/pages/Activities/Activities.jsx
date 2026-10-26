@@ -6,6 +6,7 @@ import { ACTIVITY_LATEST_YEAR, ACTIVITY_YEARS } from '../../constants/activities
 import ActivitiesSidebar from './ActivitiesSidebar'
 import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
+import { getPageWindow } from '../../utils/pagination'
 
 const PAGE_SIZE = 12
 
@@ -113,7 +114,7 @@ export default function Activities() {
                 >
                   ‹
                 </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                {getPageWindow(page, totalPages).map((num) => (
                   <button
                     key={num}
                     type="button"
