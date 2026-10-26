@@ -14,7 +14,7 @@ export default function NotFound() {
     <section className="not-found container">
       <EmptyState
         size="large"
-        title="찾으시는 페이지가 없습니다"
+        title="페이지를 찾을 수 없습니다"
         description="주소가 잘못 입력되었거나 페이지가 옮겨졌을 수 있어요."
         actions={[{ label: '홈으로 가기', to: '/' }]}
       />
