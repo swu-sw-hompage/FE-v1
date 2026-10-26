@@ -138,13 +138,6 @@
   border-radius: 8px;
 }
 
-/* 성격이 다른 필터 묶음(분류 / 임시저장)을 나란히 두되 서로 떨어뜨린다 */
-.admin-pill-filter-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
 .admin-pill-filter__btn {
   height: 36px;
   padding-inline: 16px;
