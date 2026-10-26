@@ -43,6 +43,19 @@ export const deleteNotice = (id) => apiClient.delete(`/admin/notices/${id}`)
 
 export const publishNotice = (id) => apiClient.patch(`/admin/notices/${id}/publish`)
 
+// 예약 게시: scheduledAt은 'YYYY-MM-DDTHH:mm' (한국 시간). 그 시각이 지나면 서버가 게시하고 알림 메일을 보낸다.
+export const scheduleNotice = (id, scheduledAt) =>
+  apiClient.put(`/admin/notices/${id}/schedule`, { scheduledAt })
+
+export const cancelNoticeSchedule = (id) => apiClient.delete(`/admin/notices/${id}/schedule`)
+
+// '2026.10.28 09:00' 형태
+export const formatScheduleTime = (value) => {
+  if (!value) return ''
+  const [date, time = ''] = String(value).split('T')
+  return `${date.replaceAll('-', '.')} ${time.slice(0, 5)}`
+}
+
 // 첨부파일 업로드: 응답 { name, url }을 attachments에 그대로 넣으면 된다.
 // client 기본 헤더가 JSON이라 multipart로 덮어써야 FormData가 JSON으로 바뀌지 않는다.
 export const uploadAttachment = (file) => {
