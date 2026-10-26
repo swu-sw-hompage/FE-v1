@@ -17,6 +17,9 @@
   inset: 0;
   width: 48.6%;
   height: 100%;
+  /* 사진 오른쪽이 흰 배경으로 자연스럽게 빠지도록 (기존 hero-home.jpg에 들어있던 처리를 CSS로) */
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 50%, rgba(0, 0, 0, 0.55) 75%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 50%, rgba(0, 0, 0, 0.55) 75%, transparent 100%);
 }
 
 .home__hero-bg {
@@ -92,12 +95,15 @@
 .home__hero-inner {
   position: relative;
   min-height: 520px;
+  /* 컨테이너가 사진 위 슬라이드 점을 덮지 않게, 클릭은 텍스트 영역만 받음 */
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
 .home__hero-text {
+  pointer-events: auto;
   width: 540px;
   max-width: 100%;
   display: flex;
