@@ -1,4 +1,5 @@
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import { ABOUT_SECTIONS } from '../../constants/aboutNav'
 import './About.css'
@@ -35,7 +36,7 @@ const MAJOR_INTRO = [
 export default function About() {
   return (
     <div className="about">
-      <PageHero photo title={['학과 소개']} />
+      <PageHero photo photoSrc={heroAbout} title={['학과 소개']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />
