@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
-import { getNoticeById, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import { getNoticeById, getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
+import EmptyState from '../../components/common/EmptyState'
 import MarkdownLite from '../../components/common/MarkdownLite'
 import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
+import './Notice.css'
 import './NoticeDetail.css'
 
 const FILTERS = [
@@ -18,18 +20,20 @@ export default function NoticeDetail() {
   const [searchParams] = useSearchParams()
   const [notice, setNotice] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(null)
+  const [reloadKey, setReloadKey] = useState(0)
+  const [recent, setRecent] = useState([])
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    setError('')
+    setError(null)
     getNoticeById(id)
       .then((result) => {
         if (!cancelled) setNotice(result)
       })
       .catch((err) => {
-        if (!cancelled) setError(err.message)
+        if (!cancelled) setError(err)
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -37,7 +41,25 @@ export default function NoticeDetail() {
     return () => {
       cancelled = true
     }
-  }, [id])
+  }, [id, reloadKey])
+
+  // 404거나 결과가 비어 있으면 '없는 글', 그 외 실패는 '불러오기 실패'로 본다
+  const notFound = !loading && ((!error && !notice) || error?.status === 404 || error?.status === 400)
+  const loadFailed = !loading && error && !notFound
+
+  // 없는 글일 때 바로 다른 글로 갈 수 있게 최근 공지 몇 개를 보여준다
+  useEffect(() => {
+    if (!notFound) return
+    let cancelled = false
+    getNotices({ page: 0, size: 4 })
+      .then((result) => {
+        if (!cancelled) setRecent(result?.content ?? [])
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [notFound])
 
   // 목록에서 넘어온 분류를 우선 사용하고, 홈 등에서 바로 들어온 경우엔 글의 분류를 따른다
   const filterParam = searchParams.get('filter')
@@ -86,11 +108,47 @@ export default function NoticeDetail() {
 
             {loading && <p className="notice__loading">불러오는 중...</p>}
 
-            {!loading && (error || !notice) && (
-              <div className="notice-detail__empty">
-                <p>{error || '존재하지 않는 공지사항입니다.'}</p>
-                <Link to={listHref}>← 목록으로</Link>
+            {notFound && (
+              <EmptyState
+                title="공지사항을 찾을 수 없습니다"
+                description="삭제되었거나 주소가 바뀌었을 수 있어요. 목록에서 다시 찾아봐 주세요."
+                actions={[
+                  { label: '목록으로 돌아가기', to: listHref },
+                  { label: '공지 알림 신청', to: '/notice/subscribe' },
+                ]}
+              />
+            )}
+
+            {notFound && recent.length > 0 && (
+              <div className="notice-detail__recent">
+                <p className="notice-detail__recent-title">최근 공지</p>
+                <ul className="notice__list">
+                  {recent.map((item) => (
+                    <li key={item.id}>
+                      <Link to={`/notice/${item.id}`}>
+                        {noticeCategoryLabel(item) && (
+                          <span className="notice__category">{noticeCategoryLabel(item)}</span>
+                        )}
+                        <span className="notice__title">{item.title}</span>
+                      </Link>
+                      <span className="notice__date">{formatNoticeDate(item.publishedAt ?? item.createdAt)}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            )}
+
+            {loadFailed && (
+              <EmptyState
+                icon="error"
+                code="ERROR"
+                title="공지사항을 불러오지 못했습니다"
+                description="일시적인 문제일 수 있어요. 잠시 후 다시 시도해 주세요."
+                actions={[
+                  { label: '다시 시도', onClick: () => setReloadKey((k) => k + 1) },
+                  { label: '목록으로 돌아가기', to: listHref },
+                ]}
+              />
             )}
 
             {!loading && notice && (
