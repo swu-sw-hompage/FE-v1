@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import heroHome from '../../assets/images/brand/hero-home.jpg'
+import heroLecture from '../../assets/images/brand/hero-slide-lecture.jpg'
+import heroLab from '../../assets/images/brand/hero-slide-lab.jpg'
+import heroCampus from '../../assets/images/brand/hero-slide-campus.jpg'
 import iconQuick1 from '../../assets/images/brand/icon-quick1.svg'
 import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
@@ -30,6 +32,59 @@ const noticeTime = (notice) => {
 const sortByLatest = (list) =>
   [...list].sort((a, b) => noticeTime(b) - noticeTime(a) || (b.id ?? 0) - (a.id ?? 0))
 
+// 메인 hero 배경 슬라이드 (강의실 → 실습실 → 캠퍼스 순으로 자동 전환)
+const HERO_SLIDES = [
+  { id: 'lecture', src: heroLecture, label: '소프트웨어융합학과 전공 수업' },
+  { id: 'lab', src: heroLab, label: '학과 실습실에서 함께 작업하는 학생들' },
+  { id: 'campus', src: heroCampus, label: '서울여대 캠퍼스 잔디밭의 학생들' },
+]
+const HERO_INTERVAL_MS = 5000
+
+// 일정 간격으로 다음 슬라이드로 넘김. paused면 멈추고, 사용자가 동작 줄이기를 켰으면 자동 전환 안 함
+function useHeroSlide(count, paused) {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (paused || count < 2) return undefined
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined
+    const timer = setInterval(() => setIndex((i) => (i + 1) % count), HERO_INTERVAL_MS)
+    return () => clearInterval(timer)
+  }, [count, paused, index])
+
+  return [index, setIndex]
+}
+
+function HeroSlides({ className, index }) {
+  return HERO_SLIDES.map((slide, i) => (
+    <img
+      key={slide.id}
+      className={`${className}${i === index ? ' is-active' : ''}`}
+      src={slide.src}
+      alt=""
+      aria-hidden={i !== index}
+      loading={i === 0 ? 'eager' : 'lazy'}
+      fetchPriority={i === 0 ? 'high' : undefined}
+    />
+  ))
+}
+
+function HeroDots({ className, index, onSelect }) {
+  return (
+    <div className={`home__hero-dots ${className ?? ''}`}>
+      {HERO_SLIDES.map((slide, i) => (
+        <button
+          key={slide.id}
+          type="button"
+          className={`home__hero-dot${i === index ? ' is-active' : ''}`}
+          aria-label={`${i + 1}번째 사진: ${slide.label}`}
+          aria-current={i === index ? 'true' : undefined}
+          onClick={() => onSelect(i)}
+        />
+      ))}
+    </div>
+  )
+}
+
 const NOTICE_FILTERS = [
   { key: 'all', label: '전체' },
   { key: 'academic', label: '학사' },
@@ -40,6 +95,8 @@ export default function Home() {
   const [notices, setNotices] = useState([])
   const [projects, setProjects] = useState([])
   const [noticeFilter, setNoticeFilter] = useState('all')
+  const [heroPaused, setHeroPaused] = useState(false)
+  const [heroIndex, setHeroIndex] = useHeroSlide(HERO_SLIDES.length, heroPaused)
 
   useEffect(() => {
     getNotices({
@@ -61,8 +118,9 @@ export default function Home() {
   return (
     <div className="home">
       <section className="home__hero-mobile">
-        <img className="home__hero-mobile-bg" src={heroHome} alt="" />
+        <HeroSlides className="home__hero-mobile-bg" index={heroIndex} />
         <div className="home__hero-mobile-gradient" />
+        <HeroDots className="home__hero-dots--mobile" index={heroIndex} onSelect={setHeroIndex} />
         <div className="home__hero-mobile-text">
           <span>기술로 문제를 정의하고,</span>
           <span>세상을 바꾸는 인재를 키웁니다</span>
@@ -150,8 +208,15 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="home__hero">
-        <img className="home__hero-bg" src={heroHome} alt="" />
+      <section
+        className="home__hero"
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+      >
+        <div className="home__hero-media">
+          <HeroSlides className="home__hero-bg" index={heroIndex} />
+          <HeroDots index={heroIndex} onSelect={setHeroIndex} />
+        </div>
         <div className="home__hero-fade" />
         <div className="container home__hero-inner">
           <div className="home__hero-text">
