@@ -23,6 +23,14 @@ export default function Notice() {
   const submittedKeyword = searchParams.get('q') ?? ''
   const submittedScope = searchParams.get('scope') ?? 'title-body'
 
+  // 상세로 넘어갈 때 현재 분류·페이지·검색 상태를 그대로 넘겨서
+  // 상세의 ON THIS PAGE 활성 항목과 '목록으로' 복귀 위치를 유지한다
+  const listQuery = new URLSearchParams({ filter, page: String(page) })
+  if (submittedKeyword) {
+    listQuery.set('q', submittedKeyword)
+    listQuery.set('scope', submittedScope)
+  }
+
   const [scope, setScope] = useState(submittedScope)
   const [keyword, setKeyword] = useState(submittedKeyword)
   const [notices, setNotices] = useState([])
@@ -151,7 +159,7 @@ export default function Notice() {
               <ul className="notice__list">
                 {notices.map((notice) => (
                   <li key={notice.id}>
-                    <Link to={`/notice/${notice.id}`}>
+                    <Link to={`/notice/${notice.id}?${listQuery}`}>
                       {notice.pinned && <span className="notice__pin">필독</span>}
                       <span className="notice__category">{noticeCategoryLabel(notice)}</span>
                       <span className="notice__title">{notice.title}</span>

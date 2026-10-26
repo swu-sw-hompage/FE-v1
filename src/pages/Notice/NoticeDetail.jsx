@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
 import { getNoticeById, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
@@ -15,6 +15,7 @@ const FILTERS = [
 
 export default function NoticeDetail() {
   const { id } = useParams()
+  const [searchParams] = useSearchParams()
   const [notice, setNotice] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -38,6 +39,26 @@ export default function NoticeDetail() {
     }
   }, [id])
 
+  // 목록에서 넘어온 분류를 우선 사용하고, 홈 등에서 바로 들어온 경우엔 글의 분류를 따른다
+  const filterParam = searchParams.get('filter')
+  const activeFilter = FILTERS.some((f) => f.key === filterParam)
+    ? filterParam
+    : notice?.employmentNotice
+      ? 'employment'
+      : notice?.academicNotice
+        ? 'academic'
+        : 'all'
+
+  // 이전/다음글 이동 시에도 같은 분류 상태 유지
+  const detailQuery = searchParams.toString() || `filter=${activeFilter}`
+
+  // '목록으로'는 들어왔던 분류·페이지·검색 상태로 복귀
+  const listParams = new URLSearchParams(searchParams)
+  if (!listParams.get('filter')) listParams.set('filter', activeFilter)
+  if (listParams.get('filter') === 'all') listParams.delete('filter')
+  const listQuery = listParams.toString()
+  const listHref = listQuery ? `/notice?${listQuery}` : '/notice'
+
   return (
     <div className="notice">
       <PageHero photo photoSrc={heroNotice} title={['공지사항']} />
@@ -47,7 +68,7 @@ export default function NoticeDetail() {
           <p className="chapter-nav__label">ON THIS PAGE</p>
           <ul className="chapter-nav__list">
             {FILTERS.map((f) => (
-              <li key={f.key} className={f.key === 'all' ? 'is-active' : ''}>
+              <li key={f.key} className={f.key === activeFilter ? 'is-active' : ''}>
                 <span className="chapter-nav__bar" />
                 <Link to={f.key === 'all' ? '/notice' : `/notice?filter=${f.key}`}>{f.label}</Link>
               </li>
@@ -64,7 +85,7 @@ export default function NoticeDetail() {
             {!loading && (error || !notice) && (
               <div className="notice-detail__empty">
                 <p>{error || '존재하지 않는 공지사항입니다.'}</p>
-                <Link to="/notice">← 목록으로</Link>
+                <Link to={listHref}>← 목록으로</Link>
               </div>
             )}
 
@@ -115,7 +136,7 @@ export default function NoticeDetail() {
                   <div className="notice-detail__adjacent-row">
                     <span className="notice-detail__adjacent-label">이전글</span>
                     {notice.previousPost ? (
-                      <Link to={`/notice/${notice.previousPost.id}`}>{notice.previousPost.title}</Link>
+                      <Link to={`/notice/${notice.previousPost.id}?${detailQuery}`}>{notice.previousPost.title}</Link>
                     ) : (
                       <span className="notice-detail__adjacent-empty">이전글이 없습니다.</span>
                     )}
@@ -124,7 +145,7 @@ export default function NoticeDetail() {
                   <div className="notice-detail__adjacent-row">
                     <span className="notice-detail__adjacent-label">다음글</span>
                     {notice.nextPost ? (
-                      <Link to={`/notice/${notice.nextPost.id}`}>{notice.nextPost.title}</Link>
+                      <Link to={`/notice/${notice.nextPost.id}?${detailQuery}`}>{notice.nextPost.title}</Link>
                     ) : (
                       <span className="notice-detail__adjacent-empty">다음글이 없습니다.</span>
                     )}
@@ -132,7 +153,7 @@ export default function NoticeDetail() {
                 </div>
 
                 <div className="notice-detail__actions">
-                  <Link to="/notice" className="notice-detail__back-btn">
+                  <Link to={listHref} className="notice-detail__back-btn">
                     목록으로
                   </Link>
                 </div>
