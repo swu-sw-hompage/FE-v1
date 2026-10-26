@@ -1,4 +1,5 @@
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import { ABOUT_SECTIONS } from '../../constants/aboutNav'
 import './EducationGoals.css'
@@ -30,7 +31,7 @@ const TALENTS = [
 export default function EducationGoals() {
   return (
     <div className="education-goals">
-      <PageHero photo title={['교육 목표 및 인재상']} />
+      <PageHero photo photoSrc={heroAbout} title={['교육 목표 및 인재상']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />

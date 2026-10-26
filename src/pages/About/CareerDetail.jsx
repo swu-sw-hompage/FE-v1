@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import SegmentTabs from '../../components/common/SegmentTabs'
 import InfoRows from '../../components/common/InfoRows'
@@ -37,7 +38,7 @@ export default function CareerDetail() {
 
   return (
     <div className="career-detail">
-      <PageHero photo title={['졸업 후 진로']} />
+      <PageHero photo photoSrc={heroAbout} title={['졸업 후 진로']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />

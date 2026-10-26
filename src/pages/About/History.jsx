@@ -1,4 +1,5 @@
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import { ABOUT_SECTIONS } from '../../constants/aboutNav'
 import './History.css'
@@ -31,7 +32,7 @@ const HISTORY = [
 export default function History() {
   return (
     <div className="history">
-      <PageHero photo title={['연혁']} />
+      <PageHero photo photoSrc={heroAbout} title={['연혁']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />

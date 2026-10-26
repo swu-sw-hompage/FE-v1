@@ -1,4 +1,5 @@
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import { ABOUT_SECTIONS } from '../../constants/aboutNav'
 import './Location.css'
@@ -35,7 +36,7 @@ const TRANSPORT = [
 export default function Location() {
   return (
     <div className="location">
-      <PageHero photo title={['찾아오시는 길']} />
+      <PageHero photo photoSrc={heroAbout} title={['찾아오시는 길']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />
