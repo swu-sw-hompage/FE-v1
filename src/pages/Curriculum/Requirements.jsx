@@ -104,11 +104,15 @@ export default function Requirements() {
 
             <InfoRows rows={cohortId === 'from2017' ? CERTIFICATION_STEPS : ADDITIONAL} />
             {cohortId === 'from2017' && (
-              <div className="requirements__official-note">
-                <strong>2026학년도 공식 안내</strong>
-                <p>2016학년도 이전 입학생, 외국인 학생 또는 학과 교수회의에서 특별한 사유로 인정한 경우 예외 적용 대상이 될 수 있습니다. 적용 여부는 학과사무실에 확인해 주세요.</p>
-                <p>담당교수는 통상 본인이 수강한 「프로젝트종합설계 I·II」 담당교수입니다.</p>
-                <a href="/notice/3">2026학년도 학과 졸업인증 공지 자세히 보기 →</a>
+              <div className="requirements__guru requirements__guru--after-steps">
+                <p className="requirements__guru-title">졸업인증 참고 사항</p>
+                <div className="requirements__guru-divider" />
+                <p className="requirements__guru-steps">
+                  담당교수는 통상 본인이 수강한 「프로젝트종합설계 I·II」 담당교수입니다.
+                </p>
+                <p className="requirements__guru-note">
+                  {'※ 2016학년도 이전 입학생, 외국인 학생, 학과 교수회의에서 특별한 사유로 인정한 경우 예외 적용 대상이 될 수 있습니다. 적용 여부는 학과사무실에 확인해 주세요.'}
+                </p>
               </div>
             )}
           </section>
