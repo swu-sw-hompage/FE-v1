@@ -3,6 +3,20 @@ import { apiClient } from './client'
 // 익명 방문 통계. 브라우저마다 랜덤 ID 하나만 localStorage에 두고, 개인을 식별하는 정보는 보내지 않는다.
 const VISITOR_KEY = 'swu_visitor_id'
 const VISIT_TRACKED_KEY = 'swu_visit_tracked'
+const QA_KEY = 'swu_qa'
+
+// 개발자 브라우저는 통계에서 뺀다. 아무 페이지에 ?qa=1을 붙여 한 번 열면 이 브라우저는 계속 제외되고,
+// ?qa=0으로 열면 다시 집계된다.
+const isQaBrowser = () => {
+  try {
+    const qa = new URLSearchParams(window.location.search).get('qa')
+    if (qa === '1') localStorage.setItem(QA_KEY, '1')
+    if (qa === '0') localStorage.removeItem(QA_KEY)
+    return localStorage.getItem(QA_KEY) === '1'
+  } catch {
+    return false
+  }
+}
 
 const newId = () =>
   crypto.randomUUID?.() ??
@@ -39,7 +53,7 @@ const visitSource = () => {
 
 const send = (event) => {
   // 로컬 개발 중 방문은 운영 통계에 섞이지 않게 보내지 않는다.
-  if (import.meta.env.DEV) return
+  if (import.meta.env.DEV || isQaBrowser()) return
   apiClient.post('/analytics/events', { ...event, visitorId: visitorId() }).catch(() => {})
 }
 
