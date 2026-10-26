@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import '../../components/common/ChapterNav.css'
 import { requestVerificationCode, verifyCode, subscribe, unsubscribe } from '../../api/notification'
+import { trackSubscribePageView } from '../../api/analytics'
 import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import './NoticeSubscribe.css'
 
@@ -63,6 +64,12 @@ export default function NoticeSubscribe() {
       setUnsubscribing(false)
     }
   }
+
+  // 메일의 해지 링크로 들어온 경우는 신청 페이지 조회로 세지 않는다.
+  useEffect(() => {
+    if (!unsubscribeEmail) trackSubscribePageView()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (!showToast) return undefined

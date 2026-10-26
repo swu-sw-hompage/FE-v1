@@ -24,6 +24,7 @@ import AdminCapstoneList from '../pages/Admin/AdminCapstoneList'
 import AdminSubscribers from '../pages/Admin/AdminSubscribers'
 import NoticeWrite from '../pages/Admin/NoticeWrite'
 import CapstoneWrite from '../pages/Admin/CapstoneWrite'
+import DevStats from '../pages/Dev/DevStats'
 import RequireAdmin from './RequireAdmin'
 
 export const router = createBrowserRouter([
@@ -52,6 +53,8 @@ export const router = createBrowserRouter([
     ],
   },
   { path: '/login', element: <Login /> },
+  // 개발자용 통계. 메뉴에는 없고 주소로만 들어간다 (접근 키 필요).
+  { path: '/dev/stats', element: <DevStats /> },
   { path: '/admin', element: <RequireAdmin><Dashboard /></RequireAdmin> },
   { path: '/admin/accounts', element: <RequireAdmin><AdminAccounts /></RequireAdmin> },
   { path: '/admin/subscribers', element: <RequireAdmin><AdminSubscribers /></RequireAdmin> },
