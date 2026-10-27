@@ -21,6 +21,8 @@ const FILTERS = [
 ]
 
 const PAGE_SIZE = 10
+// 임시저장 탭 옆 개수 표시용. 임시저장 글이 이보다 많아도 개수는 정확하고, 예약 개수만 이 안에서 센다.
+const DRAFT_COUNT_FETCH_SIZE = 100
 
 export default function AdminNoticeList() {
   const [filter, setFilter] = useState('all')
@@ -34,6 +36,7 @@ export default function AdminNoticeList() {
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
   const [toast, setToast] = useState('')
+  const [draftCounts, setDraftCounts] = useState({ drafts: 0, scheduled: 0 })
   const isDraftTab = filter === 'draft'
 
   useEffect(() => {
@@ -65,6 +68,21 @@ export default function AdminNoticeList() {
     }
   }, [filter, isDraftTab, submittedKeyword, page])
 
+  // 들어오자마자 이어 쓸 글·예약된 글이 있는지 보이도록 임시저장 탭에 개수를 붙인다.
+  const loadDraftCounts = () =>
+    getAdminNotices({ status: 'DRAFT', page: 0, size: DRAFT_COUNT_FETCH_SIZE })
+      .then((result) =>
+        setDraftCounts({
+          drafts: result?.totalElements ?? 0,
+          scheduled: (result?.content ?? []).filter((n) => n.scheduledAt).length,
+        }),
+      )
+      .catch(() => {})
+
+  useEffect(() => {
+    loadDraftCounts()
+  }, [])
+
   const runSearch = () => {
     setSubmittedKeyword(keyword.trim())
     setPage(1)
@@ -78,6 +96,7 @@ export default function AdminNoticeList() {
       setNotices((prev) => prev.filter((n) => n.id !== deleteTarget.id))
       setToast('공지사항이 삭제되었습니다.')
       setDeleteTarget(null)
+      if (deleteTarget.status === 'DRAFT') loadDraftCounts()
     } catch (err) {
       setError(err.message)
     } finally {
@@ -111,6 +130,14 @@ export default function AdminNoticeList() {
                 }}
               >
                 {f.label}
+                {f.key === 'draft' && draftCounts.drafts > 0 && (
+                  <span className="admin-pill-filter__count">{draftCounts.drafts}</span>
+                )}
+                {f.key === 'draft' && draftCounts.scheduled > 0 && (
+                  <span className="admin-pill-filter__count admin-pill-filter__count--sub">
+                    예약 {draftCounts.scheduled}
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -167,7 +194,11 @@ export default function AdminNoticeList() {
                       {noticeCategoryLabel(notice)}
                     </span>
                   </td>
-                  <td className="admin-table__title">{notice.title}</td>
+                  <td className="admin-table__title">
+                    <Link to={`/admin/notices/${notice.id}/edit`} className="admin-table__link" title={notice.title}>
+                      {notice.title}
+                    </Link>
+                  </td>
                   <td>
                     <span
                       className={

@@ -8,7 +8,7 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   // RequireAdmin이 넘겨준 정보: 원래 가려던 관리자 화면, 세션 만료로 튕겨났는지 여부
-  const redirectTo = location.state?.from?.startsWith('/admin') ? location.state.from : '/admin'
+  const redirectTo = location.state?.from?.startsWith('/admin') ? location.state.from : '/admin/notices'
   const sessionExpired = Boolean(location.state?.expired)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

@@ -3,7 +3,6 @@ import { getAdminEmail, logout } from '../api/auth'
 import './AdminLayout.css'
 
 const NAV_ITEMS = [
-  { label: '대시보드', to: '/admin' },
   { label: '공지사항', to: '/admin/notices' },
   { label: '졸업프로젝트', to: '/admin/capstone' },
   { label: '메인 사진', to: '/admin/hero' },
@@ -21,8 +20,7 @@ export default function AdminLayout({ eyebrow, title, description, breadcrumb, h
     navigate('/')
   }
 
-  const isActive = (to) =>
-    to === '/admin' ? location.pathname === '/admin' : location.pathname.startsWith(to)
+  const isActive = (to) => location.pathname.startsWith(to)
 
   return (
     <div className="admin">
