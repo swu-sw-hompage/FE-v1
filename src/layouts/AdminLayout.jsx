@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { label: '대시보드', to: '/admin' },
   { label: '공지사항', to: '/admin/notices' },
   { label: '졸업프로젝트', to: '/admin/capstone' },
+  { label: '메인 사진', to: '/admin/hero' },
   { label: '알림 신청자', to: '/admin/subscribers' },
   { label: '관리자 계정', to: '/admin/accounts' },
 ]
