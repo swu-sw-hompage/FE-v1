@@ -12,8 +12,8 @@ export default function Footer() {
             <p>TEL: 02-970-5921, FAX: 02-978-5981</p>
           </div>
           <p className="footer__copyright">
-            © {new Date().getFullYear()} Seoul Women&apos;s University Department of Software. All
-            rights reserved.
+            © {new Date().getFullYear()} Seoul Women&apos;s University Department of Computer Science &amp;
+            Engineering. All rights reserved.
           </p>
         </div>
         <div className="footer__divider" />

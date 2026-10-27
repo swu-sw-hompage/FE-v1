@@ -39,6 +39,13 @@
   display: block;
 }
 
+/* 학과명이 로고 오른쪽으로 빠지면서 가로가 길어져, 태블릿 폭에서 메뉴가 줄바꿈되지 않도록 축소 */
+@media (max-width: 1040px) {
+  .header__logo-full {
+    height: 48px;
+  }
+}
+
 .header__nav {
   display: flex;
   gap: 32px;
