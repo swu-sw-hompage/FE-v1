@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import EmptyState from '../../components/common/EmptyState'
 import ActivitiesSidebar from './ActivitiesSidebar'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
-import { DEPARTMENT_EVENTS } from '../../data/departmentEvents'
+import { getDepartmentEvents } from '../../api/event'
 import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
 import './DepartmentEvents.css'
@@ -21,7 +22,27 @@ const splitDate = (date) => {
 // 몇 개까지 펼쳤는지는 ?more= 쿼리에 남겨서 상세에서 돌아와도 그 자리 그대로 보이게 한다.
 export default function DepartmentEvents() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const events = DEPARTMENT_EVENTS
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    getDepartmentEvents()
+      .then((page) => {
+        if (!cancelled) setEvents(page.content)
+      })
+      .catch(() => {
+        if (!cancelled) setError('행사 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const shown = Math.max(PAGE_SIZE, Number(searchParams.get('more')) || PAGE_SIZE)
   const visible = events.slice(0, shown)
   const remaining = events.length - visible.length
@@ -50,7 +71,13 @@ export default function DepartmentEvents() {
           <section className="page-section">
             <h2>학과 행사</h2>
 
-            {events.length === 0 ? (
+            {loading ? (
+              <p className="devents__status">불러오는 중...</p>
+            ) : error ? (
+              <p className="devents__status" role="alert">
+                {error}
+              </p>
+            ) : events.length === 0 ? (
               <EmptyState
                 title="등록된 학과 행사가 없습니다"
                 description="행사 소식이 올라오면 이곳에서 사진과 함께 볼 수 있어요."

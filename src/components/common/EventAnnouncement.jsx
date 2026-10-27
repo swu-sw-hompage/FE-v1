@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getRecentEvent, formatEventDate } from '../../data/departmentEvents'
+import { formatEventDate } from '../../api/event'
+import useRecentEvent from '../../hooks/useRecentEvent'
 import './EventAnnouncement.css'
 
 const DISMISS_KEY = 'swu_dismissed_event'
@@ -14,10 +15,10 @@ const readDismissed = () => {
 }
 
 // 새 학과 행사 알림 띠 (홈 헤더 바로 아래).
-// 올린 날부터 7일(HOME_EVENT_VISIBLE_DAYS) 동안만 보이고 저절로 사라진다.
+// 처음 게시한 날부터 7일(HOME_EVENT_VISIBLE_DAYS) 동안만 보이고 저절로 사라진다.
 // 닫으면 그 행사는 이 브라우저에서 다시 안 뜨고, 다음 행사가 올라오면 다시 뜬다.
 export default function EventAnnouncement() {
-  const [event] = useState(() => getRecentEvent())
+  const event = useRecentEvent()
   const [dismissedId, setDismissedId] = useState(readDismissed)
 
   if (!event || dismissedId === String(event.id)) return null

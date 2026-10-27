@@ -4,7 +4,7 @@ import PageHero from '../../components/common/PageHero'
 import EmptyState from '../../components/common/EmptyState'
 import ActivitiesSidebar from './ActivitiesSidebar'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
-import { getDepartmentEvent, formatEventDate } from '../../data/departmentEvents'
+import { getDepartmentEventById, formatEventDate } from '../../api/event'
 import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
 import './DepartmentEvents.css'
@@ -74,8 +74,33 @@ function PhotoViewer({ photos, index, title, onClose, onMove }) {
 // 모양은 졸업프로젝트 상세(activity-detail)와 맞춘다.
 export default function DepartmentEventDetail() {
   const { id } = useParams()
-  const event = getDepartmentEvent(id)
+  const [event, setEvent] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [viewing, setViewing] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setLoadError(false)
+    setViewing(null)
+    getDepartmentEventById(id)
+      .then((result) => {
+        if (!cancelled) setEvent(result)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        setEvent(null)
+        // 404(없는 글·임시저장 글)는 '찾을 수 없음', 그 외는 불러오기 실패로 구분
+        if (err.status !== 404) setLoadError(true)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
 
   const photos = event?.photos ?? []
   const move = (step) => setViewing((i) => (i + step + photos.length) % photos.length)
@@ -100,7 +125,15 @@ export default function DepartmentEventDetail() {
           <section className="page-section">
             <h2 className="activities__page-title">학과 행사</h2>
 
-            {!event ? (
+            {loading ? (
+              <p className="devents__status">불러오는 중...</p>
+            ) : loadError ? (
+              <EmptyState
+                title="행사를 불러오지 못했습니다"
+                description="잠시 후 다시 시도해 주세요."
+                actions={[{ label: '목록으로 돌아가기', to: '/activities/events' }]}
+              />
+            ) : !event ? (
               <EmptyState
                 title="행사를 찾을 수 없습니다"
                 description="삭제되었거나 주소가 바뀌었을 수 있어요. 목록에서 다시 찾아봐 주세요."
