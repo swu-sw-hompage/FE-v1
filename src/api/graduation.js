@@ -12,6 +12,9 @@ export const createGraduationProject = (payload) => apiClient.post('/admin/gradu
 export const updateGraduationProject = (id, payload) =>
   apiClient.put(`/admin/graduation-projects/${id}`, payload)
 
+// 졸업작품이 등록된 연도 목록 (임시저장 포함, 최신순). 직접 입력한 새 연도도 등록 후 여기에 포함된다.
+export const getGraduationProjectYears = () => apiClient.get('/admin/graduation-projects/years')
+
 export const deleteGraduationProject = (id) => apiClient.delete(`/admin/graduation-projects/${id}`)
 
 // 졸업작품은 생성/수정 시 status(DRAFT|PUBLISHED)를 함께 보내는 방식이라 별도 게시 API가 없다.
