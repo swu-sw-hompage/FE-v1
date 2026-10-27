@@ -443,6 +443,10 @@
   width: 220px;
 }
 
+.admin-field .admin-field__extra {
+  margin-top: 8px;
+}
+
 .admin-field--xs {
   flex: none;
   width: 160px;

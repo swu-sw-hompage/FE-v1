@@ -1,15 +1,25 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
-import { createGraduationProject, updateGraduationProject, getGraduationProjectById } from '../../api/graduation'
+import {
+  createGraduationProject,
+  updateGraduationProject,
+  getGraduationProjectById,
+  getGraduationProjectYears,
+} from '../../api/graduation'
 import { ADMIN_ACTIVITY_YEARS } from '../../constants/activities'
 import './Admin.css'
+
+const CUSTOM_YEAR = 'custom'
+const isValidYear = (value) => /^\d{4}$/.test(value) && Number(value) >= 2000 && Number(value) <= 2099
 
 export default function CapstoneWrite() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
   const [year, setYear] = useState(String(ADMIN_ACTIVITY_YEARS[0] ?? ''))
+  const [savedYears, setSavedYears] = useState([])
+  const [customYear, setCustomYear] = useState(false)
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
   const [teamName, setTeamName] = useState('')
@@ -21,6 +31,17 @@ export default function CapstoneWrite() {
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  // 기본 연도 목록에 없던 연도도 한 번 직접 입력해 등록하면 다음부터 목록에 나온다.
+  useEffect(() => {
+    getGraduationProjectYears()
+      .then((result) => setSavedYears(result ?? []))
+      .catch(() => {})
+  }, [])
+
+  const yearOptions = [
+    ...new Set([...ADMIN_ACTIVITY_YEARS, ...savedYears, ...(customYear || !year ? [] : [Number(year)])]),
+  ].sort((a, b) => b - a)
 
   useEffect(() => {
     if (!isEdit) return undefined
@@ -53,6 +74,10 @@ export default function CapstoneWrite() {
   const handleSubmit = async (targetStatus) => {
     if (!year || !title.trim() || !teamName.trim() || !members.trim()) {
       setError('졸업연도, 작품명, 팀명, 팀원을 입력해주세요.')
+      return
+    }
+    if (!isValidYear(year)) {
+      setError('졸업연도는 2026처럼 4자리 숫자로 입력해주세요.')
       return
     }
     setError('')
@@ -112,13 +137,33 @@ export default function CapstoneWrite() {
               <span>
                 졸업연도<em>*</em>
               </span>
-              <select value={year} onChange={(e) => setYear(e.target.value)}>
-                {ADMIN_ACTIVITY_YEARS.map((y) => (
+              <select
+                value={customYear ? CUSTOM_YEAR : year}
+                onChange={(e) => {
+                  const custom = e.target.value === CUSTOM_YEAR
+                  setCustomYear(custom)
+                  setYear(custom ? '' : e.target.value)
+                }}
+              >
+                {yearOptions.map((y) => (
                   <option key={y} value={y}>
                     {y}
                   </option>
                 ))}
+                <option value={CUSTOM_YEAR}>직접 입력</option>
               </select>
+              {customYear && (
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={4}
+                  placeholder="예: 2026"
+                  className="admin-field__extra"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value.replace(/\D/g, ''))}
+                  autoFocus
+                />
+              )}
             </label>
             <label className="admin-field admin-field--grow">
               <span>
