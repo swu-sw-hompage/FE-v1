@@ -5,48 +5,6 @@
   width: 220px;
 }
 
-.activities__sidebar-label {
-  margin: 0 0 24px;
-  font-family: var(--font-pretendard);
-  font-weight: 600;
-  font-size: 11px;
-  color: var(--color-text-faint);
-}
-
-.activities__year-nav {
-  display: flex;
-  flex-direction: column;
-}
-
-.activities__year-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 38px;
-  font-family: var(--font-pretendard);
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  text-decoration: none;
-}
-
-.activities__year-rail {
-  flex-shrink: 0;
-  width: 1px;
-  height: 18px;
-  background: var(--color-border);
-}
-
-.activities__year-item--active {
-  color: var(--color-primary);
-}
-
-.activities__year-item--active .activities__year-rail {
-  width: 3px;
-  height: 24px;
-  border-radius: 1.5px;
-  background: var(--color-primary);
-}
-
 .activities__project-grid {
   display: grid;
   /* 고정 315px 3열이면 본문 폭(최대 940px)보다 넓어져 가로 넘침 → 폭에 맞춰 줄어들고, 좁으면 2열로 */
@@ -451,4 +409,9 @@
   .activities__pagination {
     gap: 4px;
   }
+}
+
+/* 사이드바는 ChapterNav 모양을 그대로 쓰고, 고정(sticky)은 바깥 aside가 맡는다 */
+.activities__sidebar .chapter-nav {
+  position: static;
 }

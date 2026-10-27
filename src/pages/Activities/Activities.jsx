@@ -51,7 +51,10 @@ export default function Activities() {
 
       <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
         <Link to={`/activities/${activeYear}`} className="activities__mobile-tab is-active">
-          학생활동
+          졸업프로젝트
+        </Link>
+        <Link to="/activities/events" className="activities__mobile-tab">
+          학과 행사
         </Link>
       </nav>
 

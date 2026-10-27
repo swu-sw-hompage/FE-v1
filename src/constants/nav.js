@@ -38,10 +38,13 @@ export const MEGA_MENU_COLUMNS = [
   {
     key: '/activities',
     title: '학생활동',
-    links: ACTIVITY_YEARS.map((year) => ({
-      to: `/activities/${year}`,
-      label: `${year}년도 졸업프로젝트`,
-    })),
+    links: [
+      { to: '/activities/events', label: '학과 행사' },
+      ...ACTIVITY_YEARS.map((year) => ({
+        to: `/activities/${year}`,
+        label: `${year}년도 졸업프로젝트`,
+      })),
+    ],
   },
   {
     key: '/notice',
@@ -58,6 +61,12 @@ export const MEGA_MENU_COLUMNS = [
 // (연도 선택은 학생활동 페이지 안의 셀렉트에서 한다)
 export const MOBILE_MENU_COLUMNS = MEGA_MENU_COLUMNS.map((column) =>
   column.key === '/activities'
-    ? { ...column, links: [{ to: `/activities/${ACTIVITY_LATEST_YEAR}`, label: '졸업프로젝트' }] }
+    ? {
+        ...column,
+        links: [
+          { to: '/activities/events', label: '학과 행사' },
+          { to: `/activities/${ACTIVITY_LATEST_YEAR}`, label: '졸업프로젝트' },
+        ],
+      }
     : column,
 )
