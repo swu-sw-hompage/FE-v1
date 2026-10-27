@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
 import ActivitiesSidebar from './ActivitiesSidebar'
@@ -7,10 +8,76 @@ import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
 import './DepartmentEvents.css'
 
-// 학과 행사 상세 — 제목·날짜·소개와 사진 모음. 모양은 졸업프로젝트 상세(activity-detail)와 맞춘다.
+// 사진 크게 보기. Esc·바깥 클릭으로 닫고, ←/→로 넘긴다.
+function PhotoViewer({ photos, index, title, onClose, onMove }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') onMove(1)
+      if (e.key === 'ArrowLeft') onMove(-1)
+    }
+    window.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose, onMove])
+
+  return (
+    <div className="devent-viewer" role="dialog" aria-modal="true" aria-label={`${title} 사진`} onClick={onClose}>
+      <button type="button" className="devent-viewer__close" onClick={onClose} aria-label="닫기">
+        ×
+      </button>
+      {photos.length > 1 && (
+        <button
+          type="button"
+          className="devent-viewer__nav devent-viewer__nav--prev"
+          onClick={(e) => {
+            e.stopPropagation()
+            onMove(-1)
+          }}
+          aria-label="이전 사진"
+        >
+          ‹
+        </button>
+      )}
+      <img
+        className="devent-viewer__img"
+        src={photos[index]}
+        alt={`${title} 사진 ${index + 1}`}
+        onClick={(e) => e.stopPropagation()}
+      />
+      {photos.length > 1 && (
+        <button
+          type="button"
+          className="devent-viewer__nav devent-viewer__nav--next"
+          onClick={(e) => {
+            e.stopPropagation()
+            onMove(1)
+          }}
+          aria-label="다음 사진"
+        >
+          ›
+        </button>
+      )}
+      <p className="devent-viewer__count">
+        {index + 1} / {photos.length}
+      </p>
+    </div>
+  )
+}
+
+// 학과 행사 상세 — 글(제목·날짜·소개·본문)이 먼저, 사진은 같은 크기 썸네일로 모아 보여주고 누르면 크게 본다.
+// 모양은 졸업프로젝트 상세(activity-detail)와 맞춘다.
 export default function DepartmentEventDetail() {
   const { id } = useParams()
   const event = getDepartmentEvent(id)
+  const [viewing, setViewing] = useState(null)
+
+  const photos = event?.photos ?? []
+  const move = (step) => setViewing((i) => (i + step + photos.length) % photos.length)
 
   return (
     <div className="activities">
@@ -41,24 +108,34 @@ export default function DepartmentEventDetail() {
               <div className="activity-detail__article">
                 <div className="activity-detail__header">
                   <p className="activity-detail__title">{event.title}</p>
-                  <p className="activity-detail__subtitle">
-                    {formatEventDate(event.date)} · 사진 {event.photos.length}장
-                  </p>
+                  <p className="activity-detail__subtitle">{formatEventDate(event.date)}</p>
                   <div className="activity-detail__divider" />
                 </div>
 
                 {event.summary && <p className="activity-detail__summary">{event.summary}</p>}
 
-                {event.photos.length > 0 && (
-                  <ul className="devent-photos">
-                    {event.photos.map((src, i) => (
-                      <li key={src}>
-                        <a href={src} target="_blank" rel="noreferrer" aria-label={`사진 ${i + 1} 크게 보기`}>
-                          <img src={src} alt={`${event.title} 사진 ${i + 1}`} loading={i < 4 ? 'eager' : 'lazy'} />
-                        </a>
-                      </li>
+                {event.content && (
+                  <div className="activity-detail__body">
+                    {event.content.split('\n').map((line, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <p key={i}>{line}</p>
                     ))}
-                  </ul>
+                  </div>
+                )}
+
+                {photos.length > 0 && (
+                  <div className="devent-gallery">
+                    <p className="devent-gallery__label">사진 {photos.length}장</p>
+                    <ul className="devent-photos">
+                      {photos.map((src, i) => (
+                        <li key={src}>
+                          <button type="button" onClick={() => setViewing(i)} aria-label={`사진 ${i + 1} 크게 보기`}>
+                            <img src={src} alt="" loading={i < 6 ? 'eager' : 'lazy'} />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
 
                 <div className="activity-detail__actions">
@@ -71,6 +148,16 @@ export default function DepartmentEventDetail() {
           </section>
         </main>
       </div>
+
+      {viewing !== null && photos.length > 0 && (
+        <PhotoViewer
+          photos={photos}
+          index={viewing}
+          title={event.title}
+          onClose={() => setViewing(null)}
+          onMove={move}
+        />
+      )}
     </div>
   )
 }
