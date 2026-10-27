@@ -4,10 +4,6 @@
   padding: 0;
 }
 
-.requirements__list--no-guru {
-  margin-bottom: 100px;
-}
-
 .requirements__list li {
   display: flex;
   gap: 20px;
@@ -37,6 +33,11 @@
   background: #fafafa;
   border-radius: 4px;
   padding: 24px;
+}
+
+/* 바로 아래 박스가 이어질 때 간격만 좁힘 */
+.requirements__guru--stacked {
+  margin-bottom: 12px;
 }
 
 /* 졸업인증 신청 절차 아래 참고 박스 — 섹션 끝이라 아래 여백 대신 위 여백 */
@@ -83,10 +84,6 @@
     border-top: 1px solid #e5e5e8;
   }
 
-  .requirements__list--no-guru {
-    margin-bottom: 0;
-  }
-
   .requirements__list li {
     gap: 12px;
     padding: 16px 0;
@@ -112,6 +109,10 @@
     padding: 18px;
   }
 
+  .requirements__guru--stacked {
+    margin-bottom: 10px;
+  }
+
   .requirements__guru-title {
     font-size: 15px;
     color: #1f1f21;
@@ -133,17 +134,4 @@
     color: #7a7a82;
   }
 
-}
-
-
-/* 종전 학번별 안내는 유지하고 최신 졸업인증 공지만 추가 표시 */
-.requirements__historical-note {
-  margin: -18px 0 36px;
-  font-size: 13px;
-  line-height: 1.75;
-  color: var(--color-text-secondary);
-}
-
-@media (max-width: 700px) {
-  .requirements__historical-note { margin: 16px 0 24px; }
 }
