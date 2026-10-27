@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import { legacyLandingPath } from '../utils/legacyRedirect'
 
 // 익명 방문 통계. 브라우저마다 랜덤 ID 하나만 localStorage에 두고, 개인을 식별하는 정보는 보내지 않는다.
 const VISITOR_KEY = 'swu_visitor_id'
@@ -55,9 +56,18 @@ const visitSource = () => {
   }
 }
 
+// 검색엔진 봇·자동화 브라우저는 사람 방문이 아니라서 뺀다 (봇이 예전 달력 주소를 수백 번 긁어 간 적이 있다).
+const isBot = () => {
+  try {
+    return navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse/i.test(navigator.userAgent)
+  } catch {
+    return false
+  }
+}
+
 const send = (event) => {
   // 로컬 개발 중 방문은 운영 통계에 섞이지 않게 보내지 않는다.
-  if (import.meta.env.DEV || isQaBrowser()) return
+  if (import.meta.env.DEV || isQaBrowser() || isBot()) return
   apiClient.post('/analytics/events', { ...event, visitorId: visitorId() }).catch(() => {})
 }
 
@@ -69,7 +79,9 @@ export const trackVisit = () => {
   } catch {
     // 저장소를 못 쓰는 브라우저는 페이지를 열 때마다 기록되지만 통계가 막히지는 않는다.
   }
-  send({ type: 'VISIT', path: window.location.pathname.slice(0, 255), source: visitSource() })
+  // 예전 주소로 들어와 새 주소로 옮겨졌으면 원래 들어온 예전 주소를 남긴다.
+  const path = legacyLandingPath ?? window.location.pathname
+  send({ type: 'VISIT', path: path.slice(0, 255), source: visitSource() })
 }
 
 /** 알림 신청에 같이 실어 보내서, 신청이 어느 유입 경로에서 왔는지 통계에서 이어 볼 수 있게 한다. */
