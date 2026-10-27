@@ -7,6 +7,7 @@ import heroNotice from '../../assets/images/brand/hero-faculty.jpg'
 import iconPrev from '../../assets/icons/pagination-prev.svg'
 import iconNext from '../../assets/icons/pagination-next.svg'
 import './Notice.css'
+import { getPageWindow } from '../../utils/pagination'
 
 const FILTERS = [
   { key: 'all', label: '전체' },
@@ -22,6 +23,14 @@ export default function Notice() {
   const page = Number(searchParams.get('page') ?? '1')
   const submittedKeyword = searchParams.get('q') ?? ''
   const submittedScope = searchParams.get('scope') ?? 'title-body'
+
+  // 상세로 넘어갈 때 현재 분류·페이지·검색 상태를 그대로 넘겨서
+  // 상세의 ON THIS PAGE 활성 항목과 '목록으로' 복귀 위치를 유지한다
+  const listQuery = new URLSearchParams({ filter, page: String(page) })
+  if (submittedKeyword) {
+    listQuery.set('q', submittedKeyword)
+    listQuery.set('scope', submittedScope)
+  }
 
   const [scope, setScope] = useState(submittedScope)
   const [keyword, setKeyword] = useState(submittedKeyword)
@@ -151,7 +160,7 @@ export default function Notice() {
               <ul className="notice__list">
                 {notices.map((notice) => (
                   <li key={notice.id}>
-                    <Link to={`/notice/${notice.id}`}>
+                    <Link to={`/notice/${notice.id}?${listQuery}`}>
                       {notice.pinned && <span className="notice__pin">필독</span>}
                       <span className="notice__category">{noticeCategoryLabel(notice)}</span>
                       <span className="notice__title">{notice.title}</span>
@@ -173,7 +182,7 @@ export default function Notice() {
                 >
                   <img src={iconPrev} alt="" />
                 </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                {getPageWindow(page, totalPages).map((n) => (
                   <button
                     key={n}
                     type="button"

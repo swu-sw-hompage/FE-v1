@@ -1,4 +1,5 @@
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
 import { ABOUT_SECTIONS } from '../../constants/aboutNav'
 import './Location.css'
@@ -35,7 +36,7 @@ const TRANSPORT = [
 export default function Location() {
   return (
     <div className="location">
-      <PageHero photo title={['찾아오시는 길']} />
+      <PageHero photo photoSrc={heroAbout} title={['찾아오시는 길']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />
@@ -69,8 +70,14 @@ export default function Location() {
               </div>
               <div className="location__info-row">
                 <p className="location__info-label">연락처</p>
-                <p className="location__info-value location__info-value--accent">
-                  소프트웨어융합학과 02-970-5921
+                <p className="location__info-value">
+                  소프트웨어학과 02-970-5921
+                </p>
+              </div>
+              <div className="location__info-row">
+                <p className="location__info-label">이메일</p>
+                <p className="location__info-value">
+                  <a className="location__email-link" href="mailto:sw@swu.ac.kr">sw@swu.ac.kr</a>
                 </p>
               </div>
             </div>

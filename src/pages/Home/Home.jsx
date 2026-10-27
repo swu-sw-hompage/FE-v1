@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import heroHome from '../../assets/images/brand/hero-home.jpg'
+import heroTeam from '../../assets/images/brand/hero-slide-team.jpg'
+import heroLab from '../../assets/images/brand/hero-slide-lab.jpg'
+import heroLecture from '../../assets/images/brand/hero-slide-lecture.jpg'
 import iconQuick1 from '../../assets/images/brand/icon-quick1.svg'
 import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
@@ -15,6 +17,106 @@ const QUICK_LINKS = [
   { id: 'notice-sub', icon: iconQuick1, title: '공지 알림 신청', mobileTitle: '공지 알림', to: '/notice/subscribe' },
 ]
 
+// 홈 미리보기에 보여줄 공지 개수
+const HOME_NOTICE_COUNT = 5
+// 백엔드는 필독(pinned) 글을 맨 앞에 붙여서 내려주기 때문에, 필독이 많으면 첫 페이지 5개가
+// 전부 필독으로 채워진다. 넉넉하게 받아와서 날짜순으로 다시 정렬한 뒤 앞에서 잘라 쓴다.
+const HOME_NOTICE_FETCH_SIZE = 50
+
+const noticeTime = (notice) => {
+  const t = Date.parse(notice.publishedAt ?? notice.createdAt ?? '')
+  return Number.isNaN(t) ? 0 : t
+}
+
+// 필독 여부와 상관없이 최신 글이 위로 오도록 정렬 (같은 시각이면 id 큰 글이 위)
+const sortByLatest = (list) =>
+  [...list].sort((a, b) => noticeTime(b) - noticeTime(a) || (b.id ?? 0) - (a.id ?? 0))
+
+// 메인 hero 배경 슬라이드 (팀 프로젝트 → 실습실 → 전공 수업 순으로 자동 전환)
+const HERO_SLIDES = [
+  { id: 'team', src: heroTeam, label: '회의실에서 코드를 함께 보며 팀 프로젝트를 하는 학생들' },
+  { id: 'lab', src: heroLab, label: '학과 컴퓨터 실습실' },
+  { id: 'lecture', src: heroLecture, label: '강의실에서 진행되는 소프트웨어 전공 수업' },
+]
+const HERO_INTERVAL_MS = 5000
+
+// 일정 간격으로 다음 슬라이드로 넘김. paused면 멈추고, 사용자가 동작 줄이기를 켰으면 자동 전환 안 함
+function useHeroSlide(count, paused) {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (paused || count < 2) return undefined
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined
+    const timer = setInterval(() => setIndex((i) => (i + 1) % count), HERO_INTERVAL_MS)
+    return () => clearInterval(timer)
+  }, [count, paused, index])
+
+  return [index, setIndex]
+}
+
+function HeroSlides({ className, index }) {
+  return HERO_SLIDES.map((slide, i) => (
+    <img
+      key={slide.id}
+      className={`${className}${i === index ? ' is-active' : ''}`}
+      src={slide.src}
+      alt=""
+      aria-hidden={i !== index}
+      loading={i === 0 ? 'eager' : 'lazy'}
+      fetchPriority={i === 0 ? 'high' : undefined}
+    />
+  ))
+}
+
+function HeroDots({ className, index, onSelect }) {
+  return (
+    <div className={`home__hero-dots ${className ?? ''}`}>
+      {HERO_SLIDES.map((slide, i) => (
+        <button
+          key={slide.id}
+          type="button"
+          className={`home__hero-dot${i === index ? ' is-active' : ''}`}
+          aria-label={`${i + 1}번째 사진: ${slide.label}`}
+          aria-current={i === index ? 'true' : undefined}
+          onClick={() => onSelect(i)}
+        />
+      ))}
+    </div>
+  )
+}
+
+// 모바일 hero 좌우 스와이프. 세로 스크롤은 그대로 두고, 가로로 충분히 민 경우에만 넘김
+const SWIPE_THRESHOLD_PX = 40
+
+function useHeroSwipe(setIndex, count, setPaused) {
+  const start = useRef(null)
+
+  const onTouchStart = (e) => {
+    const t = e.touches[0]
+    start.current = { x: t.clientX, y: t.clientY }
+    setPaused(true)
+  }
+
+  const onTouchEnd = (e) => {
+    setPaused(false)
+    if (!start.current) return
+    const t = e.changedTouches[0]
+    const dx = t.clientX - start.current.x
+    const dy = t.clientY - start.current.y
+    start.current = null
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy)) return
+    // 왼쪽으로 밀면 다음 사진, 오른쪽으로 밀면 이전 사진
+    setIndex((i) => (dx < 0 ? (i + 1) % count : (i - 1 + count) % count))
+  }
+
+  const onTouchCancel = () => {
+    start.current = null
+    setPaused(false)
+  }
+
+  return { onTouchStart, onTouchEnd, onTouchCancel }
+}
+
 const NOTICE_FILTERS = [
   { key: 'all', label: '전체' },
   { key: 'academic', label: '학사' },
@@ -25,15 +127,18 @@ export default function Home() {
   const [notices, setNotices] = useState([])
   const [projects, setProjects] = useState([])
   const [noticeFilter, setNoticeFilter] = useState('all')
+  const [heroPaused, setHeroPaused] = useState(false)
+  const [heroIndex, setHeroIndex] = useHeroSlide(HERO_SLIDES.length, heroPaused)
+  const heroSwipe = useHeroSwipe(setHeroIndex, HERO_SLIDES.length, setHeroPaused)
 
   useEffect(() => {
     getNotices({
       academic: noticeFilter === 'academic' ? true : undefined,
       employment: noticeFilter === 'employment' ? true : undefined,
       page: 0,
-      size: 5,
+      size: HOME_NOTICE_FETCH_SIZE,
     })
-      .then((result) => setNotices(result?.content ?? []))
+      .then((result) => setNotices(sortByLatest(result?.content ?? []).slice(0, HOME_NOTICE_COUNT)))
       .catch(() => setNotices([]))
   }, [noticeFilter])
 
@@ -45,9 +150,10 @@ export default function Home() {
 
   return (
     <div className="home">
-      <section className="home__hero-mobile">
-        <img className="home__hero-mobile-bg" src={heroHome} alt="" />
+      <section className="home__hero-mobile" {...heroSwipe}>
+        <HeroSlides className="home__hero-mobile-bg" index={heroIndex} />
         <div className="home__hero-mobile-gradient" />
+        <HeroDots className="home__hero-dots--mobile" index={heroIndex} onSelect={setHeroIndex} />
         <div className="home__hero-mobile-text">
           <span>기술로 문제를 정의하고,</span>
           <span>세상을 바꾸는 인재를 키웁니다</span>
@@ -135,8 +241,15 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="home__hero">
-        <img className="home__hero-bg" src={heroHome} alt="" />
+      <section
+        className="home__hero"
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+      >
+        <div className="home__hero-media">
+          <HeroSlides className="home__hero-bg" index={heroIndex} />
+          <HeroDots index={heroIndex} onSelect={setHeroIndex} />
+        </div>
         <div className="home__hero-fade" />
         <div className="container home__hero-inner">
           <div className="home__hero-text">

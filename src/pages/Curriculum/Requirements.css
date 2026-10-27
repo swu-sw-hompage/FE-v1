@@ -1,34 +1,3 @@
-.requirements__tabs {
-  display: flex;
-  margin-bottom: 16px;
-}
-
-.requirements__tab {
-  flex: 1;
-  height: 58px;
-  padding: 16px;
-  background: #fff;
-  border: 1px solid var(--color-border);
-  font-family: var(--font-en);
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  text-align: left;
-  cursor: pointer;
-}
-
-.requirements__tab:not(:first-child) {
-  margin-left: -1px;
-}
-
-.requirements__tab--active {
-  position: relative;
-  z-index: 1;
-  background: #fafafa;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-}
-
 .requirements__list {
   list-style: none;
   margin: 0 0 35px;
@@ -70,6 +39,11 @@
   padding: 24px;
 }
 
+/* 졸업인증 신청 절차 아래 참고 박스 — 섹션 끝이라 아래 여백 대신 위 여백 */
+.requirements__guru--after-steps {
+  margin: 24px 0 0;
+}
+
 .requirements__guru-title {
   margin: 0 0 12px;
   font-family: var(--font-en);
@@ -98,97 +72,9 @@
   color: var(--color-primary);
 }
 
-.requirements__additional {
-  display: flex;
-  flex-direction: column;
-}
-
-.requirements__row {
-  display: flex;
-  min-height: 120px;
-  border-top: 1px solid var(--color-border);
-}
-
-.requirements__row:last-child {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.requirements__row-label {
-  flex-shrink: 0;
-  width: 244px;
-  padding: 24px;
-  background: #fafafa;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  border-right: 1px solid var(--color-border);
-}
-
-.requirements__row-label span {
-  font-family: var(--font-en);
-  font-size: 12px;
-  color: var(--color-primary);
-}
-
-.requirements__row-label strong {
-  font-family: var(--font-pretendard);
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--color-text);
-}
-
-.requirements__row-copy {
-  flex: 1;
-  padding: 24px 24px 24px 32px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.requirements__row-copy p {
-  margin: 0;
-  font-family: var(--font-pretendard);
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--color-text);
-}
-
 @media (max-width: 900px) {
   .requirements .page-layout__main {
     gap: 44px;
-  }
-
-  .requirements__tabs {
-    padding: 4px;
-    background: #f2f2f4;
-    border-radius: 8px;
-    gap: 0;
-  }
-
-  .requirements__tab {
-    height: auto;
-    padding: 11px 8px;
-    background: none;
-    border: none;
-    border-radius: 6px;
-    text-align: center;
-    font-family: var(--font-pretendard);
-    font-weight: 400;
-    font-size: 14px;
-    color: #7a7a82;
-  }
-
-  .requirements__tab:not(:first-child) {
-    margin-left: 0;
-  }
-
-  .requirements__tab--active {
-    background: #fff;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    font-weight: 700;
-    color: #7d0e16;
   }
 
   .requirements__list {
@@ -247,57 +133,17 @@
     color: #7a7a82;
   }
 
-  .requirements__row {
-    flex-direction: column;
-    min-height: 0;
-    gap: 8px;
-    padding: 20px;
-    background: #f8f8f9;
-    border: none;
-    border-radius: 6px;
-  }
+}
 
-  .requirements__row:not(:last-child) {
-    margin-bottom: 10px;
-  }
 
-  .requirements__row:last-child {
-    border-bottom: none;
-  }
+/* 종전 학번별 안내는 유지하고 최신 졸업인증 공지만 추가 표시 */
+.requirements__historical-note {
+  margin: -18px 0 36px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+}
 
-  .requirements__row-label {
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 0;
-    background: none;
-    border: none;
-  }
-
-  .requirements__row-label span {
-    font-family: var(--font-pretendard);
-    font-weight: 700;
-    font-size: 12px;
-    color: #7d0e16;
-  }
-
-  .requirements__row-label strong {
-    font-size: 16px;
-  }
-
-  .requirements__row-copy {
-    padding: 0;
-  }
-
-  .requirements__row-copy p {
-    font-size: 14px;
-    line-height: 1.65;
-    color: #57575e;
-  }
-
-  .requirements__row-copy p:not(:only-child)::before {
-    content: '• ';
-  }
+@media (max-width: 700px) {
+  .requirements__historical-note { margin: 16px 0 24px; }
 }

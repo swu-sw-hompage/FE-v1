@@ -16,29 +16,25 @@
 }
 
 .roadmap__year-no {
-  font-family: var(--font-pretendard);
-  font-weight: 600;
+  font-family: var(--font-en);
+  font-weight: 500;
   font-size: 12px;
   color: var(--color-primary);
 }
 
 .roadmap__year-title {
-  margin-top: 5px;
+  margin-top: 6px;
   font-family: var(--font-pretendard);
-  font-weight: 700;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: 16px;
   color: var(--color-text-body);
 }
 
 .roadmap__year-rule {
   display: block;
-  margin-top: 15px;
-  height: 2px;
+  margin-top: 14px;
+  height: 1px;
   background: var(--color-border);
-}
-
-.roadmap__year-rule--active {
-  background: var(--color-primary);
 }
 
 .roadmap__semester {
@@ -79,7 +75,7 @@
 }
 
 .roadmap__course-mark--elective {
-  background: #c74a54;
+  background: #e9dfe2;
 }
 
 .roadmap__course-body {
@@ -163,19 +159,12 @@
   gap: 10px;
 }
 
-.roadmap__liberal-year {
-  margin: 0 0 12px;
-  font-family: var(--font-pretendard);
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--color-text-body);
-}
-
 .roadmap__liberal-item {
   position: relative;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
-  padding: 10px 12px;
+  background: #fff;
+  padding: 12px 14px;
+  cursor: default;
 }
 
 .roadmap__liberal-item span {
@@ -186,8 +175,8 @@
 }
 
 .roadmap__liberal-item:hover {
-  background: var(--color-primary-soft);
-  border-color: var(--color-primary-soft);
+  background: #fafafa;
+  border-color: var(--color-primary);
 }
 
 .roadmap__liberal-item:hover span {
@@ -238,33 +227,6 @@
     width: 100%;
   }
 
-  .roadmap__legend {
-    display: flex;
-    gap: 14px;
-  }
-
-  .roadmap__legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-pretendard);
-    font-size: 12px;
-    color: #57575e;
-  }
-
-  .roadmap__legend-mark {
-    width: 3px;
-    height: 12px;
-  }
-
-  .roadmap__legend-mark--required {
-    background: #7d0e16;
-  }
-
-  .roadmap__legend-mark--elective {
-    background: #ba616e;
-  }
-
   .roadmap__year-tabs {
     display: flex;
     width: 100%;
@@ -283,7 +245,7 @@
   }
 
   .roadmap__year-tab--active {
-    border-bottom: 2px solid #7d0e16;
+    border-bottom: 2px solid var(--color-primary);
     font-weight: 700;
     color: #1f1f21;
   }
@@ -315,7 +277,7 @@
   }
 
   .roadmap__mobile-course--open {
-    background: #fef6f7;
+    background: var(--color-primary-soft);
   }
 
   .roadmap__mobile-course-row {
@@ -337,11 +299,11 @@
   }
 
   .roadmap__mobile-course-mark--required {
-    background: #7d0e16;
+    background: var(--color-primary);
   }
 
   .roadmap__mobile-course-mark--elective {
-    background: #ba616e;
+    background: #e9dfe2;
   }
 
   .roadmap__mobile-course-text {
@@ -366,12 +328,12 @@
   }
 
   .roadmap__mobile-course-tag--required {
-    color: #7d0e16;
+    color: var(--color-primary);
   }
 
   .roadmap__mobile-course--open .roadmap__mobile-course-title,
   .roadmap__mobile-course--open .roadmap__mobile-course-tag {
-    color: #7d0e16;
+    color: var(--color-primary);
   }
 
   .roadmap__mobile-course-desc {
@@ -401,7 +363,7 @@
 
   .roadmap__mobile-chevron--open {
     transform: rotate(180deg);
-    color: #7d0e16;
+    color: var(--color-primary);
   }
 
   .roadmap__mobile-liberal-wrap {
@@ -424,7 +386,7 @@
   }
 
   .roadmap__mobile-liberal--open {
-    background: #fef6f7;
+    background: var(--color-primary-soft);
     border-color: #ba616e;
   }
 
@@ -450,7 +412,7 @@
   }
 
   .roadmap__mobile-liberal--open .roadmap__mobile-liberal-title {
-    color: #7d0e16;
+    color: var(--color-primary);
   }
 
   .roadmap__mobile-liberal-reason {
@@ -464,7 +426,7 @@
   }
 
   .roadmap__mobile-liberal-reason strong {
-    color: #7d0e16;
+    color: var(--color-primary);
   }
 
   .roadmap__mobile-liberal-reason p {
@@ -476,5 +438,168 @@
 @media (max-width: 560px) {
   .roadmap__liberal {
     grid-template-columns: 1fr;
+  }
+}
+
+
+.roadmap__mode-note {
+  margin: 0 0 22px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.roadmap__course-mark--recommended,
+.roadmap__mobile-course-mark--recommended {
+  background: #8d8990;
+}
+
+.roadmap__course-tag--recommended,
+.roadmap__mobile-course-tag--recommended {
+  color: var(--color-text-secondary);
+}
+
+/* 진로 소개 박스 · 범례 — 졸업 요건의 안내 박스와 같은 톤 */
+.roadmap__intro {
+  margin-bottom: 28px;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.roadmap__intro-title {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.roadmap__intro-summary {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.roadmap__intro-divider {
+  height: 1px;
+  margin: 14px 0;
+  background: var(--color-border);
+}
+
+.roadmap__intro-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.roadmap__intro-jobs {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.roadmap__intro-jobs span {
+  margin-right: 12px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-primary);
+}
+
+.roadmap__intro-link {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.roadmap__intro-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.roadmap__legend {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.roadmap__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.roadmap__legend-mark {
+  width: 3px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.roadmap__legend-mark--required {
+  background: var(--color-primary);
+}
+
+.roadmap__legend-mark--elective {
+  background: #e9dfe2;
+}
+
+.roadmap__legend-mark--recommended {
+  background: #8d8990;
+}
+
+@media (max-width: 900px) {
+  .roadmap__intro {
+    margin-bottom: 0;
+    padding: 18px;
+    background: var(--color-primary-soft);
+    border-radius: 6px;
+  }
+
+  .roadmap__intro-title {
+    font-size: 15px;
+    color: #1f1f21;
+  }
+
+  .roadmap__intro-summary {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .roadmap__intro-divider {
+    display: none;
+  }
+
+  .roadmap__intro-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .roadmap__intro-jobs {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .roadmap__intro-jobs span {
+    display: block;
+    margin: 0 0 2px;
+    font-size: 12px;
+  }
+
+  .roadmap__intro-link {
+    font-size: 13px;
+  }
+
+  .roadmap__legend {
+    justify-content: flex-start;
+    margin-bottom: 0;
   }
 }

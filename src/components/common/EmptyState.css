@@ -1,0 +1,104 @@
+.empty-state {
+  padding: 88px 24px 84px;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.empty-state__title {
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--color-text);
+  word-break: keep-all;
+}
+
+.empty-state__desc {
+  max-width: 520px;
+  margin: 12px auto 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-text-faint);
+  word-break: keep-all;
+}
+
+.empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.empty-state__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  padding: 0 24px;
+  background: #fff;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 4px;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.empty-state__action:hover {
+  background: #fafafa;
+  border-color: var(--color-text-faint);
+}
+
+.empty-state__action--primary {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.empty-state__action--primary:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.empty-state__action:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.empty-state--large {
+  padding-block: 104px 100px;
+}
+
+.empty-state--large .empty-state__title {
+  font-size: 26px;
+}
+
+@media (max-width: 900px) {
+  .empty-state,
+  .empty-state--large {
+    padding: 56px 8px 52px;
+  }
+
+  .empty-state__title,
+  .empty-state--large .empty-state__title {
+    font-size: 19px;
+  }
+
+  .empty-state__desc {
+    font-size: 14px;
+  }
+
+  .empty-state__actions {
+    flex-direction: column;
+    margin-top: 24px;
+  }
+
+  .empty-state__action {
+    width: 100%;
+  }
+}

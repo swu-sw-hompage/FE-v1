@@ -29,6 +29,9 @@ apiClient.interceptors.response.use(
       window.dispatchEvent(new Event('admin-session-expired'))
     }
     const message = error.response?.data?.message ?? error.message ?? '요청 처리 중 오류가 발생했습니다.'
-    return Promise.reject(new Error(message))
+    const err = new Error(message)
+    // 화면에서 '없는 글(404)'과 '불러오기 실패'를 구분할 수 있도록 상태 코드를 같이 넘긴다.
+    err.status = error.response?.status
+    return Promise.reject(err)
   },
 )

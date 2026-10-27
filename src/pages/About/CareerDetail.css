@@ -1,220 +1,107 @@
-.career-detail__chips {
-  display: none;
+/* 졸업 요건 페이지와 같은 구성: 분류 탭 → 안내 박스 → 라벨/내용 행 */
+.career-detail__intro {
+  margin-bottom: 28px;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 4px;
 }
 
-.career-detail__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.career-detail__card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 26px;
-  text-decoration: none;
-  color: inherit;
-}
-
-.career-detail__card span {
+.career-detail__intro-title {
+  margin: 0;
   font-family: var(--font-pretendard);
   font-weight: 600;
-  font-size: 14px;
-  color: var(--color-primary);
-}
-
-.career-detail__card strong {
-  font-family: var(--font-pretendard);
-  font-weight: 700;
-  font-size: 24px;
+  font-size: 16px;
   color: var(--color-text);
 }
 
-.career-detail__card p {
-  margin: 0;
+.career-detail__intro-summary {
+  margin: 6px 0 0;
   font-size: 14px;
   color: var(--color-text-secondary);
 }
 
-.career-detail__card em {
-  margin-top: auto;
-  padding-top: 8px;
-  font-style: normal;
-  font-family: var(--font-pretendard);
-  font-weight: 500;
-  font-size: 14px;
-  color: #7d0e13;
+.career-detail__intro-divider {
+  height: 1px;
+  margin: 14px 0;
+  background: var(--color-border);
 }
 
-.career-detail__card:hover:not(.career-detail__card--active) {
-  background: #fff5f5;
-  border-color: #fff5f5;
-}
-
-.career-detail__card--active {
-  background: #fcf2f5;
-  border: 2px solid #94141f;
-}
-
-.career-detail__panel {
-  background: transparent;
-  padding: 40px 0 0;
-}
-
-.career-detail__field-title {
+.career-detail__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
   margin: 0;
-  font-family: var(--font-pretendard);
-  font-weight: 700;
-  font-size: 28px;
-  color: #1f1f1f;
 }
 
-.career-detail__field-summary {
-  margin: 10px 0 0;
-  font-size: 15px;
-  color: var(--color-text-secondary);
-}
-
-.career-detail__accent {
-  height: 2px;
-  background: #94141f;
-  margin: 26px 0;
-}
-
-.career-detail__summary-row {
-  display: flex;
-  gap: 40px;
-  padding-bottom: 26px;
-  border-bottom: 1px solid #e6e6e6;
-}
-
-.career-detail__summary-row > div {
-  flex: 1;
-}
-
-.career-detail__value {
-  margin: 0;
-  font-size: 15px;
-  color: #1f1f1f;
-}
-
-.career-detail__label {
-  margin: 0 0 8px;
-  font-family: var(--font-pretendard);
+.career-detail__facts dt {
+  margin-bottom: 6px;
   font-weight: 600;
   font-size: 13px;
-  color: #94141f;
+  color: var(--color-primary);
 }
 
-.career-detail__info-row {
-  display: flex;
-  gap: 24px;
-  padding: 22px 0;
-  border-bottom: 1px solid #e6e6e6;
-}
-
-.career-detail__info-row:last-child {
-  border-bottom: none;
-}
-
-.career-detail__info-row .career-detail__label {
-  flex-shrink: 0;
-  width: 155px;
+.career-detail__facts dd {
   margin: 0;
-}
-
-.career-detail__info-row ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: #616161;
   font-size: 14px;
   line-height: 1.6;
+  color: var(--color-text);
+  white-space: pre-wrap;
+}
+
+.career-detail__roadmap-link {
+  display: inline-block;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.career-detail__roadmap-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 900px) {
-  .career-detail .page-section > h2 {
-    display: none;
-  }
-
-  .career-detail__accent {
-    display: none;
-  }
-
-  .career-detail__chips {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .career-detail__chip {
-    flex-shrink: 0;
-    padding: 9px 14px;
-    background: #fff;
-    border: 1px solid #e5e5e8;
-    border-radius: 4px;
-    font-family: var(--font-pretendard);
-    font-size: 13px;
-    color: #57575e;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .career-detail__chip--active {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    font-weight: 700;
-    color: #fff;
-  }
-
-  .career-detail__grid {
-    display: none;
-  }
-
-  .career-detail__field-title {
-    font-size: 22px;
-  }
-
-  .career-detail__panel {
-    padding: 0;
-  }
-
-  .career-detail__summary-row {
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 18px;
+  .career-detail__intro {
+    margin-bottom: 0;
     padding: 18px;
     background: var(--color-primary-soft);
     border-radius: 6px;
-    border-bottom: none;
   }
 
-  .career-detail__info-row {
-    flex-direction: column;
-    gap: 8px;
-    padding: 18px 0;
-  }
-
-  .career-detail__info-row .career-detail__label {
-    width: auto;
+  .career-detail__intro-title {
     font-size: 15px;
-    font-weight: 700;
     color: #1f1f21;
   }
 
-  .career-detail__info-row ul {
-    gap: 0;
-    line-height: 1.65;
+  .career-detail__intro-summary {
+    font-size: 13px;
+    line-height: 1.6;
   }
 
-  .career-detail__value {
-    font-size: 14px;
-    font-weight: 500;
+  .career-detail__intro-divider {
+    display: none;
+  }
+
+  .career-detail__facts {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .career-detail__facts dt {
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+
+  .career-detail__facts dd {
+    font-size: 13px;
     color: #1f1f21;
+  }
+
+  .career-detail__roadmap-link {
+    margin-top: 0;
+    font-size: 13px;
   }
 }

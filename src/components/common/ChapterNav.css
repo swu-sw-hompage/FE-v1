@@ -72,6 +72,13 @@
     min-width: 0;
     gap: 22px;
     overflow-x: auto;
+    /* 가로 스크롤은 유지하고 스크롤바만 숨김 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .chapter-nav__list::-webkit-scrollbar {
+    display: none;
   }
 
   .chapter-nav__list li {

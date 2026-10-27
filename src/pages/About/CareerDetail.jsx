@@ -1,8 +1,14 @@
 import { Link, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
+import heroAbout from '../../assets/images/brand/hero-about.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
+import SegmentTabs from '../../components/common/SegmentTabs'
+import InfoRows from '../../components/common/InfoRows'
 import { ABOUT_SECTIONS, CAREER_FIELDS } from '../../constants/aboutNav'
 import './CareerDetail.css'
+
+// 전공로드맵(/curriculum/roadmap)의 같은 진로 탭으로 바로 연결
+const ROADMAP_TRACK = { 'server-cloud': 'cloud', 'ai-sw': 'ai', research: 'research' }
 
 const INFO_ROWS = [
   { key: 'duties', label: '수행 직무' },
@@ -24,9 +30,15 @@ export default function CareerDetail() {
     )
   }
 
+  const rows = INFO_ROWS.map((row, i) => ({
+    no: String(i + 1).padStart(2, '0'),
+    title: row.label,
+    items: field[row.key],
+  }))
+
   return (
     <div className="career-detail">
-      <PageHero photo title={['졸업 후 진로']} />
+      <PageHero photo photoSrc={heroAbout} title={['졸업 후 진로']} />
 
       <div className="container page-layout">
         <ChapterNav sections={ABOUT_SECTIONS} />
@@ -35,68 +47,38 @@ export default function CareerDetail() {
           <section className="page-section">
             <h2>졸업 후 진로</h2>
 
-            <div className="career-detail__chips">
-              {CAREER_FIELDS.map((f) => (
-                <Link
-                  to={`/about/career/${f.slug}`}
-                  className={
-                    f.slug === field.slug
-                      ? 'career-detail__chip career-detail__chip--active'
-                      : 'career-detail__chip'
-                  }
-                  key={f.slug}
-                >
-                  {f.title}
-                </Link>
-              ))}
-            </div>
+            <SegmentTabs
+              label="진로 분야 선택"
+              items={CAREER_FIELDS.map((f) => ({
+                id: f.slug,
+                no: f.no,
+                label: f.title,
+                to: `/about/career/${f.slug}`,
+              }))}
+              active={field.slug}
+            />
 
-            <div className="career-detail__grid">
-              {CAREER_FIELDS.map((f) => (
-                <Link
-                  to={`/about/career/${f.slug}`}
-                  className={
-                    f.slug === field.slug
-                      ? 'career-detail__card career-detail__card--active'
-                      : 'career-detail__card'
-                  }
-                  key={f.slug}
-                >
-                  <span>{f.no}</span>
-                  <strong>{f.title}</strong>
-                  <p>{f.summary}</p>
-                  <em>자세히 보기 →</em>
-                </Link>
-              ))}
-            </div>
-
-            <div className="career-detail__panel">
-              <p className="career-detail__field-title">{field.heading}</p>
-              <p className="career-detail__field-summary">{field.summary}</p>
-              <div className="career-detail__accent" />
-
-              <div className="career-detail__summary-row">
+            <div className="career-detail__intro">
+              <p className="career-detail__intro-title">{field.heading}</p>
+              <p className="career-detail__intro-summary">{field.summary}</p>
+              <div className="career-detail__intro-divider" />
+              <dl className="career-detail__facts">
                 <div>
-                  <p className="career-detail__label">대표 직무</p>
-                  <p className="career-detail__value">{field.jobs}</p>
+                  <dt>대표 직무</dt>
+                  <dd>{field.jobs}</dd>
                 </div>
                 <div>
-                  <p className="career-detail__label">주요 진출처</p>
-                  <p className="career-detail__value">{field.destinations}</p>
+                  <dt>주요 진출처</dt>
+                  <dd>{field.destinations}</dd>
                 </div>
-              </div>
-
-              {INFO_ROWS.map((row) => (
-                <div className="career-detail__info-row" key={row.key}>
-                  <p className="career-detail__label">{row.label}</p>
-                  <ul>
-                    {field[row.key].map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              </dl>
             </div>
+
+            <InfoRows rows={rows} />
+
+            <Link className="career-detail__roadmap-link" to={`/curriculum/roadmap?track=${ROADMAP_TRACK[field.slug]}`}>
+              전공로드맵에서 추천 과목 보기 →
+            </Link>
           </section>
         </main>
       </div>

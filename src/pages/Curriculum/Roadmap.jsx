@@ -1,137 +1,85 @@
 import { useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
+import heroCurriculum from '../../assets/images/brand/hero-curriculum.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
-import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
+import SegmentTabs from '../../components/common/SegmentTabs'
+import { CAREER_FIELDS, CURRICULUM_SECTIONS } from '../../constants/aboutNav'
+import { ROADMAP_COURSE_DETAILS } from '../../data/roadmapCourseDetails'
 import './Roadmap.css'
 
 const COURSE_DESC_PLACEHOLDER = '과목 설명 · 강의계획서 기준 입력 예정'
 // 추천 이유가 없는 과목은 모두 교양필수 과목이다.
 const LIBERAL_REQUIRED_LABEL = '교양필수'
 
-const YEARS = [
+const GUIDEBOOK_TRACKS = [
   {
+    id: 'research',
     no: '01',
-    year: '1학년',
-    highlight: true,
-    semesters: [
-      {
-        label: '1학기',
-        courses: [
-          {
-            title: '소프트웨어융합 진로탐색(1)',
-            tag: '필수',
-            desc: '소프트웨어융합 전공을 수행하는데 있어 필요한 학습동기를 부여받고, 다양한 전공실무영역을 미리 체험하여 장래 직업 및 진로탐색에 도움되는 정보를 체득할 수 있도록 전공과 관련된 세미나 및 특강 또는 취업 관련 행사에 참석한다.',
-          },
-          {
-            title: 'C++프로그래밍 기초(3)',
-            tag: '필수',
-            desc: '컴퓨터 프로그램을 처음 시작하는 학생들을 위한 과목으로, 프로그래밍 언어의 구문보다는 문제 해결에 중점을 두는 문제 구동 방식을 사용한다. 선택문·반복문·함수·배열에 대한 기본 개념을 이해하고, 이를 기반으로 기본 프로그래밍 기법을 학습한다.',
-          },
-          {
-            title: '컴퓨터수학(3)',
-            tag: '선택',
-            desc: '소프트웨어학과에서 필수적인 수학적 기초를 다루는 과목으로, 수학적 모델·증명·함수와 그래프·부울대수·행렬과 벡터·확률과 통계·미분과 적분 등을 학습해 논리적 사고와 컴퓨터 이론의 기초를 다진다.',
-          },
-        ],
-      },
-      {
-        label: '2학기',
-        courses: [
-          {
-            title: '확률과통계(3)',
-            tag: '선택',
-            desc: '인공지능과 빅데이터 분석 등의 기본 이론을 이해하기 위해 필요한 집합과 함수, 미분과 적분, 자료의 정리와 수치적 특성, 확률, 확률변수와 분포, 추정 및 가설 검증 등을 다룬다.',
-          },
-        ],
-      },
+    name: '학문·연구',
+    subtitle: '이론과 연구를 바탕으로 새로운 기술을 탐구하는 진로',
+    careers: ['정보통신기술자', '교수', '연구원'],
+    years: [
+      ['소프트웨어개론', '컴퓨터수학', '확률과통계', 'C++프로그래밍기초', 'C++프로그래밍응용', '소프트웨어진로탐색'],
+      ['자료구조', '컴퓨터알고리즘', '컴퓨터구조', '운영체제', '빅데이터수집및마이닝(캡스톤디자인)', 'JAVA프로그래밍기초', 'JAVA프로그래밍응용', '윈도우프로그래밍'],
+      ['기계학습', '데이터통신및네트워크', '영상처리', '컴퓨터그래픽스', '데이터베이스기초', '데이터베이스응용', '웹프로그래밍', '소프트웨어커리어디자인', '인공지능'],
+      ['빅데이터분석', 'VR/AR/MR프로그래밍', '프로젝트종합설계Ⅰ(캡스톤디자인)', '프로젝트종합설계Ⅱ(캡스톤디자인)', '딥러닝및응용'],
     ],
   },
   {
+    id: 'cloud',
     no: '02',
-    year: '2학년',
-    semesters: [
-      {
-        label: '1학기',
-        courses: [
-          {
-            title: '자료구조(3)',
-            tag: '필수',
-            desc: '컴퓨터 프로그래밍에 사용되는 기본적인 자료 구조(배열·연결리스트·스택·큐·트리·그래프)의 원리와 활용 방법을 배우고, 프로그래밍 실습 및 과제를 통해 심화 학습한다. 컴퓨터 소프트웨어 개론 및 C/C++ 또는 파이썬 프로그래밍 기초 지식이 필요하다.',
-          },
-        ],
-      },
-      { label: '2학기', courses: [] },
+    name: '서버·클라우드 플랫폼',
+    subtitle: '웹·앱 서비스와 클라우드 인프라를 설계하고 운영하는 진로',
+    careers: ['웹·앱 기획자', '웹·앱 프로그래머', '서버 관리자'],
+    years: [
+      ['소프트웨어개론', 'C++프로그래밍기초', 'C++프로그래밍응용', '웹디자인및기획', '소프트웨어진로탐색'],
+      ['자료구조', '컴퓨터알고리즘', 'JAVA프로그래밍기초', 'JAVA프로그래밍응용', '컴퓨터비전', '운영체제', '컴퓨터구조', '웹표준언어', '빅데이터수집및마이닝(캡스톤디자인)'],
+      ['웹프로그래밍', '데이터통신및네트워크', '데이터베이스기초', '데이터베이스응용', '영상처리', '소프트웨어커리어디자인', '클라우드오픈소스소프트웨어'],
+      ['프로젝트종합설계Ⅰ(캡스톤디자인)', '프로젝트종합설계Ⅱ(캡스톤디자인)', '유닉스프로그래밍', '소프트웨어와스타트업'],
     ],
   },
   {
+    id: 'ai',
     no: '03',
-    year: '3학년',
-    semesters: [
-      { label: '1학기', courses: [] },
-      {
-        label: '2학기',
-        courses: [
-          {
-            title: '소프트웨어융합 커리어디자인(1)',
-            tag: '필수',
-            desc: '산업 현장에서 제시하는 요구와 기술 발전 흐름을 파악하고, 사회 진출에 대비한 경력 개발에 필요한 도움을 받을 수 있도록 전공 관련 세미나·특강 또는 취업 관련 행사에 참석하고 결과보고서를 제출하는 방식으로 운영된다.',
-          },
-          {
-            title: '인공지능(3)',
-            tag: '선택',
-            desc: '기초 머신러닝에서 최신 생성형 AI로 도약하기 위한 과목으로, 퍼셉트론·역전파·합성곱 신경망(CNN)부터 순환신경망(RNN/LSTM), 오토인코더·생성적 적대 신경망(GAN)까지 다루며 PyTorch 실습을 통해 ChatGPT·Stable Diffusion 등 최신 AI의 작동 원리를 이해할 기반을 갖춘다.',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    no: '04',
-    year: '4학년',
-    semesters: [
-      {
-        label: '1학기',
-        courses: [
-          {
-            title: '프로젝트종합설계I(3)',
-            tag: '필수',
-            desc: '졸업 후 산업 현장에서 필요한 실무 능력을 사전에 경험하는 캡스톤 디자인 과목으로, 프로젝트 기획부터 구현·테스트, 결과 발표까지 학생 스스로 팀을 구성해 문제를 해결하며 자기 주도적 문제 해결 능력을 기른다.',
-          },
-          {
-            title: '소프트웨어역량인증(0)',
-            tag: '필수',
-            desc: '졸업예정 학생이 갖춰야 할 소프트웨어개발 역량과 취업준비도를 점검·인증하는 과목. 공인외국어 성적표, 취업준비 프로그램 이수증, SW 지적재산권 관련 증빙, 소프트웨어개발실무영어 I·II 및 Guru Programming 1·2 이수증을 지도교수와 함께 확인한다.',
-          },
-          {
-            title: '빅데이터분석(3)',
-            tag: '선택',
-            desc: '스몰데이터와 빅데이터를 정의하고 구별하는 이론적 배경을 학습한다. 다양한 분야에서 수집된 빅데이터를 활용해 원하는 정보를 추출하는 파이썬 기반 데이터 분석 방법을 배우고 실습하며 실무 능력을 배양한다.',
-          },
-        ],
-      },
-      {
-        label: '2학기',
-        courses: [
-          {
-            title: '프로젝트종합설계II(3)',
-            tag: '필수',
-            desc: '프로젝트종합설계I에 이어지는 캡스톤 디자인 과목으로, 팀을 구성해 산업 현장·실생활 문제를 직접 기획·설계·구현하여 학기말에 공개 발표한다. 인공지능 기술 활용을 의무화해 취업 전 AI 응용 기술 습득을 유도한다.',
-          },
-          {
-            title: '소프트웨어와스타트업(1)',
-            tag: '선택',
-            desc: '산업기술의 최신 동향과 소프트웨어 기술 전망에 대해 전임 교수 및 산업체 전문가가 팀티칭으로 진행한다. 최신 업계 동향을 인지해 졸업 후 취업 또는 스타트업 등 진로 선택에 도움을 얻는다.',
-          },
-          {
-            title: 'VR/AR/MR프로그래밍(3)',
-            tag: '선택',
-            desc: '3D 인공세계에 몰입해 실시간 상호작용으로 현실감을 체험하는 가상현실 기술의 원리를 학습한다. Web3D 기반 가상객체 모델링, 이벤트 생성, 3D 애니메이션 등을 활용해 동적인 가상세계를 직접 제작한다.',
-          },
-        ],
-      },
+    name: 'AI·SW 개발',
+    subtitle: '인공지능과 응용 소프트웨어를 기획·개발하는 진로',
+    careers: ['AI·SW 응용 프로그램 개발자'],
+    years: [
+      ['소프트웨어개론', '컴퓨터수학', 'C++프로그래밍기초', 'C++프로그래밍응용', '소프트웨어진로탐색'],
+      ['자료구조', '컴퓨터알고리즘', 'JAVA프로그래밍기초', 'JAVA프로그래밍응용', '컴퓨터비전', '빅데이터수집및마이닝(캡스톤디자인)', '윈도우프로그래밍'],
+      ['데이터통신및네트워크', '데이터베이스기초', '데이터베이스응용', '기계학습', '영상처리', 'DIY종합설계프로그래밍', '소프트웨어커리어디자인', '인공지능', '모바일프로그래밍'],
+      ['빅데이터분석', '딥러닝및응용', '프로젝트종합설계Ⅰ(캡스톤디자인)', '프로젝트종합설계Ⅱ(캡스톤디자인)', '소프트웨어와스타트업', 'VR/AR/MR프로그래밍', '유닉스프로그래밍'],
     ],
   },
 ]
+
+// 탭 순서와 번호는 '졸업 후 진로' 페이지(CAREER_FIELDS)와 맞춘다.
+const TRACK_CAREER_SLUG = { cloud: 'server-cloud', ai: 'ai-sw', research: 'research' }
+
+const TRACK_TABS = ['cloud', 'ai', 'research'].map((id, i) => ({
+  ...GUIDEBOOK_TRACKS.find((track) => track.id === id),
+  no: String(i + 1).padStart(2, '0'),
+}))
+
+const LEGEND = [
+  { tag: '필수', className: 'required' },
+  { tag: '선택', className: 'elective' },
+  { tag: '추천', className: 'recommended' },
+]
+
+function RoadmapLegend() {
+  return (
+    <div className="roadmap__legend" aria-label="이수구분 표시">
+      {LEGEND.map((item) => (
+        <span className="roadmap__legend-item" key={item.tag}>
+          <span className={`roadmap__legend-mark roadmap__legend-mark--${item.className}`} />
+          {item.tag}
+        </span>
+      ))}
+    </div>
+  )
+}
 
 const LIBERAL_ARTS = [
   {
@@ -246,7 +194,9 @@ function MobileCourseItem({ course, expanded, onToggle }) {
           className={
             course.tag === '필수'
               ? 'roadmap__mobile-course-mark roadmap__mobile-course-mark--required'
-              : 'roadmap__mobile-course-mark roadmap__mobile-course-mark--elective'
+              : course.tag === '추천'
+                ? 'roadmap__mobile-course-mark roadmap__mobile-course-mark--recommended'
+                : 'roadmap__mobile-course-mark roadmap__mobile-course-mark--elective'
           }
         />
         <span className="roadmap__mobile-course-text">
@@ -254,7 +204,9 @@ function MobileCourseItem({ course, expanded, onToggle }) {
           <span
             className={
               course.tag === '필수'
-                ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--required'
+              ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--required'
+              : course.tag === '추천'
+                ? 'roadmap__mobile-course-tag roadmap__mobile-course-tag--recommended'
                 : 'roadmap__mobile-course-tag roadmap__mobile-course-tag--elective'
             }
           >
@@ -296,8 +248,10 @@ function CourseItem({ course, flip }) {
       <span
         className={
           course.tag === '필수'
-            ? 'roadmap__course-mark roadmap__course-mark--required'
-            : 'roadmap__course-mark roadmap__course-mark--elective'
+              ? 'roadmap__course-mark roadmap__course-mark--required'
+              : course.tag === '추천'
+                ? 'roadmap__course-mark roadmap__course-mark--recommended'
+                : 'roadmap__course-mark roadmap__course-mark--elective'
         }
       />
       <div className="roadmap__course-body">
@@ -306,7 +260,9 @@ function CourseItem({ course, flip }) {
           className={
             course.tag === '필수'
               ? 'roadmap__course-tag roadmap__course-tag--required'
-              : 'roadmap__course-tag roadmap__course-tag--elective'
+              : course.tag === '추천'
+                ? 'roadmap__course-tag roadmap__course-tag--recommended'
+                : 'roadmap__course-tag roadmap__course-tag--elective'
           }
         >
           {course.tag}
@@ -321,6 +277,22 @@ function CourseItem({ course, flip }) {
 }
 
 export default function Roadmap() {
+  // 졸업 후 진로 페이지에서 ?track=ai 처럼 넘어오면 그 진로 탭을 먼저 연다.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const trackParam = searchParams.get('track')
+  const guidebookTrackId = TRACK_TABS.some((t) => t.id === trackParam) ? trackParam : 'cloud'
+  const setGuidebookTrackId = (id) => setSearchParams({ track: id }, { replace: true, preventScrollReset: true })
+  const guidebookTrack = GUIDEBOOK_TRACKS.find((item) => item.id === guidebookTrackId) ?? GUIDEBOOK_TRACKS[0]
+  const careerField = CAREER_FIELDS.find((f) => f.slug === TRACK_CAREER_SLUG[guidebookTrack.id])
+  const displayYears = guidebookTrack.years.map((courses, index) => ({
+    no: String(index + 1).padStart(2, '0'),
+    year: `${index + 1}학년`,
+    courses: courses.map((title) => ({
+      title,
+      tag: ROADMAP_COURSE_DETAILS[title]?.tag ?? '미확인',
+      desc: ROADMAP_COURSE_DETAILS[title]?.description ?? '2026학년도 학사편람에서 교과목 정보를 확인해 주세요.',
+    })),
+  }))
   const [mobileYear, setMobileYear] = useState(0)
   const [openCourses, setOpenCourses] = useState(new Set())
   const [mobileLiberalYear, setMobileLiberalYear] = useState(0)
@@ -346,7 +318,7 @@ export default function Roadmap() {
 
   return (
     <div className="roadmap">
-      <PageHero photo title={['전공로드맵']} />
+      <PageHero photo photoSrc={heroCurriculum} title={['전공로드맵']} />
 
       <div className="container page-layout">
         <ChapterNav sections={CURRICULUM_SECTIONS} />
@@ -355,62 +327,69 @@ export default function Roadmap() {
           <section className="page-section">
             <h2>전공로드맵</h2>
 
+            <SegmentTabs
+              label="전공로드맵 진로 선택"
+              items={TRACK_TABS.map((track) => ({ id: track.id, no: track.no, label: track.name }))}
+              active={guidebookTrackId}
+              onChange={(id) => {
+                setGuidebookTrackId(id)
+                setMobileYear(0)
+                setOpenCourses(new Set())
+              }}
+            />
+
+            <div className="roadmap__intro">
+              <div className="roadmap__intro-head">
+                <p className="roadmap__intro-title">{guidebookTrack.name} 분야</p>
+                <p className="roadmap__intro-summary">{guidebookTrack.subtitle}</p>
+              </div>
+              <div className="roadmap__intro-divider" />
+              <div className="roadmap__intro-foot">
+                <p className="roadmap__intro-jobs">
+                  <span>대표 직무</span>
+                  {guidebookTrack.careers.join('  ·  ')}
+                </p>
+                {careerField && (
+                  <Link className="roadmap__intro-link" to={`/about/career/${careerField.slug}`}>
+                    졸업 후 진로 자세히 보기 →
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            <RoadmapLegend />
+
             <div className="roadmap__years">
-              {YEARS.map((y) => (
+              {displayYears.map((y) => (
                 <div className="roadmap__year" key={y.year}>
                   <span className="roadmap__year-no">{y.no}</span>
                   <strong className="roadmap__year-title">{y.year}</strong>
-                  <span className={y.highlight ? 'roadmap__year-rule roadmap__year-rule--active' : 'roadmap__year-rule'} />
+                  <span className="roadmap__year-rule" />
                 </div>
               ))}
 
-              {[0, 1].map((semIndex) =>
-                YEARS.map((y) => {
-                  const sem = y.semesters[semIndex]
-                  return (
-                    <div className="roadmap__semester" key={`${y.year}-${sem.label}`}>
-                      {semIndex > 0 && <span className="roadmap__sem-divider" />}
-                      <p className="roadmap__sem-label">{sem.label}</p>
-                      {sem.courses.map((course) => (
-                        <CourseItem course={course} flip={y.no === '04'} key={course.title} />
-                      ))}
-                    </div>
-                  )
-                }),
-              )}
+              {displayYears.map((y) => (
+                <div className="roadmap__semester" key={y.year}>
+                  {y.courses.map((course) => (
+                    <CourseItem course={course} flip={y.no === '04'} key={course.title} />
+                  ))}
+                </div>
+              ))}
             </div>
 
             <div className="roadmap__mobile-roadmap">
-              <div className="roadmap__legend">
-                <span className="roadmap__legend-item">
-                  <span className="roadmap__legend-mark roadmap__legend-mark--required" />
-                  필수
-                </span>
-                <span className="roadmap__legend-item">
-                  <span className="roadmap__legend-mark roadmap__legend-mark--elective" />
-                  선택
-                </span>
+              <MobileYearTabs years={displayYears.map((y) => y.year)} active={mobileYear} onChange={setMobileYear} />
+
+              <div className="roadmap__mobile-semester">
+                {displayYears[mobileYear].courses.map((course) => (
+                  <MobileCourseItem
+                    key={course.title}
+                    course={course}
+                    expanded={openCourses.has(course.title)}
+                    onToggle={() => toggleCourse(course.title)}
+                  />
+                ))}
               </div>
-
-              <MobileYearTabs years={YEARS.map((y) => y.year)} active={mobileYear} onChange={setMobileYear} />
-
-              {YEARS[mobileYear].semesters.map((sem) => (
-                <div className="roadmap__mobile-semester" key={sem.label}>
-                  <p className="roadmap__mobile-sem-label">{sem.label}</p>
-                  {sem.courses.length === 0 ? (
-                    <p className="roadmap__mobile-empty">개설 예정 과목이 없습니다.</p>
-                  ) : (
-                    sem.courses.map((course) => (
-                      <MobileCourseItem
-                        key={course.title}
-                        course={course}
-                        expanded={openCourses.has(course.title)}
-                        onToggle={() => toggleCourse(course.title)}
-                      />
-                    ))
-                  )}
-                </div>
-              ))}
             </div>
           </section>
 
@@ -420,7 +399,11 @@ export default function Roadmap() {
             <div className="roadmap__liberal">
               {LIBERAL_ARTS.map((group) => (
                 <div className="roadmap__liberal-col" key={group.year}>
-                  <p className="roadmap__liberal-year">{group.year}</p>
+                  <div className="roadmap__year">
+                    <span className="roadmap__year-no">{String(LIBERAL_ARTS.indexOf(group) + 1).padStart(2, '0')}</span>
+                    <strong className="roadmap__year-title">{group.year}</strong>
+                    <span className="roadmap__year-rule" />
+                  </div>
                   {group.courses.map((course) => (
                     <div
                       className={

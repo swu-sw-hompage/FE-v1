@@ -1,7 +1,7 @@
 import PageHero from '../../components/common/PageHero'
 import ChapterNav from '../../components/common/ChapterNav'
 import { FACULTY, EMERITUS_FACULTY } from '../../data/faculty'
-import heroFaculty from '../../assets/images/brand/hero-faculty.jpg'
+import heroFaculty from '../../assets/images/brand/hero-faculty-lounge.jpg'
 import './Faculty.css'
 
 const SECTIONS = [{ id: 'faculty-list', label: '교수진' }]
