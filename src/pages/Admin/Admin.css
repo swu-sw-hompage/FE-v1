@@ -138,13 +138,6 @@
   border-radius: 8px;
 }
 
-/* 성격이 다른 필터 묶음(분류 / 임시저장)을 나란히 두되 서로 떨어뜨린다 */
-.admin-pill-filter-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
 .admin-pill-filter__btn {
   height: 36px;
   padding-inline: 16px;
@@ -1293,4 +1286,95 @@
   font-size: 11px;
   color: #7b1e22;
   white-space: nowrap;
+}
+
+/* 메인 사진 관리 */
+.admin-hero__count {
+  margin-left: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #7a7a82;
+}
+
+.admin-hero__hint {
+  margin: -8px 0 20px;
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #7a7a82;
+}
+
+.admin-hero__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-hero__empty {
+  padding: 24px;
+  border: 1px dashed #e5e5e8;
+  border-radius: 8px;
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  color: #7a7a82;
+  text-align: center;
+}
+
+.admin-hero__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid #e5e5e8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.admin-hero__order {
+  flex-shrink: 0;
+  width: 24px;
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: 14px;
+  color: #7b1e22;
+  text-align: center;
+}
+
+.admin-hero__thumb {
+  flex-shrink: 0;
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #f0f0f2;
+}
+
+.admin-hero__alt {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-hero__actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 6px;
+}
+
+@media (max-width: 760px) {
+  .admin-hero__item {
+    flex-wrap: wrap;
+  }
+
+  .admin-hero__thumb {
+    width: 120px;
+    height: 68px;
+  }
+
+  .admin-hero__alt {
+    flex-basis: 100%;
+    order: 3;
+  }
 }

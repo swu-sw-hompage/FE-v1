@@ -8,6 +8,7 @@ import iconQuick2 from '../../assets/images/brand/icon-quick2.svg'
 import iconQuick3 from '../../assets/images/brand/icon-quick3.svg'
 import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/notice'
 import { getGraduationProjects } from '../../api/graduation'
+import { getHeroSlides, heroImageUrl } from '../../api/hero'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
 import './Home.css'
 
@@ -32,13 +33,45 @@ const noticeTime = (notice) => {
 const sortByLatest = (list) =>
   [...list].sort((a, b) => noticeTime(b) - noticeTime(a) || (b.id ?? 0) - (a.id ?? 0))
 
-// 메인 hero 배경 슬라이드 (팀 프로젝트 → 실습실 → 전공 수업 순으로 자동 전환)
-const HERO_SLIDES = [
+// 메인 hero 배경 슬라이드. 사진·순서는 관리자 > 메인 사진에서 관리하고, API를 못 받으면 아래 기본 3장을 쓴다.
+const DEFAULT_HERO_SLIDES = [
   { id: 'team', src: heroTeam, label: '회의실에서 코드를 함께 보며 팀 프로젝트를 하는 학생들' },
   { id: 'lab', src: heroLab, label: '학과 컴퓨터 실습실' },
   { id: 'lecture', src: heroLecture, label: '강의실에서 진행되는 소프트웨어 전공 수업' },
 ]
 const HERO_INTERVAL_MS = 5000
+// 마지막으로 받은 사진 목록을 기억해 두고 다음 방문 때 바로 보여준다 (기본 사진이 잠깐 보였다 바뀌는 깜빡임 방지)
+const HERO_CACHE_KEY = 'swu_hero_slides'
+
+const readCachedSlides = () => {
+  try {
+    const cached = JSON.parse(localStorage.getItem(HERO_CACHE_KEY))
+    return Array.isArray(cached) && cached.length > 0 ? cached : null
+  } catch {
+    return null
+  }
+}
+
+function useHeroSlidesData() {
+  const [slides, setSlides] = useState(() => readCachedSlides() ?? DEFAULT_HERO_SLIDES)
+
+  useEffect(() => {
+    getHeroSlides()
+      .then((result) => {
+        if (!Array.isArray(result) || result.length === 0) return
+        const next = result.map((s) => ({ id: s.id, src: heroImageUrl(s.imageUrl), label: s.altText }))
+        setSlides(next)
+        try {
+          localStorage.setItem(HERO_CACHE_KEY, JSON.stringify(next))
+        } catch {
+          // 저장 못 해도 이번 화면에는 이미 반영됐다.
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  return slides
+}
 
 // 일정 간격으로 다음 슬라이드로 넘김. paused면 멈추고, 사용자가 동작 줄이기를 켰으면 자동 전환 안 함
 function useHeroSlide(count, paused) {
@@ -54,8 +87,8 @@ function useHeroSlide(count, paused) {
   return [index, setIndex]
 }
 
-function HeroSlides({ className, index }) {
-  return HERO_SLIDES.map((slide, i) => (
+function HeroSlides({ slides, className, index }) {
+  return slides.map((slide, i) => (
     <img
       key={slide.id}
       className={`${className}${i === index ? ' is-active' : ''}`}
@@ -68,10 +101,11 @@ function HeroSlides({ className, index }) {
   ))
 }
 
-function HeroDots({ className, index, onSelect }) {
+function HeroDots({ slides, className, index, onSelect }) {
+  if (slides.length < 2) return null
   return (
     <div className={`home__hero-dots ${className ?? ''}`}>
-      {HERO_SLIDES.map((slide, i) => (
+      {slides.map((slide, i) => (
         <button
           key={slide.id}
           type="button"
@@ -128,8 +162,11 @@ export default function Home() {
   const [projects, setProjects] = useState([])
   const [noticeFilter, setNoticeFilter] = useState('all')
   const [heroPaused, setHeroPaused] = useState(false)
-  const [heroIndex, setHeroIndex] = useHeroSlide(HERO_SLIDES.length, heroPaused)
-  const heroSwipe = useHeroSwipe(setHeroIndex, HERO_SLIDES.length, setHeroPaused)
+  const heroSlides = useHeroSlidesData()
+  const [heroIndex, setHeroIndex] = useHeroSlide(heroSlides.length, heroPaused)
+  const heroSwipe = useHeroSwipe(setHeroIndex, heroSlides.length, setHeroPaused)
+  // 사진 수가 줄어 현재 순번이 범위를 벗어나면 첫 사진부터
+  const heroActive = heroIndex < heroSlides.length ? heroIndex : 0
 
   useEffect(() => {
     getNotices({
@@ -151,9 +188,14 @@ export default function Home() {
   return (
     <div className="home">
       <section className="home__hero-mobile" {...heroSwipe}>
-        <HeroSlides className="home__hero-mobile-bg" index={heroIndex} />
+        <HeroSlides slides={heroSlides} className="home__hero-mobile-bg" index={heroActive} />
         <div className="home__hero-mobile-gradient" />
-        <HeroDots className="home__hero-dots--mobile" index={heroIndex} onSelect={setHeroIndex} />
+        <HeroDots
+          slides={heroSlides}
+          className="home__hero-dots--mobile"
+          index={heroActive}
+          onSelect={setHeroIndex}
+        />
         <div className="home__hero-mobile-text">
           <span>기술로 문제를 정의하고,</span>
           <span>세상을 바꾸는 인재를 키웁니다</span>
@@ -247,8 +289,8 @@ export default function Home() {
         onMouseLeave={() => setHeroPaused(false)}
       >
         <div className="home__hero-media">
-          <HeroSlides className="home__hero-bg" index={heroIndex} />
-          <HeroDots index={heroIndex} onSelect={setHeroIndex} />
+          <HeroSlides slides={heroSlides} className="home__hero-bg" index={heroActive} />
+          <HeroDots slides={heroSlides} index={heroActive} onSelect={setHeroIndex} />
         </div>
         <div className="home__hero-fade" />
         <div className="container home__hero-inner">

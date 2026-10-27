@@ -22,6 +22,7 @@ import AdminAccounts from '../pages/Admin/AdminAccounts'
 import AdminNoticeList from '../pages/Admin/AdminNoticeList'
 import AdminCapstoneList from '../pages/Admin/AdminCapstoneList'
 import AdminSubscribers from '../pages/Admin/AdminSubscribers'
+import AdminHeroSlides from '../pages/Admin/AdminHeroSlides'
 import NoticeWrite from '../pages/Admin/NoticeWrite'
 import CapstoneWrite from '../pages/Admin/CapstoneWrite'
 import DevStats from '../pages/Dev/DevStats'
@@ -58,6 +59,7 @@ export const router = createBrowserRouter([
   { path: '/admin', element: <RequireAdmin><Dashboard /></RequireAdmin> },
   { path: '/admin/accounts', element: <RequireAdmin><AdminAccounts /></RequireAdmin> },
   { path: '/admin/subscribers', element: <RequireAdmin><AdminSubscribers /></RequireAdmin> },
+  { path: '/admin/hero', element: <RequireAdmin><AdminHeroSlides /></RequireAdmin> },
   { path: '/admin/notices', element: <RequireAdmin><AdminNoticeList /></RequireAdmin> },
   { path: '/admin/notices/new', element: <RequireAdmin><NoticeWrite /></RequireAdmin> },
   { path: '/admin/notices/:id/edit', element: <RequireAdmin><NoticeWrite /></RequireAdmin> },
