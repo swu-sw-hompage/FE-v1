@@ -12,6 +12,8 @@ import Requirements from '../pages/Curriculum/Requirements'
 import Faculty from '../pages/Faculty/Faculty'
 import Activities from '../pages/Activities/Activities'
 import ActivityDetail from '../pages/Activities/ActivityDetail'
+import DepartmentEvents from '../pages/Activities/DepartmentEvents'
+import DepartmentEventDetail from '../pages/Activities/DepartmentEventDetail'
 import Notice from '../pages/Notice/Notice'
 import NoticeDetail from '../pages/Notice/NoticeDetail'
 import NoticeSubscribe from '../pages/Notice/NoticeSubscribe'
@@ -45,6 +47,8 @@ export const router = createBrowserRouter([
       { path: 'curriculum/requirements', element: <Requirements /> },
       { path: 'faculty', element: <Faculty /> },
       { path: 'activities', element: <Navigate to="/activities/2025" replace /> },
+      { path: 'activities/events', element: <DepartmentEvents /> },
+      { path: 'activities/events/:id', element: <DepartmentEventDetail /> },
       { path: 'activities/:year', element: <Activities /> },
       { path: 'activities/:year/:id', element: <ActivityDetail /> },
       { path: 'notice', element: <Notice /> },

@@ -1,0 +1,106 @@
+/* 홈 헤더 아래 새 학과 행사 알림 띠 */
+.event-bar {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.event-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.event-bar__link {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 48px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.event-bar__label {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #fff;
+  font-family: var(--font-en);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+}
+
+.event-bar__text {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.event-bar__text strong {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.event-bar__date {
+  flex-shrink: 0;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.event-bar__more {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.event-bar__close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #fff;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.event-bar__close:hover {
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .event-bar__inner {
+    gap: 4px;
+    padding-right: 8px;
+  }
+
+  .event-bar__link {
+    justify-content: flex-start;
+    gap: 10px;
+    height: 44px;
+  }
+
+  .event-bar__text strong {
+    font-size: 13px;
+  }
+
+  .event-bar__date,
+  .event-bar__more {
+    display: none;
+  }
+}

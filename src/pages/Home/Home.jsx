@@ -10,6 +10,7 @@ import { getNotices, noticeCategoryLabel, formatNoticeDate } from '../../api/not
 import { getGraduationProjects } from '../../api/graduation'
 import { getHeroSlides, heroImageUrl } from '../../api/hero'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
+import EventAnnouncement from '../../components/common/EventAnnouncement'
 import './Home.css'
 
 const QUICK_LINKS = [
@@ -187,6 +188,7 @@ export default function Home() {
 
   return (
     <div className="home">
+      <EventAnnouncement />
       <section className="home__hero-mobile" {...heroSwipe}>
         <HeroSlides slides={heroSlides} className="home__hero-mobile-bg" index={heroActive} />
         <div className="home__hero-mobile-gradient" />

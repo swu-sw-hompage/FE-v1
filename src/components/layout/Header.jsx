@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { NAV_ITEMS, MEGA_MENU_COLUMNS, MOBILE_MENU_COLUMNS } from '../../constants/nav'
+import { getRecentEvent } from '../../data/departmentEvents'
 import logoFull from '../../assets/images/brand/logo-full.svg'
 import './Header.css'
 
@@ -20,6 +21,8 @@ const isLinkActive = (to, location) => {
 
 export default function Header() {
   const [hoveredKey, setHoveredKey] = useState(null)
+  // 새 학과 행사가 올라온 뒤 7일 동안 '학생활동' 옆에 작은 점
+  const [hasNewEvent] = useState(() => Boolean(getRecentEvent()))
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [expandedKey, setExpandedKey] = useState(null)
   const location = useLocation()
@@ -84,6 +87,9 @@ export default function Header() {
               onMouseEnter={() => setHoveredKey(item.path)}
             >
               {item.label}
+              {item.path === '/activities' && hasNewEvent && (
+                <span className="header__new-dot" aria-label="새 학과 행사" />
+              )}
             </NavLink>
           ))}
         </nav>
