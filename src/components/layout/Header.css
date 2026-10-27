@@ -34,7 +34,7 @@
 }
 
 .header__logo-full {
-  height: 72px;
+  height: 52px;
   width: auto;
   display: block;
 }
@@ -42,7 +42,7 @@
 /* 학과명이 로고 오른쪽으로 빠지면서 가로가 길어져, 태블릿 폭에서 메뉴가 줄바꿈되지 않도록 축소 */
 @media (max-width: 1120px) {
   .header__logo-full {
-    height: 44px;
+    height: 40px;
   }
 }
 
@@ -197,7 +197,7 @@
   }
 
   .header__logo-full {
-    height: 44px;
+    height: 40px;
   }
 
   .header__mega {
@@ -361,6 +361,6 @@
 /* 소형 모바일: 로고 + 햄버거 버튼 한 줄 유지 */
 @media (max-width: 480px) {
   .header__logo-full {
-    height: 36px;
+    height: 32px;
   }
 }
