@@ -96,7 +96,7 @@ export default function CapstoneWrite() {
       breadcrumb={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 등록'}
       eyebrow="PROJECT ARCHIVE"
       title={isEdit ? '졸업프로젝트 수정' : '졸업프로젝트 등록'}
-      description="연도별 졸업작품 정보를 등록하고 학생활동 페이지에 공개할 수 있습니다."
+      description="연도별 졸업작품 정보를 등록하고 학생 활동 페이지에 공개할 수 있습니다."
     >
       <div className="admin-columns">
         <form
@@ -254,10 +254,10 @@ export default function CapstoneWrite() {
           </div>
           <div className="admin-callout">
             <span className="admin-callout__icon">i</span>
-            <p>공개된 작품은 학생활동 페이지의 졸업프로젝트 아카이브에 표시됩니다. 필수 항목(*)을 모두 입력한 뒤 게시해주세요.</p>
+            <p>공개된 작품은 학생 활동 페이지의 졸업프로젝트 아카이브에 표시됩니다. 필수 항목(*)을 모두 입력한 뒤 게시해주세요.</p>
           </div>
           <Link to={`/activities/${year}`} className="admin-preview-link">
-            학생활동에서 미리보기
+            학생 활동에서 미리보기
           </Link>
         </aside>
       </div>

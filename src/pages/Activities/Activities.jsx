@@ -51,7 +51,7 @@ export default function Activities() {
 
       <nav className="activities__mobile-tabs" aria-label="학과 활동 분류">
         <Link to={`/activities/${activeYear}`} className="activities__mobile-tab is-active">
-          학생활동
+          학생 활동
         </Link>
         <Link to="/activities/events" className="activities__mobile-tab">
           학과 행사
@@ -63,7 +63,7 @@ export default function Activities() {
 
         <main className="page-layout__main">
           <section className="page-section">
-            <h2>학생활동</h2>
+            <h2>학생 활동</h2>
 
             <div className="activities__year-select-wrap">
               <select

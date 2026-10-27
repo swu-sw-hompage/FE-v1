@@ -86,7 +86,7 @@ export default function DepartmentEventDetail() {
 
       <nav className="activities__mobile-tabs" aria-label="학과 활동 분류">
         <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="activities__mobile-tab">
-          학생활동
+          학생 활동
         </Link>
         <Link to="/activities/events" className="activities__mobile-tab is-active">
           학과 행사

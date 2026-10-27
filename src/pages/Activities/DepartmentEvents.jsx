@@ -36,7 +36,7 @@ export default function DepartmentEvents() {
 
       <nav className="activities__mobile-tabs" aria-label="학과 활동 분류">
         <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="activities__mobile-tab">
-          학생활동
+          학생 활동
         </Link>
         <Link to="/activities/events" className="activities__mobile-tab is-active">
           학과 행사
@@ -54,7 +54,7 @@ export default function DepartmentEvents() {
               <EmptyState
                 title="등록된 학과 행사가 없습니다"
                 description="행사 소식이 올라오면 이곳에서 사진과 함께 볼 수 있어요."
-                actions={[{ label: '학생활동 보기', to: `/activities/${ACTIVITY_LATEST_YEAR}` }]}
+                actions={[{ label: '학생 활동 보기', to: `/activities/${ACTIVITY_LATEST_YEAR}` }]}
               />
             ) : (
               <ol className="devents__timeline">

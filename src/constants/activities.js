@@ -5,7 +5,7 @@ export const ACTIVITY_LATEST_YEAR = 2025
 
 const yearsDescending = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => to - i)
 
-// 학생활동 페이지·메뉴에 보이는 연도 (공개 연도까지만)
+// 학생 활동 페이지·메뉴에 보이는 연도 (공개 연도까지만)
 export const ACTIVITY_YEARS = yearsDescending(ACTIVITY_START_YEAR, ACTIVITY_LATEST_YEAR)
 
 // 관리자 작성 화면용: 아직 공개 전인 올해 작품도 미리 등록할 수 있도록 올해까지 포함한다.

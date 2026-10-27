@@ -39,7 +39,7 @@ export const MEGA_MENU_COLUMNS = [
     key: '/activities',
     title: '학과 활동',
     links: [
-      { to: `/activities/${ACTIVITY_LATEST_YEAR}`, label: '학생활동' },
+      { to: `/activities/${ACTIVITY_LATEST_YEAR}`, label: '학생 활동' },
       { to: '/activities/events', label: '학과 행사' },
     ],
   },
