@@ -268,7 +268,7 @@ export default function Home() {
 
       <div className="home__mobile-section">
         <div className="home__mobile-section-head">
-          <h2>학생활동</h2>
+          <h2>학생 활동</h2>
           <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`}>전체보기</Link>
         </div>
         <div className="home__mobile-scroller">
@@ -369,7 +369,7 @@ export default function Home() {
 
       <section className="home__projects container">
         <div className="home__projects-header">
-          <h2>학생활동</h2>
+          <h2>학생 활동</h2>
           <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="home__see-all">
             전체보기 <span aria-hidden="true">+</span>
           </Link>
