@@ -15,9 +15,11 @@ export const heroImageUrl = (url) => {
 // 관리자 전용 (JWT 필요)
 export const getAdminHeroSlides = () => apiClient.get('/admin/hero-slides')
 
-export const createHeroSlide = ({ imageUrl, altText }) => apiClient.post('/admin/hero-slides', { imageUrl, altText })
+// 관리 화면의 저장하기: 사진 목록 전체를 순서대로 보낸다. 기존 사진은 { id }, 새 사진은 { imageUrl }.
+// 목록에 없는 사진은 삭제되고, 하나라도 잘못되면 아무것도 바뀌지 않는다.
+export const saveHeroSlides = (slides) => apiClient.put('/admin/hero-slides', { slides })
 
-export const updateHeroSlide = (id, { altText }) => apiClient.put(`/admin/hero-slides/${id}`, { altText })
+export const createHeroSlide = ({ imageUrl, altText }) => apiClient.post('/admin/hero-slides', { imageUrl, altText })
 
 export const reorderHeroSlides = (ids) => apiClient.put('/admin/hero-slides/order', { ids })
 
