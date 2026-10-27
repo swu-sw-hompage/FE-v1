@@ -1,28 +1,15 @@
-import { useState } from 'react'
 import PageHero from '../../components/common/PageHero'
 import heroCurriculum from '../../assets/images/brand/hero-curriculum.jpg'
 import ChapterNav from '../../components/common/ChapterNav'
-import SegmentTabs from '../../components/common/SegmentTabs'
 import InfoRows from '../../components/common/InfoRows'
 import { CURRICULUM_SECTIONS } from '../../constants/aboutNav'
 import './Requirements.css'
 
-const COHORTS = [
-  {
-    id: 'until2016',
-    label: '~2016학번까지',
-    items: ['공인외국어 성적', '취업준비 프로그램 이수 인증'],
-  },
-  {
-    id: 'from2017',
-    label: '2017학번부터',
-    items: [
-      '공인 외국어 성적 인증 (TOEIC, TOEFL 등)',
-      '1인 1지식재산권 획득 (논문발표 또는 특허출원)',
-      '소프트웨어개발실무영어 I·II 과목 이수',
-      '방학 중 프로그래밍 Guru 1·2 교육 이수 및 수료증 제출',
-    ],
-  },
+const REQUIREMENTS = [
+  '공인 외국어 성적 인증 (TOEIC, TOEFL 등)',
+  '1인 1지식재산권 획득 (논문발표 또는 특허출원)',
+  '소프트웨어개발실무영어 I·II 과목 이수',
+  '방학 중 프로그래밍 Guru 1·2 교육 이수 및 수료증 제출',
 ]
 
 const ADDITIONAL = [
@@ -32,7 +19,7 @@ const ADDITIONAL = [
     items: [
       "'Guru 1', 'Guru 2' 중 한 가지 이수",
       "'소프트웨어개발실무영어 I', '소프트웨어개발실무영어 II' 중 한 가지 이수",
-      '1인 1 SW지적재산권 한 가지 취득 (SW등록, 논문, 특허출원 등)',
+      '1인 1지식재산권 획득 (논문발표 또는 특허출원)',
     ],
   },
   {
@@ -50,9 +37,6 @@ const CERTIFICATION_STEPS = [
 ]
 
 export default function Requirements() {
-  const [cohortId, setCohortId] = useState('from2017')
-  const cohort = COHORTS.find((c) => c.id === cohortId)
-
   return (
     <div className="requirements">
       <PageHero photo photoSrc={heroCurriculum} title={['졸업 요건']} />
@@ -64,21 +48,8 @@ export default function Requirements() {
           <section className="page-section">
             <h2>졸업 요건</h2>
 
-            <SegmentTabs
-              label="입학 연도 선택"
-              items={COHORTS.map((c) => ({ id: c.id, label: c.label }))}
-              active={cohortId}
-              onChange={setCohortId}
-            />
-
-            <ol
-              className={
-                cohortId === 'until2016'
-                  ? 'requirements__list requirements__list--no-guru'
-                  : 'requirements__list'
-              }
-            >
-              {cohort.items.map((item, i) => (
+            <ol className="requirements__list">
+              {REQUIREMENTS.map((item, i) => (
                 <li key={item}>
                   <span>{String(i + 1).padStart(2, '0')}</span>
                   <p>{item}</p>
@@ -86,36 +57,48 @@ export default function Requirements() {
               ))}
             </ol>
 
-            {cohortId === 'from2017' && (
-              <div className="requirements__guru">
-                <p className="requirements__guru-title">GURU 1·2 이수 여부 확인 방법</p>
-                <div className="requirements__guru-divider" />
-                <p className="requirements__guru-steps">
-                  학생성장지원시스템 &gt; 마이페이지 &gt; 학습활동 &gt; GURU 비교과목 &gt; 활동 &gt; 수료증 다운로드
-                </p>
-                <p className="requirements__guru-note">
-                  {'※ 2026학년도부터 지식재산권 조건에서 SW 등록 실적은 인정되지 않습니다.'}
-                </p>
-              </div>
-            )}
+            <div className="requirements__guru requirements__guru--stacked">
+              <p className="requirements__guru-title">GURU 1·2 이수 여부 확인 방법</p>
+              <div className="requirements__guru-divider" />
+              <p className="requirements__guru-steps">
+                학생성장지원시스템 &gt; 마이페이지 &gt; 학습활동 &gt; GURU 비교과목 &gt; 활동 &gt; 수료증 다운로드
+              </p>
+              <p className="requirements__guru-note">
+                {'※ 2026학년도부터 지식재산권 조건에서 SW 등록 실적은 인정되지 않습니다.'}
+              </p>
+            </div>
+
+            <div className="requirements__guru">
+              <p className="requirements__guru-title">2016학번 이전 입학생</p>
+              <div className="requirements__guru-divider" />
+              <p className="requirements__guru-steps">
+                공인외국어 성적과 취업준비 프로그램 이수 인증으로 졸업 요건을 충족합니다.
+              </p>
+              <p className="requirements__guru-note">
+                {'※ 자세한 적용 기준은 학과사무실에 문의해 주세요.'}
+              </p>
+            </div>
           </section>
 
           <section className="page-section">
-            <h2>{cohortId === 'from2017' ? '졸업인증 신청 절차' : '전형별 추가 졸업요건'}</h2>
+            <h2>전형별 추가 졸업요건</h2>
+            <InfoRows rows={ADDITIONAL} />
+          </section>
 
-            <InfoRows rows={cohortId === 'from2017' ? CERTIFICATION_STEPS : ADDITIONAL} />
-            {cohortId === 'from2017' && (
-              <div className="requirements__guru requirements__guru--after-steps">
-                <p className="requirements__guru-title">졸업인증 참고 사항</p>
-                <div className="requirements__guru-divider" />
-                <p className="requirements__guru-steps">
-                  담당교수는 통상 본인이 수강한 「프로젝트종합설계 I·II」 담당교수입니다.
-                </p>
-                <p className="requirements__guru-note">
-                  {'※ 2016학년도 이전 입학생, 외국인 학생, 학과 교수회의에서 특별한 사유로 인정한 경우 예외 적용 대상이 될 수 있습니다. 적용 여부는 학과사무실에 확인해 주세요.'}
-                </p>
-              </div>
-            )}
+          <section className="page-section">
+            <h2>졸업인증 신청 절차</h2>
+
+            <InfoRows rows={CERTIFICATION_STEPS} />
+            <div className="requirements__guru requirements__guru--after-steps">
+              <p className="requirements__guru-title">졸업인증 참고 사항</p>
+              <div className="requirements__guru-divider" />
+              <p className="requirements__guru-steps">
+                담당교수는 통상 본인이 수강한 「프로젝트종합설계 I·II」 담당교수입니다.
+              </p>
+              <p className="requirements__guru-note">
+                {'※ 2016학년도 이전 입학생, 외국인 학생, 학과 교수회의에서 특별한 사유로 인정한 경우 예외 적용 대상이 될 수 있습니다. 적용 여부는 학과사무실에 확인해 주세요.'}
+              </p>
+            </div>
           </section>
         </main>
       </div>
