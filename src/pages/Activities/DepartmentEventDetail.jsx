@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
+import EmptyState from '../../components/common/EmptyState'
 import ActivitiesSidebar from './ActivitiesSidebar'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
 import { getDepartmentEvent, formatEventDate } from '../../data/departmentEvents'
@@ -81,11 +82,11 @@ export default function DepartmentEventDetail() {
 
   return (
     <div className="activities">
-      <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
+      <PageHero photo photoSrc={heroActivities} title={['학과 활동']} />
 
-      <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
+      <nav className="activities__mobile-tabs" aria-label="학과 활동 분류">
         <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="activities__mobile-tab">
-          졸업프로젝트
+          학생활동
         </Link>
         <Link to="/activities/events" className="activities__mobile-tab is-active">
           학과 행사
@@ -100,10 +101,11 @@ export default function DepartmentEventDetail() {
             <h2 className="activities__page-title">학과 행사</h2>
 
             {!event ? (
-              <div className="activity-detail__empty">
-                <p>존재하지 않는 행사입니다.</p>
-                <Link to="/activities/events">← 목록으로</Link>
-              </div>
+              <EmptyState
+                title="행사를 찾을 수 없습니다"
+                description="삭제되었거나 주소가 바뀌었을 수 있어요. 목록에서 다시 찾아봐 주세요."
+                actions={[{ label: '목록으로 돌아가기', to: '/activities/events' }]}
+              />
             ) : (
               <div className="activity-detail__article">
                 <div className="activity-detail__header">

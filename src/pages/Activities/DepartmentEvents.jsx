@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import PageHero from '../../components/common/PageHero'
+import EmptyState from '../../components/common/EmptyState'
 import ActivitiesSidebar from './ActivitiesSidebar'
 import { ACTIVITY_LATEST_YEAR } from '../../constants/activities'
 import { DEPARTMENT_EVENTS } from '../../data/departmentEvents'
@@ -31,11 +32,11 @@ export default function DepartmentEvents() {
 
   return (
     <div className="activities">
-      <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
+      <PageHero photo photoSrc={heroActivities} title={['학과 활동']} />
 
-      <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
+      <nav className="activities__mobile-tabs" aria-label="학과 활동 분류">
         <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="activities__mobile-tab">
-          졸업프로젝트
+          학생활동
         </Link>
         <Link to="/activities/events" className="activities__mobile-tab is-active">
           학과 행사
@@ -48,16 +49,13 @@ export default function DepartmentEvents() {
         <main className="page-layout__main">
           <section className="page-section">
             <h2>학과 행사</h2>
-            <p className="devents__lead">시상식, 전시회, 특강처럼 학과에서 함께한 순간을 사진으로 모아 둡니다.</p>
 
             {events.length === 0 ? (
-              <div className="devents__empty">
-                <strong>아직 등록된 학과 행사가 없습니다.</strong>
-                <p>시상식·전시회·특강 소식이 올라오면 이곳에 날짜순으로 차곡차곡 쌓입니다.</p>
-                <Link to={`/activities/${ACTIVITY_LATEST_YEAR}`} className="devents__empty-link">
-                  졸업프로젝트 둘러보기 <span aria-hidden="true">→</span>
-                </Link>
-              </div>
+              <EmptyState
+                title="등록된 학과 행사가 없습니다"
+                description="행사 소식이 올라오면 이곳에서 사진과 함께 볼 수 있어요."
+                actions={[{ label: '학생활동 보기', to: `/activities/${ACTIVITY_LATEST_YEAR}` }]}
+              />
             ) : (
               <ol className="devents__timeline">
                 {visible.map((event, i) => {

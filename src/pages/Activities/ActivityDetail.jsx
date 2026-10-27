@@ -37,11 +37,11 @@ export default function ActivityDetail() {
 
   return (
     <div className="activities">
-      <PageHero photo photoSrc={heroActivities} title={['학생활동']} />
+      <PageHero photo photoSrc={heroActivities} title={['학과 활동']} />
 
-      <nav className="activities__mobile-tabs" aria-label="학생활동 분류">
+      <nav className="activities__mobile-tabs" aria-label="학과 활동 분류">
         <Link to={`/activities/${activeYear}`} className="activities__mobile-tab is-active">
-          졸업프로젝트
+          학생활동
         </Link>
         <Link to="/activities/events" className="activities__mobile-tab">
           학과 행사

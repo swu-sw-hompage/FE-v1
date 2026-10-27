@@ -1,9 +1,3 @@
-.devents__lead {
-  margin: -20px 0 36px;
-  font-size: 15px;
-  color: var(--color-text-secondary);
-}
-
 /* ── 뉴스레터형 타임라인 ── */
 .devents__timeline {
   margin: 0;
@@ -141,45 +135,7 @@
   color: var(--color-primary);
 }
 
-/* ── 빈 상태 ── */
-.devents__empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 72px 24px;
-  border-top: 2px solid var(--color-text);
-  border-bottom: 1px solid var(--color-border);
-  text-align: center;
-}
-
-.devents__empty strong {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.devents__empty p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--color-text-secondary);
-  word-break: keep-all;
-}
-
-.devents__empty-link {
-  margin-top: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
 @media (max-width: 900px) {
-  .devents__lead {
-    margin: 0 0 4px;
-    font-size: 14px;
-  }
 
   .devents__item {
     grid-template-columns: 1fr;
@@ -241,13 +197,6 @@
     font-size: 14px;
   }
 
-  .devents__empty {
-    padding: 56px 16px;
-  }
-
-  .devents__empty strong {
-    font-size: 16px;
-  }
 }
 
 /* ── 상세: 사진 모음 (같은 크기 썸네일, 누르면 크게) ── */
