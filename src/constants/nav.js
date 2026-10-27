@@ -1,10 +1,10 @@
-import { ACTIVITY_YEARS, ACTIVITY_LATEST_YEAR } from './activities'
+import { ACTIVITY_LATEST_YEAR } from './activities'
 
 export const NAV_ITEMS = [
   { label: '학과 소개', path: '/about' },
   { label: '교육과정', path: '/curriculum' },
   { label: '교수진', path: '/faculty' },
-  { label: '학생활동', path: '/activities' },
+  { label: '학과 활동', path: '/activities' },
   { label: '공지사항', path: '/notice' },
 ]
 
@@ -37,13 +37,10 @@ export const MEGA_MENU_COLUMNS = [
   },
   {
     key: '/activities',
-    title: '학생활동',
+    title: '학과 활동',
     links: [
+      { to: `/activities/${ACTIVITY_LATEST_YEAR}`, label: '학생활동' },
       { to: '/activities/events', label: '학과 행사' },
-      ...ACTIVITY_YEARS.map((year) => ({
-        to: `/activities/${year}`,
-        label: `${year}년도 졸업프로젝트`,
-      })),
     ],
   },
   {
@@ -57,16 +54,5 @@ export const MEGA_MENU_COLUMNS = [
   },
 ]
 
-// 모바일 햄버거 메뉴용 — 메가메뉴와 같지만 졸업프로젝트 연도는 한 항목으로 합친다.
-// (연도 선택은 학생활동 페이지 안의 셀렉트에서 한다)
-export const MOBILE_MENU_COLUMNS = MEGA_MENU_COLUMNS.map((column) =>
-  column.key === '/activities'
-    ? {
-        ...column,
-        links: [
-          { to: '/activities/events', label: '학과 행사' },
-          { to: `/activities/${ACTIVITY_LATEST_YEAR}`, label: '졸업프로젝트' },
-        ],
-      }
-    : column,
-)
+// 모바일 햄버거 메뉴용 — 메가메뉴와 같다.
+export const MOBILE_MENU_COLUMNS = MEGA_MENU_COLUMNS

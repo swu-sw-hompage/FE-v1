@@ -21,7 +21,7 @@ const isLinkActive = (to, location) => {
 
 export default function Header() {
   const [hoveredKey, setHoveredKey] = useState(null)
-  // 새 학과 행사가 올라온 뒤 7일 동안 '학생활동' 옆에 작은 점
+  // 새 학과 행사가 올라온 뒤 7일 동안 '학과 활동' 옆에 작은 점
   const [hasNewEvent] = useState(() => Boolean(getRecentEvent()))
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [expandedKey, setExpandedKey] = useState(null)
