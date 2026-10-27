@@ -26,6 +26,8 @@ import AdminSubscribers from '../pages/Admin/AdminSubscribers'
 import AdminHeroSlides from '../pages/Admin/AdminHeroSlides'
 import NoticeWrite from '../pages/Admin/NoticeWrite'
 import CapstoneWrite from '../pages/Admin/CapstoneWrite'
+import AdminEventList from '../pages/Admin/AdminEventList'
+import EventWrite from '../pages/Admin/EventWrite'
 import DevStats from '../pages/Dev/DevStats'
 import RequireAdmin from './RequireAdmin'
 
@@ -70,4 +72,7 @@ export const router = createBrowserRouter([
   { path: '/admin/capstone', element: <RequireAdmin><AdminCapstoneList /></RequireAdmin> },
   { path: '/admin/capstone/new', element: <RequireAdmin><CapstoneWrite /></RequireAdmin> },
   { path: '/admin/capstone/:id/edit', element: <RequireAdmin><CapstoneWrite /></RequireAdmin> },
+  { path: '/admin/events', element: <RequireAdmin><AdminEventList /></RequireAdmin> },
+  { path: '/admin/events/new', element: <RequireAdmin><EventWrite /></RequireAdmin> },
+  { path: '/admin/events/:id/edit', element: <RequireAdmin><EventWrite /></RequireAdmin> },
 ])

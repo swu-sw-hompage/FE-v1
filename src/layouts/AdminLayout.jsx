@@ -5,6 +5,7 @@ import './AdminLayout.css'
 const NAV_ITEMS = [
   { label: '공지사항', to: '/admin/notices' },
   { label: '졸업프로젝트', to: '/admin/capstone' },
+  { label: '학과 행사', to: '/admin/events' },
   { label: '메인 사진', to: '/admin/hero' },
   { label: '알림 신청자', to: '/admin/subscribers' },
   { label: '관리자 계정', to: '/admin/accounts' },
