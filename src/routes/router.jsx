@@ -19,7 +19,6 @@ import NoticeDetail from '../pages/Notice/NoticeDetail'
 import NoticeSubscribe from '../pages/Notice/NoticeSubscribe'
 import Login from '../pages/Login/Login'
 import NotFound from '../pages/NotFound/NotFound'
-import Dashboard from '../pages/Admin/Dashboard'
 import AdminAccounts from '../pages/Admin/AdminAccounts'
 import AdminNoticeList from '../pages/Admin/AdminNoticeList'
 import AdminCapstoneList from '../pages/Admin/AdminCapstoneList'
@@ -60,7 +59,8 @@ export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
   // 개발자용 통계. 메뉴에는 없고 주소로만 들어간다 (접근 키 필요).
   { path: '/dev/stats', element: <DevStats /> },
-  { path: '/admin', element: <RequireAdmin><Dashboard /></RequireAdmin> },
+  // 관리자 첫 화면은 가장 많이 쓰는 공지사항 관리.
+  { path: '/admin', element: <Navigate to="/admin/notices" replace /> },
   { path: '/admin/accounts', element: <RequireAdmin><AdminAccounts /></RequireAdmin> },
   { path: '/admin/subscribers', element: <RequireAdmin><AdminSubscribers /></RequireAdmin> },
   { path: '/admin/hero', element: <RequireAdmin><AdminHeroSlides /></RequireAdmin> },
