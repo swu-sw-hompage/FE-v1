@@ -1,0 +1,61 @@
+/* 홈 첫 화면 홍보 팝업 */
+.promo-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.promo-popup__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(440px, 100%, calc((100dvh - 32px - 48px) * 0.8));
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.promo-popup__image-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.promo-popup__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.promo-popup__actions {
+  display: flex;
+  height: 48px;
+  background: var(--color-bg-dark);
+}
+
+.promo-popup__action {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+}
+
+.promo-popup__action:hover {
+  color: #fff;
+}
+
+.promo-popup__action--close {
+  flex: 0 0 96px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+  color: #fff;
+}
