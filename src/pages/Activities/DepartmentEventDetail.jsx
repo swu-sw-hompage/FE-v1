@@ -9,6 +9,9 @@ import heroActivities from '../../assets/images/brand/hero-activities.jpg'
 import './Activities.css'
 import './DepartmentEvents.css'
 
+// 대표 사진 다음에 처음부터 보여줄 사진 수. 2칸이라 짝수로 둔다.
+const PREVIEW_COUNT = 6
+
 // 사진 크게 보기. Esc·바깥 클릭으로 닫고, ←/→로 넘긴다.
 function PhotoViewer({ photos, index, title, onClose, onMove }) {
   useEffect(() => {
@@ -78,12 +81,14 @@ export default function DepartmentEventDetail() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [viewing, setViewing] = useState(null)
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
     setLoadError(false)
     setViewing(null)
+    setShowAll(false)
     getDepartmentEventById(id)
       .then((result) => {
         if (!cancelled) setEvent(result)
@@ -103,6 +108,10 @@ export default function DepartmentEventDetail() {
   }, [id])
 
   const photos = event?.photos ?? []
+  // 대표 사진은 크게, 나머지는 2칸으로. 사진이 많으면 처음엔 PREVIEW_COUNT장만 보여준다.
+  const rest = photos.slice(1)
+  const visibleRest = showAll ? rest : rest.slice(0, PREVIEW_COUNT)
+  const hiddenCount = rest.length - visibleRest.length
   const move = (step) => setViewing((i) => (i + step + photos.length) % photos.length)
 
   return (
@@ -161,15 +170,34 @@ export default function DepartmentEventDetail() {
                 {photos.length > 0 && (
                   <div className="devent-gallery">
                     <p className="devent-gallery__label">사진 {photos.length}장</p>
-                    <ul className="devent-photos">
-                      {photos.map((src, i) => (
-                        <li key={src}>
-                          <button type="button" onClick={() => setViewing(i)} aria-label={`사진 ${i + 1} 크게 보기`}>
-                            <img src={src} alt="" loading={i < 6 ? 'eager' : 'lazy'} />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                    <button
+                      type="button"
+                      className="devent-cover"
+                      onClick={() => setViewing(0)}
+                      aria-label="사진 1 크게 보기"
+                    >
+                      <img src={photos[0]} alt="" />
+                    </button>
+                    {photos.length > 1 && (
+                      <ul className="devent-photos">
+                        {visibleRest.map((src, i) => (
+                          <li key={src}>
+                            <button
+                              type="button"
+                              onClick={() => setViewing(i + 1)}
+                              aria-label={`사진 ${i + 2} 크게 보기`}
+                            >
+                              <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {hiddenCount > 0 && (
+                      <button type="button" className="devent-gallery__more" onClick={() => setShowAll(true)}>
+                        사진 {hiddenCount}장 더 보기
+                      </button>
+                    )}
                   </div>
                 )}
 
