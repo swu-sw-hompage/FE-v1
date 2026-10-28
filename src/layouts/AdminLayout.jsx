@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getAdminEmail, logout } from '../api/auth'
 import './AdminLayout.css'
@@ -15,6 +16,15 @@ export default function AdminLayout({ eyebrow, title, description, breadcrumb, h
   const location = useLocation()
   const navigate = useNavigate()
   const adminEmail = getAdminEmail()
+  // 폰(900px 이하)에서는 사이드바가 화면 밖에 숨어 있다가 우측 상단 메뉴 버튼으로 연다.
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e) => e.key === 'Escape' && setMenuOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   const handleLogout = () => {
     logout()
@@ -25,7 +35,7 @@ export default function AdminLayout({ eyebrow, title, description, breadcrumb, h
 
   return (
     <div className="admin">
-      <aside className="admin__sidebar">
+      <aside id="admin-sidebar" className={menuOpen ? 'admin__sidebar admin__sidebar--open' : 'admin__sidebar'}>
         <div className="admin__brand">
           <Link to="/" className="admin__brand-logo">
             <strong>서울여자대학교</strong>
@@ -40,6 +50,7 @@ export default function AdminLayout({ eyebrow, title, description, breadcrumb, h
             <Link
               key={item.label}
               to={item.to}
+              onClick={() => setMenuOpen(false)}
               className={isActive(item.to) ? 'admin__nav-item admin__nav-item--active' : 'admin__nav-item'}
             >
               <span className="admin__nav-dot" />
@@ -64,6 +75,8 @@ export default function AdminLayout({ eyebrow, title, description, breadcrumb, h
         </div>
       </aside>
 
+      {menuOpen && <div className="admin__backdrop" onClick={() => setMenuOpen(false)} aria-hidden="true" />}
+
       <div className="admin__body">
         <header className="admin__topbar">
           <div className="admin__breadcrumb">
@@ -75,9 +88,24 @@ export default function AdminLayout({ eyebrow, title, description, breadcrumb, h
               </>
             )}
           </div>
-          <a href="/" className="admin__site-link" target="_blank" rel="noreferrer">
-            학과 홈페이지 바로가기 ↗
-          </a>
+          <div className="admin__topbar-actions">
+            <a href="/" className="admin__site-link" target="_blank" rel="noreferrer">
+              <span className="admin__site-link-full">학과 홈페이지 바로가기</span>
+              <span className="admin__site-link-short">홈페이지</span> ↗
+            </a>
+            <button
+              type="button"
+              className="admin__menu-btn"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? '관리 메뉴 닫기' : '관리 메뉴 열기'}
+              aria-expanded={menuOpen}
+              aria-controls="admin-sidebar"
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </header>
 
         <main className="admin__main">
