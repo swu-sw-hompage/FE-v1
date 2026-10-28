@@ -367,6 +367,52 @@ function SourceList({ rows }) {
   )
 }
 
+// 홍보 팝업 key → 표시 이름. 없으면 key를 그대로 보여준다.
+const PROMO_LABELS = {
+  'notice-subscribe-2026-10': '공지 알림 신청 (2026.10)',
+}
+
+function PromoList({ rows }) {
+  return (
+    <section className="dev-stats__card">
+      <h2 className="dev-stats__card-title">홍보 팝업</h2>
+      <p className="dev-stats__card-desc">
+        노출은 홈에서 팝업이 뜬 횟수, 클릭률은 본 사람 대비 클릭 수, 신청은 팝업을 누른 뒤 알림을 신청한 수입니다.
+      </p>
+      {rows.length === 0 ? (
+        <p className="dev-stats__empty">아직 데이터가 없습니다.</p>
+      ) : (
+        <div className="dev-stats__table-wrap">
+          <table className="dev-stats__table">
+            <thead>
+              <tr>
+                <th>팝업</th>
+                <th>노출</th>
+                <th>본 사람</th>
+                <th>클릭</th>
+                <th>클릭률</th>
+                <th>클릭 후 신청</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.key}>
+                  <td title={r.key}>{PROMO_LABELS[r.key] ?? r.key}</td>
+                  <td>{fmt(r.views)}</td>
+                  <td>{fmt(r.uniqueViewers)}</td>
+                  <td>{fmt(r.clicks)}</td>
+                  <td>{pct(r.clicks, r.uniqueViewers)}</td>
+                  <td>{fmt(r.subscribed)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  )
+}
+
 export default function DevStats() {
   const [key, setKey] = useState(readKey)
   const [keyInput, setKeyInput] = useState('')
@@ -501,6 +547,8 @@ export default function DevStats() {
             <Funnel totals={t} />
             <SourceList rows={stats.sources} />
           </div>
+
+          <PromoList rows={stats.promos ?? []} />
 
           <RankList
             title="첫 방문 페이지"

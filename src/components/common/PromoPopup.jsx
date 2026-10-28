@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import promoImage from '../../assets/images/promo/notice-subscribe-popup.jpg'
+import { trackPromo } from '../../api/analytics'
 import './PromoPopup.css'
 
 // 공지 알림 신청 홍보 팝업 (홈 첫 화면).
 // SHOW_UNTIL이 지나면 저절로 안 뜬다. 다음 홍보 때는 이미지·링크·날짜·키만 바꾸면 된다.
+// 노출·클릭은 key 이름으로 /dev/stats의 홍보 팝업 카드에 집계된다.
 const PROMO = {
   key: 'notice-subscribe-2026-10',
   image: promoImage,
@@ -39,6 +41,12 @@ export default function PromoPopup() {
   const [open, setOpen] = useState(() => !isHidden())
   const navigate = useNavigate()
 
+  // 홈에 들어올 때마다 뜨므로 노출 수는 방문보다 많을 수 있다. 통계에는 본 사람 수도 같이 나온다.
+  useEffect(() => {
+    if (open) trackPromo('PROMO_VIEW', PROMO.key)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     if (!open) return
     const onKey = (e) => e.key === 'Escape' && setOpen(false)
@@ -54,6 +62,7 @@ export default function PromoPopup() {
   if (!open) return null
 
   const goToPromo = () => {
+    trackPromo('PROMO_CLICK', PROMO.key)
     setOpen(false)
     navigate(PROMO.to)
   }
