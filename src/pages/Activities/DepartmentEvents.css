@@ -258,7 +258,7 @@
 
 .devent-photos {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   margin: 0;
   padding: 0;
@@ -277,24 +277,24 @@
   cursor: zoom-in;
 }
 
-/* 홀수 장이면 마지막 한 장이 혼자 반쪽에 남지 않게 한 줄을 다 쓴다. */
-.devent-photos li:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
+/* 6칸 격자에 사진마다 3칸(한 줄 2장). 홀수 장이면 마지막 줄을 2칸씩 3장으로 채운다. */
+.devent-photos li {
+  grid-column: span 3;
 }
 
-.devent-photos li:last-child:nth-child(odd) button {
-  aspect-ratio: 3 / 2;
+.devent-photos:has(> li:first-child:nth-last-child(odd)) > li:nth-last-child(-n + 3) {
+  grid-column: span 2;
+}
+
+.devent-photos > li:only-child {
+  grid-column: 1 / -1;
 }
 
 .devent-photos img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease, opacity 0.2s;
-}
-
-.devent-photos button:hover img {
-  transform: scale(1.04);
+  transition: opacity 0.2s;
 }
 
 .devent-photos button:focus-visible {
