@@ -90,5 +90,9 @@ export const visitorIdForAttribution = () => (import.meta.env.DEV || isQaBrowser
 export const trackSubscribePageView = () =>
   send({ type: 'SUBSCRIBE_PAGE_VIEW', path: window.location.pathname.slice(0, 255) })
 
+/** 홍보 팝업 노출(PROMO_VIEW)·클릭(PROMO_CLICK). source에 홍보 key를 실어 홍보별로 집계한다. */
+export const trackPromo = (type, promoKey) =>
+  send({ type, path: window.location.pathname.slice(0, 255), source: promoKey.slice(0, 100) })
+
 export const getDevStats = ({ key, days }) =>
   apiClient.get('/dev/stats', { params: { days }, headers: { 'X-Stats-Key': key } })
