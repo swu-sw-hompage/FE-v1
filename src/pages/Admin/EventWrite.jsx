@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../layouts/AdminLayout'
 import { uploadAttachment } from '../../api/notice'
+import { resizeImage } from '../../utils/resizeImage'
 import {
   createDepartmentEvent,
   updateDepartmentEvent,
@@ -92,7 +93,7 @@ export default function EventWrite() {
     setUploading(true)
     try {
       for (const file of files) {
-        const uploaded = await uploadAttachment(file)
+        const uploaded = await uploadAttachment(await resizeImage(file))
         setPhotos((prev) => [...prev, withKey(uploaded.url)])
       }
     } catch (err) {
