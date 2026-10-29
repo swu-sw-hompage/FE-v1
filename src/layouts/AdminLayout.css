@@ -212,6 +212,43 @@
   text-decoration: underline;
 }
 
+.admin__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin__site-link-short,
+.admin__menu-btn,
+.admin__backdrop {
+  display: none;
+}
+
+.admin__menu-btn {
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  padding: 0 9px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.admin__menu-btn span {
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background: #1f1f21;
+}
+
+.admin__menu-btn:focus-visible {
+  outline: 2px solid #7d0e16;
+}
+
 .admin__main {
   flex: 1;
   padding: 40px 48px 64px;
@@ -263,9 +300,43 @@
 @media (max-width: 900px) {
   .admin__sidebar {
     position: fixed;
-    z-index: 20;
-    transform: translateX(-100%);
+    top: 0;
+    right: 0;
+    z-index: 30;
+    overflow-y: auto;
+    border-right: none;
+    border-left: 1px solid #e5e5e8;
+    transform: translateX(100%);
     transition: transform 0.2s ease;
+  }
+
+  .admin__sidebar--open {
+    transform: none;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.18);
+  }
+
+  .admin__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .admin__menu-btn {
+    display: flex;
+  }
+
+  .admin__site-link-full {
+    display: none;
+  }
+
+  .admin__site-link-short {
+    display: inline;
+  }
+
+  .admin__topbar {
+    height: 60px;
   }
 
   .admin__body {

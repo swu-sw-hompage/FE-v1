@@ -1165,6 +1165,17 @@
   }
 }
 
+@media (max-width: 900px) {
+  /* 폰에서는 표를 줄이지 않고 옆으로 밀어서 본다. 안 그러면 고정 폭 열들 때문에 제목 칸이 0이 된다. */
+  .admin-table-card {
+    overflow-x: auto;
+  }
+
+  .admin-table {
+    min-width: 680px;
+  }
+}
+
 @media (max-width: 640px) {
   .admin-form-row {
     flex-direction: column;
