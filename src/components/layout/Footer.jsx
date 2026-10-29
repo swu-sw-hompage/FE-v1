@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="footer__info">
             <strong>서울여자대학교 소프트웨어학과</strong>
             <p>서울특별시 노원구 화랑로 621 서울여자대학교</p>
-            <p>TEL: 02-970-5921, FAX: 02-978-5981</p>
+            <p>TEL: 02-970-5921, FAX: 02-978-5981, E-mail: sw@swu.ac.kr</p>
           </div>
           <p className="footer__copyright">
             © {new Date().getFullYear()} Seoul Women&apos;s University Department of Computer Science &amp;
