@@ -52,16 +52,6 @@
   flex-wrap: wrap;
 }
 
-.header__new-dot {
-  position: absolute;
-  top: -2px;
-  right: -9px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-primary-accent);
-}
-
 .header__link {
   position: relative;
   color: var(--color-text);
