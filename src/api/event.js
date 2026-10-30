@@ -28,7 +28,7 @@ export const deleteDepartmentEvent = (id) => apiClient.delete(`/admin/department
 
 export const formatEventDate = (date) => (date ? String(date).replaceAll('-', '.') : '')
 
-// 새 행사는 처음 게시한 날(postedAt)부터 이 기간 동안만 홈 상단 띠 + 메뉴 점으로 알리고, 지나면 저절로 사라진다.
+// 새 행사는 처음 게시한 날(postedAt)부터 이 기간 동안만 홈 상단 띠로 알리고, 지나면 저절로 사라진다.
 export const HOME_EVENT_VISIBLE_DAYS = 7
 
 const isRecent = (event, now) => {
@@ -37,7 +37,7 @@ const isRecent = (event, now) => {
   return ageDays >= 0 && ageDays <= HOME_EVENT_VISIBLE_DAYS
 }
 
-// 헤더 점과 홈 띠가 같은 요청을 두 번 보내지 않도록 한 번 받은 결과를 같이 쓴다.
+// 홈에 다시 들어올 때마다 요청하지 않도록 한 번 받은 결과를 같이 쓴다.
 let recentEventRequest = null
 export const fetchRecentEvent = () => {
   if (!recentEventRequest) {
