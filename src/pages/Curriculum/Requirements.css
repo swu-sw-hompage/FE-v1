@@ -85,6 +85,14 @@
   word-break: keep-all;
 }
 
+.requirements__notice-inline-note {
+  margin: 6px 0 0;
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
 .requirements__notice-note {
   margin: 14px 0 0;
   padding-top: 12px;
