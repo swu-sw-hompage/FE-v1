@@ -1,8 +1,7 @@
 .requirements__list {
   list-style: none;
-  margin: 0 0 28px;
+  margin: 0 0 35px;
   padding: 0;
-  border-top: 1px solid var(--color-border);
 }
 
 .requirements__list li {
@@ -29,70 +28,49 @@
   color: var(--color-text);
 }
 
-
-
-
-
-
-
-
-/* 안내 박스 — 제목 + 라벨/내용 행 + 각주 */
-.requirements__notice {
-  padding: 22px 26px;
-  border-left: 3px solid var(--color-primary);
-  border-radius: 0 6px 6px 0;
-  background: var(--color-primary-soft);
+.requirements__guru {
+  margin-bottom: 100px;
+  background: #fafafa;
+  border-radius: 4px;
+  padding: 24px;
 }
 
-.page-section > .info-rows + .requirements__notice {
-  margin-top: 28px;
+/* 바로 아래 박스가 이어질 때 간격만 좁힘 */
+.requirements__guru--stacked {
+  margin-bottom: 12px;
 }
 
-.requirements__notice-title {
+/* 졸업인증 신청 절차 아래 참고 박스 — 섹션 끝이라 아래 여백 대신 위 여백 */
+.requirements__guru--after-steps {
+  margin: 24px 0 0;
+}
+
+.requirements__guru-title {
   margin: 0 0 12px;
-  font-family: var(--font-pretendard);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--color-primary);
-}
-
-.requirements__notice-rows {
-  display: grid;
-  gap: 10px;
-  margin: 0;
-}
-
-.requirements__notice-row {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 16px;
-}
-
-.requirements__notice-row dt {
-  font-family: var(--font-pretendard);
+  font-family: var(--font-en);
   font-weight: 600;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 16px;
   color: var(--color-text);
 }
 
-.requirements__notice-row dd {
-  margin: 0;
-  font-family: var(--font-pretendard);
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--color-text-secondary);
-  word-break: keep-all;
+.requirements__guru-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin-bottom: 12px;
 }
 
-.requirements__notice-note {
-  margin: 14px 0 0;
-  padding-top: 12px;
-  border-top: 1px solid rgba(118, 20, 25, 0.12);
+.requirements__guru-steps {
+  margin: 0 0 8px;
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.requirements__guru-note {
+  margin: 0;
   font-family: var(--font-pretendard);
   font-size: 12px;
-  line-height: 1.6;
-  color: var(--color-text-muted);
+  color: var(--color-primary);
 }
 
 @media (max-width: 900px) {
@@ -124,21 +102,36 @@
     font-size: 15px;
   }
 
-  .requirements__notice {
+  .requirements__guru {
+    margin-bottom: 0;
+    background: var(--color-primary-soft);
+    border-radius: 6px;
     padding: 18px;
   }
 
-  .page-section > .info-rows + .requirements__notice {
-    margin-top: 0;
+  .requirements__guru--stacked {
+    margin-bottom: 10px;
   }
 
-  .requirements__notice-row {
-    grid-template-columns: 1fr;
-    gap: 2px;
+  .requirements__guru-title {
+    font-size: 15px;
+    color: #1f1f21;
   }
 
-  .requirements__notice-row dt,
-  .requirements__notice-row dd {
+  .requirements__guru-divider {
+    display: none;
+  }
+
+  .requirements__guru-steps {
     font-size: 13px;
+    line-height: 1.65;
+    color: #1f1f21;
   }
+
+  .requirements__guru-note {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #7a7a82;
+  }
+
 }
