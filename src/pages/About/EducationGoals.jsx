@@ -23,9 +23,9 @@ const GOALS = [
 ]
 
 const TALENTS = [
-  { no: '01', title: '기술 전문성', lines: ['소프트웨어', '기술 역량'] },
-  { no: '02', title: '의사소통 역량', lines: ['협력과 소통의', '연결 역량'], active: true },
-  { no: '03', title: '사회 기여', lines: ['지속적인 성장과', '발전에 기여'] },
+  { no: '01', title: '기술 전문성', body: '소프트웨어 기술 역량' },
+  { no: '02', title: '의사소통 역량', body: '협력과 소통의 연결 역량' },
+  { no: '03', title: '사회 기여', body: '지속적인 성장과 발전에 기여' },
 ]
 
 export default function EducationGoals() {
@@ -59,23 +59,14 @@ export default function EducationGoals() {
               소프트웨어 인재
             </p>
 
-            <div className="talent-diagram">
-              {TALENTS.map((talent, index) => (
-                <div className="talent-diagram__item-wrap" key={talent.no}>
-                  <div
-                    className={
-                      talent.active ? 'talent-diagram__circle talent-diagram__circle--active' : 'talent-diagram__circle'
-                    }
-                  >
-                    <span className="talent-diagram__no">{talent.no}</span>
+            <div className="education-goals__list">
+              {TALENTS.map((talent) => (
+                <div className="education-goals__row" key={talent.no}>
+                  <span className="education-goals__no">{talent.no}</span>
+                  <div>
                     <strong>{talent.title}</strong>
-                    <p>
-                      {talent.lines.map((line) => (
-                        <span key={line}>{line}</span>
-                      ))}
-                    </p>
+                    <p>{talent.body}</p>
                   </div>
-                  {index < TALENTS.length - 1 && <span className="talent-diagram__connector" />}
                 </div>
               ))}
             </div>
