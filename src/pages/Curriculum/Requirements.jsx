@@ -42,7 +42,6 @@ const REQUIREMENT_NOTICE = [
   {
     label: '예외 적용',
     text: '외국인 학생이나 학과 교수회의에서 특별한 사유로 인정한 경우 예외가 적용될 수 있습니다.',
-    note: '* 적용 여부는 학과 사무실에서 확인해 주세요',
   },
 ]
 
@@ -61,10 +60,7 @@ function Notice({ title, rows, note }) {
         {rows.map((row) => (
           <div className="requirements__notice-row" key={row.label}>
             <dt>{row.label}</dt>
-            <dd>
-              {row.text}
-              {row.note && <p className="requirements__notice-inline-note">{row.note}</p>}
-            </dd>
+            <dd>{row.text}</dd>
           </div>
         ))}
       </dl>
@@ -104,7 +100,13 @@ export default function Requirements() {
             <Notice
               title="안내"
               rows={REQUIREMENT_NOTICE}
-              note="※ 2026학년도부터 지식재산권 조건에서 SW 등록 실적은 인정되지 않습니다."
+              note={
+                <>
+                  * 적용 여부는 학과 사무실에서 확인해 주세요
+                  <br />
+                  ※ 2026학년도부터 지식재산권 조건에서 SW 등록 실적은 인정되지 않습니다.
+                </>
+              }
             />
           </section>
 
