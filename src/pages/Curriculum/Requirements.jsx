@@ -39,16 +39,17 @@ const REQUIREMENT_NOTICE = [
     label: '2016학번 이전 입학생',
     text: '공인외국어 성적, 취업준비 프로그램 이수 인증으로 졸업 요건을 충족합니다.',
   },
+  {
+    label: '예외 적용',
+    text: '외국인 학생이나 학과 교수회의에서 특별한 사유로 인정한 경우 예외가 적용될 수 있습니다.',
+    note: '* 적용 여부는 학과 사무실에서 확인해 주세요',
+  },
 ]
 
 const CERTIFICATION_NOTICE = [
   {
     label: '담당교수',
     text: '통상 본인이 수강한 「프로젝트종합설계 I·II」 담당교수입니다.',
-  },
-  {
-    label: '예외 적용',
-    text: '외국인 학생이나 학과 교수회의에서 특별한 사유로 인정한 경우 예외가 적용될 수 있습니다.',
   },
 ]
 
@@ -60,7 +61,10 @@ function Notice({ title, rows, note }) {
         {rows.map((row) => (
           <div className="requirements__notice-row" key={row.label}>
             <dt>{row.label}</dt>
-            <dd>{row.text}</dd>
+            <dd>
+              {row.text}
+              {row.note && <p className="requirements__notice-inline-note">{row.note}</p>}
+            </dd>
           </div>
         ))}
       </dl>
@@ -117,7 +121,6 @@ export default function Requirements() {
             <Notice
               title="참고 사항"
               rows={CERTIFICATION_NOTICE}
-              note="※ 적용 여부는 학과사무실에 확인해 주세요."
             />
           </section>
         </main>
