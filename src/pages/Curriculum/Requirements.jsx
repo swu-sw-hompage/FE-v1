@@ -79,7 +79,7 @@ export default function Requirements() {
               </p>
             </div>
 
-            <div className="requirements__guru">
+            <div className="requirements__guru requirements__guru--section-end">
               <p className="requirements__guru-title">예외 적용</p>
               <div className="requirements__guru-divider" />
               <p className="requirements__guru-steps">
